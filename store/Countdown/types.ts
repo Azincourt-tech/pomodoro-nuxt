@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import { MutationTree } from 'vuex';
 
 export interface State {
