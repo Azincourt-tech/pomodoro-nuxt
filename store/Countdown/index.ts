@@ -5,12 +5,12 @@ const MINUTES = 25;
 export const state = (): State => ({
 	time: MINUTES * 60,
 	isActive: false,
-	hasCompleted: false
+	hasCompleted: false,
 });
 
 export const getters: Getters = {
 	minutes: state => Math.floor(state.time / 60),
-	seconds: state => state.time % 60
+	seconds: state => state.time % 60,
 };
 
 export const mutations: MutationsInterface = {
@@ -25,5 +25,5 @@ export const mutations: MutationsInterface = {
 	},
 	[Mutations.SET_HAS_COMPLETED] (state, hasCompleted) {
 		state.hasCompleted = hasCompleted;
-	}
+	},
 };
