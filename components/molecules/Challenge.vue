@@ -38,6 +38,6 @@ function resetChallenges() {
 function challengeSucceeded() {
   resetChallenges()
   challenges.completeChallenge(props.amount)
-  challenges.saveToCookie()
+  challenges.saveToStorage()
 }
 </script>
