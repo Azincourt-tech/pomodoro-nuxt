@@ -1,23 +1,16 @@
 <template>
-	<div class="bg-white rounded-md flex flex-1 w-full mt-8 lg:mt-0 shadow-sm">
-		<Challenge v-if="currentChallenge" v-bind="currentChallenge" />
-		<StartCycle v-else />
-		<LevelUpModal />
-	</div>
+  <div class="bg-base-100 rounded-box shadow-sm flex flex-1 w-full">
+    <Challenge v-if="challenges.currentChallenge" v-bind="challenges.currentChallenge" />
+    <StartCycle v-else />
+    <LevelUpModal />
+  </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import { mapGetters } from 'vuex';
-import LevelUpModal from '~/components/atoms/LevelUpModal.vue';
-import StartCycle from '~/components/atoms/StartCycle.vue';
-import Challenge from '~/components/molecules/Challenge.vue';
-export default Vue.extend({
-	components: {
-		Challenge,
-		StartCycle,
-		LevelUpModal,
-	},
-	computed: mapGetters('Challenges', ['currentChallenge']),
-});
+<script setup lang="ts">
+import { useChallengesStore } from '~/stores/challenges'
+import LevelUpModal from '~/components/atoms/LevelUpModal.vue'
+import StartCycle from '~/components/atoms/StartCycle.vue'
+import Challenge from '~/components/molecules/Challenge.vue'
+
+const challenges = useChallengesStore()
 </script>
