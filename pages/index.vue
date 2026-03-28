@@ -43,6 +43,7 @@ import { onMounted, nextTick } from 'vue'
 import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
 import { useThemeStore } from '~/stores/theme'
+import { useProfileStore } from '~/stores/profile'
 import CompletedChallenges from '~/components/atoms/CompletedChallenges.vue'
 import Profile from '~/components/molecules/Profile.vue'
 import Countdown from '~/components/molecules/Countdown.vue'
@@ -55,10 +56,12 @@ useHead({ title: 'Pomodoro | Move.it' })
 const challenges = useChallengesStore()
 const countdown = useCountdownStore()
 const theme = useThemeStore()
+const profile = useProfileStore()
 
 onMounted(() => {
   theme.initTheme()
-  challenges.initFromCookie()
+  challenges.initFromStorage()
+  profile.loadFromStorage()
   if ('Notification' in window) Notification.requestPermission()
 })
 

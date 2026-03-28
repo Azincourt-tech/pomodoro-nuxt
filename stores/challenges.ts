@@ -39,9 +39,11 @@ export const useChallengesStore = defineStore('challenges', {
     setCurrentChallengeIndex(index: number | null) {
       this.currentChallengeIndex = index
     },
+
     setIsLevelUpModalOpen(flag: boolean) {
       this.isLevelUpModalOpen = flag
     },
+
     completeChallenge(xpAmount: number) {
       const currentTotalXP = this.xp.current + xpAmount
       const shouldLevelUp = currentTotalXP >= this.xp.end
@@ -53,25 +55,36 @@ export const useChallengesStore = defineStore('challenges', {
         const experienceToNextLevel = Math.pow((this.level + 1) * 4, 2)
         this.xp = { current: remainingXp, start: 0, end: experienceToNextLevel }
         this.isLevelUpModalOpen = true
+        this.saveToStorage()
         return
       }
       this.xp = { ...this.xp, current: currentTotalXP }
+      this.saveToStorage()
     },
-    initFromCookie() {
-      const cookie = useCookie('pomodoro-movueit')
-      if (cookie.value) {
-        const data = cookie.value as { level: number; xp: XP; completedChallenges: number }
-        this.level = data.level
-        this.xp = data.xp
-        this.completedChallenges = data.completedChallenges
+
+    initFromStorage() {
+      if (import.meta.client) {
+        const saved = localStorage.getItem('pomodoro-progress')
+        if (saved) {
+          try {
+            const data = JSON.parse(saved) as { level: number; xp: XP; completedChallenges: number }
+            this.level = data.level
+            this.xp = data.xp
+            this.completedChallenges = data.completedChallenges
+          } catch {
+            // ignore invalid data
+          }
+        }
       }
     },
-    saveToCookie() {
-      const cookie = useCookie('pomodoro-movueit')
-      cookie.value = {
-        level: this.level,
-        xp: this.xp,
-        completedChallenges: this.completedChallenges,
+
+    saveToStorage() {
+      if (import.meta.client) {
+        localStorage.setItem('pomodoro-progress', JSON.stringify({
+          level: this.level,
+          xp: this.xp,
+          completedChallenges: this.completedChallenges,
+        }))
       }
     },
   },
