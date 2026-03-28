@@ -9,7 +9,7 @@ export type ThemeName = (typeof AVAILABLE_THEMES)[number]
 
 export const useThemeStore = defineStore('theme', {
   state: () => ({
-    currentTheme: 'dracula' as ThemeName,
+    currentTheme: 'dark' as ThemeName,
   }),
 
   actions: {
