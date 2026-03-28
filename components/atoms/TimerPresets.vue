@@ -52,7 +52,7 @@
 
       <!-- Reset button -->
       <button
-        class="btn btn-sm mt-3 gap-1 w-full"
+        class="btn btn-sm mt-5 gap-1 w-full"
         :class="countdown.isActive ? 'btn-error' : 'btn-ghost'"
         @click="resetTimer"
         :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60"
