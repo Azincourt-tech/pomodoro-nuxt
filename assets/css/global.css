@@ -1,3 +1,4 @@
+/* Base font sizing */
 @media (max-width: 1023px) {
   html { font-size: 93.75%; }
 }
@@ -18,6 +19,7 @@ body {
 /* Smooth theme transitions */
 html {
   transition: background-color 0.3s ease, color 0.3s ease;
+  scroll-behavior: smooth;
 }
 
 /* Card hover effects */
@@ -59,11 +61,6 @@ html {
 .scale-enter-from { opacity: 0; transform: scale(0.95); }
 .scale-leave-to { opacity: 0; transform: scale(0.95); }
 
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -72,20 +69,47 @@ html {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: oklch(var(--bc) / 0.2);
+  background: oklch(var(--bc) / 0.15);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(var(--bc) / 0.3);
-}
-
-/* Countdown digit glow */
-@keyframes pulse-glow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  background: oklch(var(--bc) / 0.25);
 }
 
 /* Progress bar animation */
 .progress {
   transition: value 0.5s ease;
+}
+
+/* Desktop-specific: sidebar sticky behavior */
+@media (min-width: 1024px) {
+  aside {
+    align-self: flex-start;
+  }
+}
+
+/* Countdown digit styling */
+@keyframes countdown-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Glass effect for navbar */
+.navbar {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Desktop: add subtle borders between sections */
+@media (min-width: 1024px) {
+  .lg\:border-l {
+    border-left: 1px solid oklch(var(--bc) / 0.1);
+  }
+}
+
+/* Better focus states */
+*:focus-visible {
+  outline: 2px solid oklch(var(--p));
+  outline-offset: 2px;
+  border-radius: 4px;
 }

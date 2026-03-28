@@ -1,25 +1,35 @@
 <template>
   <div class="min-h-screen bg-base-200 flex flex-col">
     <!-- Navbar -->
-    <nav class="navbar bg-base-100 shadow-sm px-4 lg:px-8 sticky top-0 z-50 backdrop-blur-sm bg-base-100/95">
+    <nav class="navbar bg-base-100/80 backdrop-blur-md shadow-sm px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/50">
       <div class="flex-1">
-        <NuxtLink to="/" class="btn btn-ghost text-xl font-bold font-rajdhani tracking-wide gap-2">
-          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          Pomodoro
+        <NuxtLink to="/" class="flex items-center gap-3 group">
+          <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <span class="text-xl font-bold font-rajdhani tracking-wide">Pomodoro</span>
         </NuxtLink>
       </div>
       <div class="flex-none">
         <div class="flex items-center gap-3">
-          <span class="badge badge-primary badge-sm font-medium hidden sm:flex">Level {{ challenges.level }}</span>
+          <!-- Level badge -->
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-base-200 rounded-full">
+            <svg class="w-4 h-4 text-warning" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span class="text-sm font-semibold">Level {{ challenges.level }}</span>
+          </div>
+
+          <!-- Theme toggle -->
           <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle" title="Tema">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
               </svg>
             </div>
-            <div tabindex="0" class="dropdown-content z-[10] mt-3 p-2 shadow-lg bg-base-100 rounded-box w-64">
+            <div tabindex="0" class="dropdown-content z-[10] mt-3 p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-300/50">
               <ThemeSelector />
             </div>
           </div>
@@ -28,29 +38,33 @@
     </nav>
 
     <!-- Experience Bar -->
-    <div class="max-w-6xl mx-auto w-full px-4 pt-6">
+    <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 pt-4 lg:pt-6">
       <ExperienceBar />
     </div>
 
     <!-- Main Content -->
-    <main class="max-w-6xl mx-auto w-full px-4 pb-8 flex-1">
+    <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 pb-8 flex-1">
       <slot />
     </main>
 
     <!-- Footer -->
-    <footer class="bg-base-100 border-t border-base-300 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 py-6">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div class="flex items-center gap-2 text-sm text-base-content/60">
+    <footer class="bg-base-100/50 border-t border-base-300/50 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+          <div class="flex items-center gap-2 text-base-content/50">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Pomodoro Move.it - Produtividade com saude</span>
+            <span>Pomodoro Move.it</span>
           </div>
-          <div class="flex items-center gap-4 text-sm text-base-content/50">
-            <span>Feito com foco e cafe</span>
-            <a href="https://github.com/Azincourt-tech" target="_blank" rel="noopener" class="link link-hover text-primary">
-              Azincourt-tech
+          <div class="flex items-center gap-4 text-base-content/40">
+            <span>Feito por</span>
+            <a href="https://github.com/Azincourt-tech" target="_blank" rel="noopener" class="link link-hover text-primary font-medium">
+              Willian
+            </a>
+            <span>e</span>
+            <a href="https://github.com/Morgana-Claw" target="_blank" rel="noopener" class="link link-hover text-primary font-medium">
+              Morgana
             </a>
           </div>
         </div>

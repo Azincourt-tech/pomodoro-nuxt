@@ -1,56 +1,72 @@
 <template>
-  <div class="py-6 space-y-6">
-    <!-- Top Section: Profile + Stats + Timer -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Left: Profile + Completed -->
-      <div class="space-y-4">
-        <Profile />
-        <CompletedChallenges />
-        <TimerPresets />
-      </div>
+  <div class="py-6 lg:py-10">
+    <!-- Desktop: Sidebar layout | Mobile: Stack layout -->
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
 
-      <!-- Center: Countdown -->
-      <div class="flex flex-col items-center justify-center gap-6">
-        <Countdown @completed="getNewChallenge" />
+      <!-- LEFT SIDEBAR (Desktop only feel) -->
+      <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0 space-y-5">
+        <!-- Profile Card -->
+        <div class="lg:sticky lg:top-24">
+          <Profile />
+          <div class="mt-4">
+            <CompletedChallenges />
+          </div>
+          <div class="mt-4">
+            <TimerPresets />
+          </div>
+        </div>
+      </aside>
 
-        <div class="w-full max-w-xs">
-          <button
-            v-if="countdown.hasCompleted"
-            disabled
-            class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
-          >
-            Ciclo completado
-          </button>
-          <button
-            v-else-if="countdown.isActive"
-            class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
-            @click="setCountdownState(false)"
-          >
-            Abandonar ciclo
-          </button>
-          <button
-            v-else
-            class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
-            @click="setCountdownState(true)"
-          >
-            Iniciar ciclo
-          </button>
+      <!-- CENTER: Main content -->
+      <div class="flex-1 flex flex-col items-center gap-6 min-w-0">
+        <!-- Countdown - big and centered -->
+        <div class="w-full flex flex-col items-center">
+          <Countdown @completed="getNewChallenge" />
+
+          <div class="mt-6 w-full max-w-sm">
+            <button
+              v-if="countdown.hasCompleted"
+              disabled
+              class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
+            >
+              Ciclo completado
+            </button>
+            <button
+              v-else-if="countdown.isActive"
+              class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
+              @click="setCountdownState(false)"
+            >
+              Abandonar ciclo
+            </button>
+            <button
+              v-else
+              class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+              @click="setCountdownState(true)"
+            >
+              Iniciar ciclo
+            </button>
+          </div>
         </div>
 
-        <!-- Spotify Player - Always visible -->
-        <div class="w-full max-w-md">
+        <!-- Active Challenge (appears when cycle completes) -->
+        <div class="w-full max-w-lg">
+          <Card id="challenge" />
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR (Desktop only feel) -->
+      <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0 space-y-5">
+        <div class="lg:sticky lg:top-24">
+          <!-- Spotify Player - always visible -->
           <SpotifyPlayer />
         </div>
-      </div>
-
-      <!-- Right: Active Challenge -->
-      <div class="flex flex-col">
-        <Card id="challenge" class="flex-1" />
-      </div>
+      </aside>
     </div>
 
-    <!-- Challenges Browser -->
-    <ChallengeBrowser />
+    <!-- Challenges Browser - full width -->
+    <div class="mt-8 lg:mt-12">
+      <ChallengeBrowser />
+    </div>
   </div>
 </template>
 
