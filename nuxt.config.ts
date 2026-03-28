@@ -11,11 +11,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Pomodoro Move.it',
-      htmlAttrs: { lang: 'en' },
+      htmlAttrs: { lang: 'pt-BR' },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Pomodoro timer with health challenges' },
+        { name: 'description', content: 'Pomodoro timer com challenges de saude e bem-estar' },
+        { name: 'theme-color', content: '#6366f1' },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
