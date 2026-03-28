@@ -1,28 +1,19 @@
 <template>
-	<header class="pb-10 flex items-center">
-		<p class="text-sm">
-			{{ `${xp.start} xp` }}
-		</p>
-		<div class="mx-4 lg:mx-6 flex-1 bg-gray-line h-1 rounded-md">
-			<div class="relative bg-green h-1" :style="{ width: `${currentXpPercentage}%` }">
-				<p class="text-sm absolute -right-4 w-max top-2">
-					{{ `${xp.current} xp (${currentXpPercentage}%)` }}
-				</p>
-			</div>
-		</div>
-		<p class="text-sm">
-			{{ `${xp.end} xp` }}
-		</p>
-	</header>
+  <div class="mb-4">
+    <div class="flex items-center gap-3">
+      <span class="text-sm font-medium text-base-content/60">{{ challenges.xp.start }} xp</span>
+      <progress class="progress progress-success flex-1 h-3" :value="challenges.currentXpPercentage" max="100" />
+      <span class="text-sm font-medium text-base-content/60">{{ challenges.xp.end }} xp</span>
+    </div>
+    <div class="text-center mt-1">
+      <span class="badge badge-success badge-sm font-medium">
+        {{ challenges.xp.current }} xp ({{ challenges.currentXpPercentage }}%)
+      </span>
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import { mapState, mapGetters } from 'vuex';
-export default Vue.extend({
-	computed: {
-		...mapState('Challenges', ['xp']),
-		...mapGetters('Challenges', ['currentXpPercentage']),
-	},
-});
+<script setup lang="ts">
+import { useChallengesStore } from '~/stores/challenges'
+const challenges = useChallengesStore()
 </script>

@@ -1,33 +1,26 @@
 @media (max-width: 1023px) {
-	html {
-		font-size: 93.75%;
-	}
+  html { font-size: 93.75%; }
 }
-
 @media (max-width: 639px) {
-	html {
-		font-size: 87.5%;
-	}
+  html { font-size: 87.5%; }
 }
 
 body {
-	font-family: 'Inter', sans-serif;
-	@apply text-text bg-background;
+  font-family: 'Inter', sans-serif;
 }
 
 .font-rajdhani {
-	font-family: Rajdhani;
+  font-family: 'Rajdhani', sans-serif;
 }
 
-.slide-fade-enter-active {
-	transition: all .4s ease;
+.slide-fade-enter-active { transition: all 0.4s ease; }
+.slide-fade-leave-active { transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1); }
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
 }
 
-.slide-fade-leave-active {
-	transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-
-.slide-fade-enter, .slide-fade-leave-to {
-	transform: translateY(10px);
-	opacity: 0;
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

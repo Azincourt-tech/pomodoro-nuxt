@@ -1,18 +1,11 @@
 <template>
-	<div class="flex justify-between items-center pb-5 border-b-2 border-gray-line mt-8 lg:mt-14 font-medium">
-		<p class="text-lg">
-			Completed challenges
-		</p>
-		<p class="text-2xl">
-			{{ completedChallenges }}
-		</p>
-	</div>
+  <div class="stat bg-base-100 rounded-box shadow-sm p-4">
+    <div class="stat-title">Completed challenges</div>
+    <div class="stat-value text-primary text-3xl">{{ challenges.completedChallenges }}</div>
+  </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import { mapState } from 'vuex';
-export default Vue.extend({
-	computed: mapState('Challenges', ['completedChallenges']),
-});
+<script setup lang="ts">
+import { useChallengesStore } from '~/stores/challenges'
+const challenges = useChallengesStore()
 </script>

@@ -1,69 +1,65 @@
-# pomodoro-nuxt
+# Pomodoro Move.it
 
-## Build Setup
+Aplicacao de Pomodoro gamificada com desafios de saude, construida com Nuxt 3.
+
+## Funcionalidades
+
+- Timer Pomodoro de 25 minutos
+- Desafios de alongamento e exercicios oculares
+- Sistema de XP e levels
+- Suporte a multiplos temas (DaisyUI)
+- Embed do Spotify para ouvir musica enquanto trabalha
+- Notificacoes quando o ciclo termina
+- Progresso salvo em cookies
+
+## Tecnologias
+
+- **Framework:** Nuxt 3
+- **State Management:** Pinia
+- **Styling:** TailwindCSS 3 + DaisyUI 4
+- **Linguagem:** TypeScript
+- **Deploy:** Vercel
+
+## Setup
 
 ```bash
-# install dependencies
-$ npm install
+# instalar dependencias
+npm install
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+# iniciar servidor de desenvolvimento
+npm run dev
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+# build para producao
+npm run build
 
-# generate static project
-$ npm run generate
+# preview do build
+npm run preview
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+## Temas Disponiveis
 
-## Special Directories
+O app suporta 10 temas do DaisyUI:
+- light, dark, cupcake, dracula, synthwave
+- retro, cyberpunk, valentine, aqua, lofi
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+Selecione o tema pelo menu dropdown no canto superior direito.
 
-### `assets`
+## Estrutura do Projeto
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+```
+├── assets/          # CSS e dados dos desafios
+├── components/
+│   ├── atoms/       # Componentes basicos
+│   ├── molecules/   # Componentes compostos
+│   └── organisms/   # Componentes complexos
+├── layouts/         # Layouts da aplicacao
+├── pages/           # Paginas (rotas)
+├── public/          # Arquivos estaticos
+├── stores/          # Stores Pinia
+└── utils/           # Funcoes utilitarias
+```
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+## Autores
 
-### `components`
-
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+- [Willian](https://github.com/Azincourt-tech)
+- [Morgana](https://github.com/Morgana-Claw)
