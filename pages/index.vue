@@ -1,18 +1,17 @@
 <template>
   <div class="py-6 lg:py-10">
-    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+    <!-- Linha principal: 3 colunas com altura padrao -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8" id="main-row">
 
-      <!-- LEFT SIDEBAR -->
-      <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0">
-        <div class="flex flex-col gap-4">
-          <Profile />
-          <CompletedChallenges />
-          <TimerPresets class="flex-1" />
-        </div>
-      </aside>
+      <!-- LEFT: Profile + Completed + Timer -->
+      <div class="flex flex-col gap-4">
+        <Profile />
+        <CompletedChallenges />
+        <TimerPresets class="flex-1" />
+      </div>
 
-      <!-- CENTER -->
-      <div class="flex-1 flex flex-col items-center gap-6 min-w-0">
+      <!-- CENTER: Countdown + Button + Challenge -->
+      <div class="flex flex-col items-center gap-6">
         <div class="w-full flex flex-col items-center">
           <Countdown @completed="getNewChallenge" />
 
@@ -41,18 +40,19 @@
           </div>
         </div>
 
-        <div class="w-full max-w-lg">
+        <div class="w-full flex-1">
           <Card id="challenge" />
         </div>
       </div>
 
-      <!-- RIGHT SIDEBAR -->
-      <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0">
-        <SpotifyPlayer />
-      </aside>
+      <!-- RIGHT: Spotify -->
+      <div class="flex flex-col">
+        <SpotifyPlayer class="flex-1" />
+      </div>
     </div>
 
-    <div class="mt-8 lg:mt-12">
+    <!-- Challenges Browser -->
+    <div class="mt-8">
       <ChallengeBrowser />
     </div>
   </div>
