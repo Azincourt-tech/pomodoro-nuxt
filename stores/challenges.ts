@@ -1,0 +1,107 @@
+import { defineStore } from 'pinia'
+import allChallenges from '~/assets/challenges/data'
+
+export interface XP {
+  current: number
+  start: number
+  end: number
+}
+
+export interface Challenge {
+  type: string
+  description: string
+  amount: number
+}
+
+export interface ChallengesState {
+  level: number
+  xp: XP
+  completedChallenges: number
+  currentChallengeIndex: number | null
+  isLevelUpModalOpen: boolean
+  allChallenges: Challenge[]
+}
+
+export const useChallengesStore = defineStore('challenges', {
+  state: (): ChallengesState => ({
+    level: 1,
+    xp: {
+      current: 0,
+      start: 0,
+      end: 64,
+    },
+    completedChallenges: 0,
+    currentChallengeIndex: null,
+    isLevelUpModalOpen: false,
+    allChallenges,
+  }),
+
+  getters: {
+    challengesLength: (state) => state.allChallenges.length,
+    currentXpPercentage: (state) => {
+      const percentage = (state.xp.current / state.xp.end) * 100
+      return Number(percentage.toFixed(2))
+    },
+    currentChallenge: (state): Challenge | null => {
+      return typeof state.currentChallengeIndex === 'number'
+        ? state.allChallenges[state.currentChallengeIndex]
+        : null
+    },
+  },
+
+  actions: {
+    setCurrentChallengeIndex(index: number | null) {
+      this.currentChallengeIndex = index
+    },
+    setIsLevelUpModalOpen(flag: boolean) {
+      this.isLevelUpModalOpen = flag
+    },
+    completeChallenge(xpAmount: number) {
+      const { current, end } = this.xp
+      const currentTotalXP = current + xpAmount
+      const shouldLevelUp = currentTotalXP >= end
+
+      this.completedChallenges += 1
+
+      if (shouldLevelUp) {
+        this.level += 1
+
+        const remainingXp = currentTotalXP - end
+        const experienceToNextLevel = Math.pow((this.level + 1) * 4, 2)
+
+        this.xp = {
+          current: remainingXp,
+          start: 0,
+          end: experienceToNextLevel,
+        }
+
+        this.isLevelUpModalOpen = true
+        return
+      }
+
+      this.xp = {
+        ...this.xp,
+        current: currentTotalXP,
+      }
+    },
+    saveCookieData(cookie: { level: number; xp: XP; completedChallenges: number }) {
+      this.level = cookie.level
+      this.xp = cookie.xp
+      this.completedChallenges = cookie.completedChallenges
+    },
+    initFromCookie() {
+      const cookie = useCookie('movueit')
+      if (cookie.value) {
+        this.saveCookieData(cookie.value as any)
+      }
+    },
+    saveToCookie() {
+      const cookie = useCookie('movueit')
+      cookie.value = {
+        level: this.level,
+        xp: this.xp,
+        completedChallenges: this.completedChallenges,
+      }
+    },
+  },
+})
