@@ -4,12 +4,10 @@
 
       <!-- LEFT SIDEBAR -->
       <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0">
-        <div class="flex flex-col gap-4 lg:h-full">
+        <div class="flex flex-col gap-4">
           <Profile />
           <CompletedChallenges />
-          <div class="flex-1">
-            <TimerPresets />
-          </div>
+          <TimerPresets class="flex-1" />
         </div>
       </aside>
 
@@ -50,9 +48,7 @@
 
       <!-- RIGHT SIDEBAR -->
       <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0">
-        <div class="lg:h-full">
-          <SpotifyPlayer />
-        </div>
+        <SpotifyPlayer />
       </aside>
     </div>
 

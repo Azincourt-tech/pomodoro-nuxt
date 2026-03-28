@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-base-100 shadow-sm">
+  <div class="card bg-base-100 shadow-sm" v-bind="$attrs">
     <div class="card-body p-4">
       <div class="flex items-center gap-2 mb-3">
         <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
