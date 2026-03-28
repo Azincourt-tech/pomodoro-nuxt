@@ -1,55 +1,30 @@
 <template>
-	<transition name="slide-fade">
-		<div
-			v-if="isLevelUpModalOpen"
-			class="overlay flex justify-center items-center bg-gray-line fixed inset-0"
-			@click="setModalState(false)"
-		>
-			<div class="bg-white w-full max-w-md p-10 rounded-md shadow-lg text-center relative" @click.stop>
-				<header class="text-9xl font-semibold text-blue bg-contain">
-					{{ level }}
-				</header>
-
-				<strong class="text-2xl text-text mt-1">
-					Congratulations!
-				</strong>
-
-				<p>
-					You reached a new level!
-				</p>
-
-				<button
-					type="button"
-					class="absolute right-2 top-2 bg-transparent border-0"
-					@click="setModalState(false)"
-				>
-					<img src="icons/close.svg" alt="Close modal">
-				</button>
-			</div>
-		</div>
-	</transition>
+  <Teleport to="body">
+    <dialog class="modal" :open="challenges.isLevelUpModalOpen">
+      <div class="modal-box text-center">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="challenges.setIsLevelUpModalOpen(false)">x</button>
+        </form>
+        <div class="py-6">
+          <div class="text-8xl font-bold font-rajdhani text-primary mb-2">{{ challenges.level }}</div>
+          <svg class="w-16 h-16 mx-auto mb-4 text-warning" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          </svg>
+          <h3 class="text-2xl font-bold">Congratulations!</h3>
+          <p class="py-2 text-base-content/70">You reached a new level!</p>
+        </div>
+        <div class="modal-action justify-center">
+          <button class="btn btn-primary" @click="challenges.setIsLevelUpModalOpen(false)">Continue</button>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button @click="challenges.setIsLevelUpModalOpen(false)">close</button>
+      </form>
+    </dialog>
+  </Teleport>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import { mapState, mapMutations } from 'vuex';
-import { Mutations } from '~/store/Challenges/types';
-export default Vue.extend({
-	computed: mapState('Challenges', ['level', 'isLevelUpModalOpen']),
-	methods: mapMutations('Challenges', {
-		setModalState: Mutations.SET_IS_LEVEL_UP_MODAL_OPEN,
-	}),
-});
+<script setup lang="ts">
+import { useChallengesStore } from '~/stores/challenges'
+const challenges = useChallengesStore()
 </script>
-
-<style scoped>
-	.overlay {
-		background-color: rgba(242, 243, 245, 0.8);
-	}
-	header {
-		background: url('/icons/levelup.svg') no-repeat center;
-	}
-	button {
-		font-size: 0;
-	}
-</style>
