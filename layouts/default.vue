@@ -22,11 +22,13 @@
             <span class="text-sm font-semibold">Level {{ challenges.level }}</span>
           </div>
 
-          <!-- Theme toggle -->
+          <!-- Theme toggle - clearly visible -->
           <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle" title="Tema">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2" title="Mudar tema">
+              <span class="w-5 h-5 rounded-full shadow-sm ring-1 ring-base-300" :class="themePreviewColor" />
+              <span class="hidden sm:inline text-xs font-medium capitalize">{{ theme.currentTheme }}</span>
+              <svg class="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
             <div tabindex="0" class="dropdown-content z-[10] mt-3 p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-300/50">
@@ -74,9 +76,27 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import ExperienceBar from '~/components/atoms/ExperienceBar.vue'
 import ThemeSelector from '~/components/atoms/ThemeSelector.vue'
 import { useChallengesStore } from '~/stores/challenges'
+import { useThemeStore } from '~/stores/theme'
 
 const challenges = useChallengesStore()
+const theme = useThemeStore()
+
+const colorMap: Record<string, string> = {
+  light: 'bg-gray-100 border border-gray-300',
+  dark: 'bg-gray-900',
+  cupcake: 'bg-pink-200',
+  dracula: 'bg-purple-900',
+  synthwave: 'bg-fuchsia-600',
+  retro: 'bg-orange-200',
+  cyberpunk: 'bg-yellow-400',
+  valentine: 'bg-pink-400',
+  aqua: 'bg-cyan-400',
+  lofi: 'bg-gray-300',
+}
+
+const themePreviewColor = computed(() => colorMap[theme.currentTheme] || 'bg-gray-400')
 </script>
