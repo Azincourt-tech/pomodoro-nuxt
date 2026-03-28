@@ -1,25 +1,39 @@
 <template>
-  <div class="dropdown dropdown-end">
-    <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-      </svg>
-      <span class="hidden sm:inline text-xs">Theme</span>
-      <svg class="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
-    <ul tabindex="0" class="dropdown-content z-[10] menu p-2 shadow-lg bg-base-100 rounded-box w-52 max-h-80 overflow-y-auto">
-      <li v-for="t in themes" :key="t">
-        <button :class="{ active: theme.currentTheme === t }" @click="theme.setTheme(t)">
-          <span class="w-4 h-4 rounded-full shrink-0" :class="previewColor(t)" />
-          <span class="capitalize">{{ t }}</span>
-          <svg v-if="theme.currentTheme === t" class="w-4 h-4 text-primary ml-auto" fill="currentColor" viewBox="0 0 20 20">
+  <div class="card bg-base-100 shadow-sm">
+    <div class="card-body p-4">
+      <div class="flex items-center gap-2 mb-3">
+        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+        </svg>
+        <h3 class="font-semibold text-sm">Tema</h3>
+      </div>
+
+      <div class="space-y-1">
+        <button
+          v-for="t in themes"
+          :key="t"
+          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200"
+          :class="theme.currentTheme === t
+            ? 'bg-primary/10 ring-1 ring-primary/30'
+            : 'hover:bg-base-200'"
+          @click="theme.setTheme(t)"
+        >
+          <span
+            class="w-6 h-6 rounded-full shrink-0 shadow-sm ring-1 ring-base-300 transition-transform duration-200"
+            :class="[previewColor(t), theme.currentTheme === t ? 'scale-110' : '']"
+          />
+          <span class="capitalize text-sm font-medium flex-1 text-left">{{ t }}</span>
+          <svg
+            v-if="theme.currentTheme === t"
+            class="w-4 h-4 text-primary"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
           </svg>
         </button>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
