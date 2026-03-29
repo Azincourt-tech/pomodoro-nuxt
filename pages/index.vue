@@ -1,16 +1,33 @@
 <template>
   <div class="py-6 lg:py-10">
-    <!-- Linha principal: 3 colunas com altura padrao -->
+    <!-- PiP Toggle Button -->
+    <div class="fixed bottom-4 right-4 z-[9998]">
+      <button
+        v-if="!pip.isOpen"
+        class="btn btn-circle btn-primary shadow-lg"
+        @click="pip.open()"
+        title="Abrir janela flutuante"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- PiP Window -->
+    <PiPWindow />
+
+    <!-- Linha principal: 3 colunas -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8" id="main-row">
 
-      <!-- LEFT: Profile + Completed + Timer -->
+      <!-- LEFT -->
       <div class="flex flex-col gap-4">
         <Profile />
         <CompletedChallenges />
         <TimerPresets class="flex-1" />
       </div>
 
-      <!-- CENTER: Countdown + Button + Challenge -->
+      <!-- CENTER -->
       <div class="flex flex-col items-center gap-6">
         <div class="w-full flex flex-col items-center">
           <Countdown @completed="getNewChallenge" />
@@ -45,7 +62,7 @@
         </div>
       </div>
 
-      <!-- RIGHT: Spotify -->
+      <!-- RIGHT -->
       <div class="flex flex-col">
         <SpotifyPlayer class="flex-1" />
       </div>
@@ -64,10 +81,12 @@ import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
 import { useThemeStore } from '~/stores/theme'
 import { useProfileStore } from '~/stores/profile'
+import { usePipStore } from '~/stores/pip'
 import CompletedChallenges from '~/components/atoms/CompletedChallenges.vue'
 import TimerPresets from '~/components/atoms/TimerPresets.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
 import ChallengeBrowser from '~/components/atoms/ChallengeBrowser.vue'
+import PiPWindow from '~/components/atoms/PiPWindow.vue'
 import Profile from '~/components/molecules/Profile.vue'
 import Countdown from '~/components/molecules/Countdown.vue'
 import Card from '~/components/organisms/Card.vue'
@@ -79,14 +98,21 @@ const challenges = useChallengesStore()
 const countdown = useCountdownStore()
 const theme = useThemeStore()
 const profile = useProfileStore()
+const pip = usePipStore()
 
 onMounted(() => {
   theme.initTheme()
   challenges.initFromStorage()
   profile.loadFromStorage()
   countdown.initFromStorage()
-  if ('Notification' in window) Notification.requestPermission()
+  requestNotificationPermission()
 })
+
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission()
+  }
+}
 
 function setCountdownState(flag: boolean) {
   countdown.setHasCompleted(false)
@@ -97,13 +123,18 @@ function getNewChallenge() {
   const index = getRandomNumber(0, challenges.challengesLength)
   countdown.setHasCompleted(true)
   challenges.setCurrentChallengeIndex(index)
-  if (Notification?.permission === 'granted') {
+
+  // Notificacao do navegador
+  if ('Notification' in window && Notification.permission === 'granted') {
     playAudio('/notification.mp3')
-    sendNotification('Novo Challenge!', {
-      body: 'Um novo challenge comecou. Va completar!',
+    const challenge = challenges.currentChallenge
+    sendNotification('Ciclo completado!', {
+      body: challenge ? challenge.description : 'Novo desafio disponivel!',
       icon: '/favicon.png',
+      tag: 'pomodoro-challenge',
     })
   }
+
   nextTick(() => scrollToElement('#challenge'))
 }
 </script>
