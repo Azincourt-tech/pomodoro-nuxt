@@ -28,7 +28,8 @@
       </div>
 
       <!-- Embed preenchendo o restante -->
-      <div v-if="embedSrc" class="rounded-lg overflow-hidden flex-1 min-h-0">
+      <div v-if="embedSrc" class="flex flex-col flex-1 min-h-0 gap-2">
+        <div class="rounded-lg overflow-hidden flex-1 min-h-0">
         <iframe
           :src="embedSrc"
           width="100%"
@@ -39,6 +40,13 @@
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"
         />
+        </div>
+        <p class="text-base-content/40 text-xs text-center flex items-center justify-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Faca login no Spotify no navegador para ouvir musicas completas
+        </p>
       </div>
 
       <!-- Placeholder centralizado -->
