@@ -1,6 +1,6 @@
 <template>
   <div class="card bg-base-100 shadow-sm h-full" v-bind="$attrs">
-    <div class="card-body p-3 flex flex-col gap-2">
+    <div class="card-body p-3 flex flex-col gap-2 [&>p]:flex-none">
       <!-- Header compacto -->
       <div class="flex items-center gap-2">
         <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 24 24">
@@ -29,13 +29,13 @@
         <button class="link link-error" @click="clearUrl">Remover</button>
       </div>
 
-      <!-- Aviso compacto -->
-      <p class="text-base-content/30 text-[10px] flex items-center gap-1 -mt-1">
-        <svg class="w-2.5 h-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Aviso de login -->
+      <div class="flex items-center gap-1.5 h-8 text-base-content/50 text-xs bg-base-200/50 rounded px-2">
+        <svg class="w-3.5 h-3.5 flex-shrink-0 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        Login no Spotify para musicas completas
-      </p>
+        <span>Para ouvir as musicas completas, faca login na sua conta do Spotify no navegador</span>
+      </div>
 
       <!-- Embed ou Placeholder -->
       <div v-if="embedSrc" class="rounded-lg overflow-hidden flex-1 min-h-0">
