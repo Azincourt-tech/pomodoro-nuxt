@@ -1,20 +1,6 @@
 <template>
   <div class="py-6 lg:py-10">
-    <!-- PiP Toggle Button -->
-    <div class="fixed bottom-4 right-4 z-[9998]">
-      <button
-        v-if="!pip.isOpen"
-        class="btn btn-circle btn-primary shadow-lg"
-        @click="pip.open()"
-        title="Abrir janela flutuante"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- PiP Window -->
+    <!-- PiP Window com botao -->
     <PiPWindow />
 
     <!-- Linha principal: 3 colunas -->
@@ -81,7 +67,6 @@ import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
 import { useThemeStore } from '~/stores/theme'
 import { useProfileStore } from '~/stores/profile'
-import { usePipStore } from '~/stores/pip'
 import CompletedChallenges from '~/components/atoms/CompletedChallenges.vue'
 import TimerPresets from '~/components/atoms/TimerPresets.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
@@ -98,7 +83,6 @@ const challenges = useChallengesStore()
 const countdown = useCountdownStore()
 const theme = useThemeStore()
 const profile = useProfileStore()
-const pip = usePipStore()
 
 onMounted(() => {
   theme.initTheme()
