@@ -4,26 +4,45 @@
     class="btn btn-circle shadow-lg fixed bottom-4 right-4 z-[9998]"
     :class="isOpen ? 'btn-error' : 'btn-primary'"
     @click="togglePiP"
-    :title="isOpen ? 'Fechar janela flutuante' : 'Abrir janela flutuante'"
+    :title="isOpen ? $t('pip.closeWindow') : $t('pip.openWindow')"
   >
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path v-if="!isOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      <path v-if="!isOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 4a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2h-7l3 2v1H8v-1l3-2H4a2 2 0 01-2-2V4zm10 9h6a1 1 0 001-1V6a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1z" />
       <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, nextTick } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
 import { useChallengesStore } from '~/stores/challenges'
+import { useThemeStore } from '~/stores/theme'
 
+const { t, locale } = useI18n()
 const countdown = useCountdownStore()
 const challenges = useChallengesStore()
+const themeStore = useThemeStore()
 const isOpen = ref(false)
 
 let pipWindow: any = null
 let animFrameId: number | null = null
+
+// Watch for theme changes and update PiP (with nextTick for CSS recalc)
+watch(() => themeStore.currentTheme, () => {
+  if (isOpen.value && pipWindow) {
+    nextTick(() => {
+      updatePiPTheme()
+    })
+  }
+})
+
+// Watch for locale changes and update PiP
+watch(() => locale.value, () => {
+  if (isOpen.value && pipWindow) {
+    updatePiPContent()
+  }
+})
 
 function togglePiP() {
   if (isOpen.value) {
@@ -49,7 +68,7 @@ async function openPiP() {
       const styles = document.querySelectorAll('link[rel="stylesheet"], style')
       styles.forEach(style => pipWindow.document.head.appendChild(style.cloneNode(true)))
 
-      // Injetar CSS customizado
+      // Injetar CSS customizado com tema DaisyUI
       const customStyle = pipWindow.document.createElement('style')
       customStyle.textContent = getPiPCSS()
       pipWindow.document.head.appendChild(customStyle)
@@ -57,6 +76,10 @@ async function openPiP() {
       // Injetar HTML
       pipWindow.document.body.innerHTML = getPiPBody()
       pipWindow.document.title = 'Pomodoro'
+
+      // Wait for browser to recalculate CSS before syncing theme
+      await nextTick()
+      syncDaisyUITheme()
 
       // Configurar eventos
       setupPiPEvents()
@@ -83,7 +106,7 @@ async function openPiP() {
   pipWindow = window.open('', 'pomodoro-pip', 'width=340,height=380')
 
   if (!pipWindow || pipWindow.closed) {
-    alert('Permita popups para usar a janela flutuante')
+    alert(t('pip.allowPopups'))
     return
   }
 
@@ -134,33 +157,152 @@ function updatePiPLoop() {
   }
 
   if (statusEl) {
-    statusEl.textContent = countdown.isActive ? 'Em andamento' : 'Pausado'
-    statusEl.style.color = countdown.isActive ? '#22c55e' : '#9ca3af'
+    statusEl.textContent = countdown.isActive ? t('pip.inProgress') : t('pip.paused')
   }
 
   if (toggleBtn) {
-    toggleBtn.textContent = countdown.isActive ? 'Parar' : 'Iniciar'
-    const btn = toggleBtn as HTMLButtonElement
-    btn.style.background = countdown.isActive
-      ? 'linear-gradient(135deg, #ef4444, #dc2626)'
-      : 'linear-gradient(135deg, #6366f1, #7c3aed)'
+    toggleBtn.textContent = countdown.isActive ? t('pip.stop') : t('pip.start')
   }
 
   if (challengeText) {
     challengeText.textContent = challenges.currentChallenge
       ? challenges.currentChallenge.description
-      : 'Inicie um ciclo para receber desafios'
+      : t('pip.startForChallenges')
   }
 
   animFrameId = requestAnimationFrame(updatePiPLoop)
+}
+
+function updatePiPContent() {
+  if (!pipWindow || pipWindow.closed) return
+
+  const challengeHeader = pipWindow.document.querySelector('.pip-challenge-header')
+  if (challengeHeader) {
+    challengeHeader.textContent = t('pip.challenge')
+  }
+
+  const statusEl = pipWindow.document.getElementById('pip-status')
+  if (statusEl) {
+    statusEl.textContent = countdown.isActive ? t('pip.inProgress') : t('pip.paused')
+  }
+
+  const toggleBtn = pipWindow.document.getElementById('pip-toggle-btn')
+  if (toggleBtn) {
+    toggleBtn.textContent = countdown.isActive ? t('pip.stop') : t('pip.start')
+  }
+
+  const resetBtn = pipWindow.document.getElementById('pip-reset-btn')
+  if (resetBtn) {
+    resetBtn.textContent = t('pip.reset')
+  }
+
+  const challengeText = pipWindow.document.getElementById('pip-challenge-text')
+  if (challengeText && !challenges.currentChallenge) {
+    challengeText.textContent = t('pip.startForChallenges')
+  }
+}
+
+/**
+ * Strips oklch() wrapper from a CSS value string.
+ * DaisyUI custom properties (--p, --b1, etc.) contain raw OKLCH component
+ * values (e.g. "0.933 0.018 272.8"), but getComputedStyle may return them
+ * already wrapped as "oklch(0.933 0.018 272.8)". We extract just the values.
+ */
+function extractOklchValues(raw: string): string {
+  const trimmed = raw.trim()
+  const match = trimmed.match(/^oklch\((.+)\)$/i)
+  return match ? match[1].trim() : trimmed
+}
+
+function syncDaisyUITheme() {
+  if (!pipWindow || pipWindow.closed) return
+
+  // Copy data-theme attribute
+  const dataTheme = document.documentElement.getAttribute('data-theme')
+  if (dataTheme) {
+    pipWindow.document.documentElement.setAttribute('data-theme', dataTheme)
+  }
+
+  // Get computed CSS variables from the parent document
+  const rootStyles = getComputedStyle(document.documentElement)
+
+  // Extract DaisyUI theme colors - these are raw OKLCH component values
+  const themeVars = [
+    '--p', '--pc', '--s', '--sc', '--a', '--ac',
+    '--n', '--nc', '--b1', '--b2', '--b3', '--bc',
+    '--inc', '--suc', '--wa', '--er', '--in',
+    '--su',
+  ]
+
+  let cssVars = ''
+  for (const varName of themeVars) {
+    const raw = rootStyles.getPropertyValue(varName).trim()
+    if (raw) {
+      cssVars += `${varName}: ${extractOklchValues(raw)};\n`
+    }
+  }
+
+  // Update or create style element with theme variables
+  let themeStyleEl = pipWindow.document.getElementById('pip-theme-vars')
+  if (!themeStyleEl) {
+    themeStyleEl = pipWindow.document.createElement('style')
+    themeStyleEl.id = 'pip-theme-vars'
+    pipWindow.document.head.appendChild(themeStyleEl)
+  }
+
+  themeStyleEl.textContent = `
+    :root {
+      ${cssVars}
+    }
+    body {
+      background: oklch(var(--b1)) !important;
+      color: oklch(var(--bc)) !important;
+    }
+    .pip-timer {
+      background: linear-gradient(135deg, oklch(var(--p)), oklch(var(--p) / 0.8)) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+    .pip-status {
+      color: oklch(var(--bc) / 0.6) !important;
+    }
+    .pip-btn-primary {
+      background: linear-gradient(135deg, oklch(var(--p)), oklch(var(--p) / 0.9)) !important;
+      color: oklch(var(--pc)) !important;
+    }
+    .pip-btn-ghost {
+      background: oklch(var(--b1) / 0.1) !important;
+      border: 1px solid oklch(var(--bc) / 0.1) !important;
+      color: oklch(var(--bc) / 0.6) !important;
+    }
+    .pip-btn-ghost:hover {
+      background: oklch(var(--b1) / 0.2) !important;
+      color: oklch(var(--bc)) !important;
+    }
+    .pip-challenge {
+      background: oklch(var(--b1) / 0.5) !important;
+      border: 1px solid oklch(var(--bc) / 0.1) !important;
+    }
+    .pip-challenge-header {
+      color: oklch(var(--p)) !important;
+    }
+    .pip-challenge-text {
+      color: oklch(var(--bc) / 0.7) !important;
+    }
+  `
+}
+
+function updatePiPTheme() {
+  syncDaisyUITheme()
 }
 
 function getPiPCSS(): string {
   return `
     body {
       font-family: 'Inter', -apple-system, sans-serif !important;
-      background: #0f0f1a !important;
-      color: #e8e6e3 !important;
+      background: oklch(var(--b1, 15% 0 0)) !important;
+      color: oklch(var(--bc, 95% 0 0)) !important;
       margin: 0 !important;
       padding: 20px !important;
       display: flex !important;
@@ -174,15 +316,15 @@ function getPiPBody(): string {
   return `
     <div class="pip-timer-wrapper">
       <div class="pip-timer" id="pip-timer">${countdown.minutes}:${String(countdown.seconds).padStart(2, '0')}</div>
-      <div class="pip-status" id="pip-status">${countdown.isActive ? 'Em andamento' : 'Pausado'}</div>
+      <div class="pip-status" id="pip-status">${countdown.isActive ? t('pip.inProgress') : t('pip.paused')}</div>
     </div>
     <div class="pip-controls">
-      <button class="pip-btn pip-btn-primary" id="pip-toggle-btn">${countdown.isActive ? 'Parar' : 'Iniciar'}</button>
-      <button class="pip-btn pip-btn-ghost" id="pip-reset-btn">Reset</button>
+      <button class="pip-btn pip-btn-primary" id="pip-toggle-btn">${countdown.isActive ? t('pip.stop') : t('pip.start')}</button>
+      <button class="pip-btn pip-btn-ghost" id="pip-reset-btn">${t('pip.reset')}</button>
     </div>
     <div class="pip-challenge">
-      <div class="pip-challenge-header">Desafio</div>
-      <p class="pip-challenge-text" id="pip-challenge-text">${challenges.currentChallenge ? challenges.currentChallenge.description : 'Inicie um ciclo para receber desafios'}</p>
+      <div class="pip-challenge-header">${t('pip.challenge')}</div>
+      <p class="pip-challenge-text" id="pip-challenge-text">${challenges.currentChallenge ? challenges.currentChallenge.description : t('pip.startForChallenges')}</p>
     </div>
     <style>${getPiPStyles()}</style>
   `
@@ -197,12 +339,12 @@ function getPiPStyles(): string {
       font-weight: 700;
       letter-spacing: 3px;
       line-height: 1;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      background: linear-gradient(135deg, oklch(var(--p)), oklch(var(--p) / 0.8));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .pip-status { font-size: 13px; font-weight: 500; margin-top: 6px; color: #9ca3af; }
+    .pip-status { font-size: 13px; font-weight: 500; margin-top: 6px; color: oklch(var(--bc) / 0.6); }
     .pip-controls { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
     .pip-btn {
       padding: 12px 28px;
@@ -215,34 +357,34 @@ function getPiPStyles(): string {
       font-family: 'Inter', sans-serif;
     }
     .pip-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
-    .pip-btn-primary { background: linear-gradient(135deg, #6366f1, #7c3aed); color: white; }
+    .pip-btn-primary { background: linear-gradient(135deg, oklch(var(--p)), oklch(var(--p) / 0.9)); color: oklch(var(--pc)); }
     .pip-btn-ghost {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #9ca3af;
+      background: oklch(var(--b1) / 0.1);
+      border: 1px solid oklch(var(--bc) / 0.1);
+      color: oklch(var(--bc) / 0.6);
     }
-    .pip-btn-ghost:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .pip-btn-ghost:hover { background: oklch(var(--b1) / 0.2); color: oklch(var(--bc)); }
     .pip-challenge {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: oklch(var(--b1) / 0.5);
+      border: 1px solid oklch(var(--bc) / 0.1);
       border-radius: 14px;
       padding: 16px;
       flex: 1;
     }
     .pip-challenge-header {
       font-weight: 600; font-size: 11px;
-      color: #a78bfa;
+      color: oklch(var(--p));
       margin-bottom: 10px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
     }
-    .pip-challenge-text { font-size: 14px; color: #9ca3af; line-height: 1.6; }
+    .pip-challenge-text { font-size: 14px; color: oklch(var(--bc) / 0.7); line-height: 1.6; }
   `
 }
 
 function getFullHTML(): string {
   return `<!DOCTYPE html>
-<html>
+<html data-theme="${themeStore.currentTheme}">
 <head>
   <title>Pomodoro</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
@@ -250,8 +392,8 @@ function getFullHTML(): string {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #0f0f1a;
-      color: #e8e6e3;
+      background: oklch(var(--b1, 15% 0 0));
+      color: oklch(var(--bc, 95% 0 0));
       min-height: 100vh;
       padding: 20px;
       display: flex;
