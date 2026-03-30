@@ -37,7 +37,7 @@
             <input
               v-model="githubInput"
               type="text"
-              placeholder="ex: Azincourt-tech"
+              :placeholder="$t('profile.githubPlaceholder')"
               class="input input-bordered input-sm flex-1"
               @keyup.enter="saveGithub"
             />
@@ -64,7 +64,7 @@
           <input
             v-model="nameInput"
             type="text"
-            placeholder="Seu nome"
+            :placeholder="$t('profile.namePlaceholder')"
             class="input input-bordered input-sm"
           />
         </div>
@@ -94,7 +94,7 @@
             </div>
           </div>
           <div>
-            <p class="font-medium text-sm">{{ nameInput || 'User' }}</p>
+            <p class="font-medium text-sm">{{ nameInput || $t('profile.defaultName') }}</p>
             <p class="text-xs text-base-content/60">{{ $t('profile.preview') }}</p>
           </div>
         </div>
@@ -114,6 +114,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useProfileStore } from '~/stores/profile'
 import { useChallengesStore } from '~/stores/challenges'
 
+const { t } = useI18n()
 const profile = useProfileStore()
 const challenges = useChallengesStore()
 
@@ -150,7 +151,7 @@ function clearGithub() {
 
 function save() {
   profile.updateProfile({
-    name: nameInput.value || 'User',
+    name: nameInput.value || t('profile.defaultName'),
     avatar: profile.profile.githubUsername ? '' : avatarInput.value,
   })
   profile.setEditing(false)

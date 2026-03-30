@@ -21,16 +21,19 @@
   "profile": {
     "editProfile": "Editar Perfil",
     "githubUsername": "Username do GitHub",
+    "githubPlaceholder": "ex: Azincourt-tech",
     "connectedAs": "Conectado como {username}",
     "remove": "Remover",
     "or": "ou",
     "name": "Nome",
+    "namePlaceholder": "Seu nome",
     "photoUrl": "URL da foto",
     "pasteLink": "Cole o link de uma imagem",
     "preview": "Preview",
     "save": "Salvar",
     "cancel": "Cancelar",
-    "edit": "Editar perfil"
+    "edit": "Editar perfil",
+    "defaultName": "Usuario"
   },
   "challenges": {
     "completedChallenges": "Desafios completados",

@@ -199,6 +199,18 @@ function updatePiPContent() {
   }
 }
 
+/**
+ * Strips oklch() wrapper from a CSS value string.
+ * DaisyUI custom properties (--p, --b1, etc.) contain raw OKLCH component
+ * values (e.g. "0.933 0.018 272.8"), but getComputedStyle may return them
+ * already wrapped as "oklch(0.933 0.018 272.8)". We extract just the values.
+ */
+function extractOklchValues(raw: string): string {
+  const trimmed = raw.trim()
+  const match = trimmed.match(/^oklch\((.+)\)$/i)
+  return match ? match[1].trim() : trimmed
+}
+
 function syncDaisyUITheme() {
   if (!pipWindow || pipWindow.closed) return
 
@@ -211,19 +223,19 @@ function syncDaisyUITheme() {
   // Get computed CSS variables from the parent document
   const rootStyles = getComputedStyle(document.documentElement)
 
-  // Extract DaisyUI theme colors
+  // Extract DaisyUI theme colors - these are raw OKLCH component values
   const themeVars = [
     '--p', '--pc', '--s', '--sc', '--a', '--ac',
     '--n', '--nc', '--b1', '--b2', '--b3', '--bc',
     '--inc', '--suc', '--wa', '--er', '--in',
-    '--su', '--wa', '--er',
+    '--su',
   ]
 
   let cssVars = ''
   for (const varName of themeVars) {
-    const value = rootStyles.getPropertyValue(varName).trim()
-    if (value) {
-      cssVars += `${varName}: ${value};\n`
+    const raw = rootStyles.getPropertyValue(varName).trim()
+    if (raw) {
+      cssVars += `${varName}: ${extractOklchValues(raw)};\n`
     }
   }
 
@@ -235,51 +247,45 @@ function syncDaisyUITheme() {
     pipWindow.document.head.appendChild(themeStyleEl)
   }
 
-  // Get background and text colors based on theme
-  const bgColor = rootStyles.getPropertyValue('--b1').trim() || 'oklch(var(--b1))'
-  const textColor = rootStyles.getPropertyValue('--bc').trim() || 'oklch(var(--bc))'
-  const primaryColor = rootStyles.getPropertyValue('--p').trim() || 'oklch(var(--p))'
-  const primaryContent = rootStyles.getPropertyValue('--pc').trim() || 'oklch(var(--pc))'
-
   themeStyleEl.textContent = `
     :root {
       ${cssVars}
     }
     body {
-      background: oklch(${bgColor}) !important;
-      color: oklch(${textColor}) !important;
+      background: oklch(var(--b1)) !important;
+      color: oklch(var(--bc)) !important;
     }
     .pip-timer {
-      background: linear-gradient(135deg, oklch(${primaryColor}), oklch(${primaryColor} / 0.8)) !important;
+      background: linear-gradient(135deg, oklch(var(--p)), oklch(var(--p) / 0.8)) !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
       background-clip: text !important;
     }
     .pip-status {
-      color: oklch(${textColor} / 0.6) !important;
+      color: oklch(var(--bc) / 0.6) !important;
     }
     .pip-btn-primary {
-      background: linear-gradient(135deg, oklch(${primaryColor}), oklch(${primaryColor} / 0.9)) !important;
-      color: oklch(${primaryContent}) !important;
+      background: linear-gradient(135deg, oklch(var(--p)), oklch(var(--p) / 0.9)) !important;
+      color: oklch(var(--pc)) !important;
     }
     .pip-btn-ghost {
-      background: oklch(${bgColor} / 0.1) !important;
-      border: 1px solid oklch(${textColor} / 0.1) !important;
-      color: oklch(${textColor} / 0.6) !important;
+      background: oklch(var(--b1) / 0.1) !important;
+      border: 1px solid oklch(var(--bc) / 0.1) !important;
+      color: oklch(var(--bc) / 0.6) !important;
     }
     .pip-btn-ghost:hover {
-      background: oklch(${bgColor} / 0.2) !important;
-      color: oklch(${textColor}) !important;
+      background: oklch(var(--b1) / 0.2) !important;
+      color: oklch(var(--bc)) !important;
     }
     .pip-challenge {
-      background: oklch(${bgColor} / 0.5) !important;
-      border: 1px solid oklch(${textColor} / 0.1) !important;
+      background: oklch(var(--b1) / 0.5) !important;
+      border: 1px solid oklch(var(--bc) / 0.1) !important;
     }
     .pip-challenge-header {
-      color: oklch(${primaryColor}) !important;
+      color: oklch(var(--p)) !important;
     }
     .pip-challenge-text {
-      color: oklch(${textColor} / 0.7) !important;
+      color: oklch(var(--bc) / 0.7) !important;
     }
   `
 }
