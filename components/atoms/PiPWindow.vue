@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, nextTick } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
 import { useChallengesStore } from '~/stores/challenges'
 import { useThemeStore } from '~/stores/theme'
@@ -28,10 +28,12 @@ const isOpen = ref(false)
 let pipWindow: any = null
 let animFrameId: number | null = null
 
-// Watch for theme changes and update PiP
+// Watch for theme changes and update PiP (with nextTick for CSS recalc)
 watch(() => themeStore.currentTheme, () => {
   if (isOpen.value && pipWindow) {
-    updatePiPTheme()
+    nextTick(() => {
+      updatePiPTheme()
+    })
   }
 })
 
@@ -75,7 +77,8 @@ async function openPiP() {
       pipWindow.document.body.innerHTML = getPiPBody()
       pipWindow.document.title = 'Pomodoro'
 
-      // Sincronizar tema DaisyUI
+      // Wait for browser to recalculate CSS before syncing theme
+      await nextTick()
       syncDaisyUITheme()
 
       // Configurar eventos

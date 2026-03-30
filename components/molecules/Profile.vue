@@ -30,15 +30,15 @@
 
         <!-- GitHub Login -->
         <div class="form-control">
-          <label class="label py-1">
+          <label class="label py-1 items-center">
             <span class="label-text font-medium">{{ $t('profile.githubUsername') }}</span>
           </label>
-          <div class="flex gap-2">
+          <div class="grid grid-cols-[1fr_auto] gap-2">
             <input
               v-model="githubInput"
               type="text"
               :placeholder="$t('profile.githubPlaceholder')"
-              class="input input-bordered input-sm flex-1 min-w-0"
+              class="input input-bordered input-sm w-full min-w-0"
               @keyup.enter="saveGithub"
             />
             <button class="btn btn-sm btn-primary shrink-0" @click="saveGithub">
@@ -48,7 +48,7 @@
               {{ $t('profile.save') }}
             </button>
           </div>
-          <label class="label py-1" v-if="profile.profile.githubUsername">
+          <label class="label py-1 items-center" v-if="profile.profile.githubUsername">
             <span class="label-text-alt text-success truncate">{{ $t('profile.connectedAs', { username: profile.profile.githubUsername }) }}</span>
             <button class="label-text-alt link link-error shrink-0" @click="clearGithub">{{ $t('profile.remove') }}</button>
           </label>
@@ -58,7 +58,7 @@
 
         <!-- Manual Name -->
         <div class="form-control">
-          <label class="label py-1">
+          <label class="label py-1 items-center">
             <span class="label-text font-medium">{{ $t('profile.name') }}</span>
           </label>
           <input
@@ -71,7 +71,7 @@
 
         <!-- Manual Avatar URL -->
         <div class="form-control">
-          <label class="label py-1">
+          <label class="label py-1 items-center">
             <span class="label-text font-medium">{{ $t('profile.photoUrl') }}</span>
           </label>
           <input
@@ -81,7 +81,7 @@
             class="input input-bordered input-sm w-full"
             :disabled="!!profile.profile.githubUsername"
           />
-          <label class="label py-1">
+          <label class="label py-1 items-center">
             <span class="label-text-alt">{{ $t('profile.pasteLink') }}</span>
           </label>
         </div>

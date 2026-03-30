@@ -24,9 +24,9 @@
 
       <!-- Custom input -->
       <div class="form-control">
-        <div class="flex gap-2 items-end">
-          <div class="flex-1">
-            <label class="label pb-1">
+        <div class="grid grid-cols-[1fr_auto] gap-2 items-end">
+          <div>
+            <label class="label py-1">
               <span class="label-text text-xs">{{ $t('timer.customTime') }}</span>
             </label>
             <input
@@ -41,7 +41,7 @@
             />
           </div>
           <button
-            class="btn btn-sm btn-outline"
+            class="btn btn-sm btn-outline self-end"
             @click="applyCustom"
             :disabled="countdown.isActive || !customInput || customInput < 1"
           >

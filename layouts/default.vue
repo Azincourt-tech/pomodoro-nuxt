@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import ExperienceBar from '~/components/atoms/ExperienceBar.vue'
 import ThemeSelector from '~/components/atoms/ThemeSelector.vue'
 import LanguageSelector from '~/components/atoms/LanguageSelector.vue'
@@ -101,6 +101,11 @@ const { locale } = useI18n()
 const challenges = useChallengesStore()
 const theme = useThemeStore()
 const currentLocale = ref(locale.value)
+
+// Sync navbar locale display with i18n changes
+watch(locale, (newLocale) => {
+  currentLocale.value = newLocale
+})
 
 const colorMap: Record<string, string> = {
   light: 'bg-gray-100 border border-gray-300',

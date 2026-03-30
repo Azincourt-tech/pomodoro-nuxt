@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 
 const { locales, locale, setLocale: setI18nLocale } = useI18n()
 
@@ -52,6 +52,13 @@ function setLocale(code: string) {
     localStorage.setItem('pomodoro-locale', code)
   }
 }
+
+// Keep local state in sync if i18n locale changes from elsewhere
+watch(locale, (newLocale) => {
+  if (currentLocale.value !== newLocale) {
+    currentLocale.value = newLocale
+  }
+})
 
 onMounted(() => {
   if (import.meta.client) {
