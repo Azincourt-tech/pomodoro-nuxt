@@ -5,8 +5,8 @@
         <svg class="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
         </svg>
-        <h3 class="font-semibold text-sm">Todos os Challenges</h3>
-        <span class="badge badge-sm badge-ghost ml-auto">{{ challenges.allChallenges.length }} disponiveis</span>
+        <h3 class="font-semibold text-sm">{{ $t('challenges.allChallenges') }}</h3>
+        <span class="badge badge-sm badge-ghost ml-auto">{{ $t('challenges.available', { count: challenges.allChallenges.length }) }}</span>
       </div>
 
       <div class="space-y-2 max-h-96 overflow-y-auto pr-1">
@@ -22,7 +22,7 @@
             </span>
             <div>
               <span class="font-medium text-sm capitalize">{{ challenge.label }}</span>
-              <span class="text-xs text-base-content/50 ml-2">{{ challenge.items.length }} challenges</span>
+              <span class="text-xs text-base-content/50 ml-2">{{ challenge.items.length }} {{ $t('challenges.challenges') }}</span>
             </div>
           </div>
           <div class="collapse-content">
@@ -47,22 +47,13 @@
 import { computed } from 'vue'
 import { useChallengesStore, type Challenge } from '~/stores/challenges'
 
+const { t } = useI18n()
 const challenges = useChallengesStore()
 
 interface GroupedChallenge {
   type: string
   label: string
   items: Challenge[]
-}
-
-const typeLabels: Record<string, string> = {
-  body: 'Alongamento',
-  eye: 'Exercicio Ocular',
-  drink: 'Hidratacao',
-  breathe: 'Respiracao',
-  posture: 'Postura',
-  meditate: 'Meditacao Rapida',
-  walk: 'Caminhada',
 }
 
 const groupedChallenges = computed<GroupedChallenge[]>(() => {
@@ -78,7 +69,7 @@ const groupedChallenges = computed<GroupedChallenge[]>(() => {
     if (items && items.length > 0) {
       result.push({
         type,
-        label: typeLabels[type] || type,
+        label: t(`challengeTypes.${type}`),
         items,
       })
     }

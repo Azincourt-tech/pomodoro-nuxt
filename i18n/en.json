@@ -1,0 +1,90 @@
+{
+  "app": {
+    "title": "Pomodoro Move.it",
+    "description": "Pomodoro timer with health and wellness challenges"
+  },
+  "nav": {
+    "level": "Level {level}",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "timer": {
+    "startCycle": "Start cycle",
+    "abandonCycle": "Abandon cycle",
+    "cycleCompleted": "Cycle completed",
+    "pomodoroTime": "Pomodoro Time",
+    "customTime": "Custom time (minutes)",
+    "apply": "Apply",
+    "resetTimer": "Reset Timer",
+    "minutes": "{minutes}min"
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "githubUsername": "GitHub Username",
+    "connectedAs": "Connected as {username}",
+    "remove": "Remove",
+    "or": "or",
+    "name": "Name",
+    "photoUrl": "Photo URL",
+    "pasteLink": "Paste an image link",
+    "preview": "Preview",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit profile"
+  },
+  "challenges": {
+    "completedChallenges": "Completed challenges",
+    "allChallenges": "All Challenges",
+    "available": "{count} available",
+    "challenges": "challenges",
+    "failed": "Failed",
+    "completed": "Completed",
+    "startCycle": "Start a new cycle to receive new challenges",
+    "levelUp": "Increase your level by completing challenges"
+  },
+  "challengeTypes": {
+    "body": "Stretching",
+    "eye": "Eye Exercise",
+    "drink": "Hydration",
+    "breathe": "Breathing",
+    "posture": "Posture",
+    "meditate": "Quick Meditation",
+    "walk": "Walking"
+  },
+  "levelUp": {
+    "congratulations": "Congratulations!",
+    "newLevel": "You reached a new level!",
+    "continue": "Continue"
+  },
+  "pip": {
+    "closeWindow": "Close floating window",
+    "openWindow": "Open floating window",
+    "inProgress": "In progress",
+    "paused": "Paused",
+    "stop": "Stop",
+    "start": "Start",
+    "reset": "Reset",
+    "challenge": "Challenge",
+    "startForChallenges": "Start a cycle to receive challenges",
+    "allowPopups": "Allow popups to use the floating window"
+  },
+  "spotify": {
+    "player": "Spotify Player",
+    "playlistLink": "Playlist link...",
+    "use": "Use",
+    "activePlaylist": "Active playlist",
+    "remove": "Remove",
+    "loginInfo": "To listen to full songs, log in to your Spotify account in the browser",
+    "pasteLink": "Paste a Spotify link"
+  },
+  "experience": {
+    "xp": "xp"
+  },
+  "footer": {
+    "madeBy": "Made by"
+  },
+  "notifications": {
+    "cycleCompleted": "Cycle completed!",
+    "newChallenge": "New challenge available!"
+  }
+}

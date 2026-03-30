@@ -18,8 +18,8 @@
       <p class="text-base-content/70 text-sm leading-relaxed">{{ description }}</p>
 
       <div class="card-actions w-full mt-4 grid grid-cols-2 gap-2">
-        <button class="btn btn-error btn-outline btn-sm h-10" @click="resetChallenges">Falhou</button>
-        <button class="btn btn-success btn-sm h-10" @click="challengeSucceeded">Completou</button>
+        <button class="btn btn-error btn-outline btn-sm h-10" @click="resetChallenges">{{ $t('challenges.failed') }}</button>
+        <button class="btn btn-success btn-sm h-10" @click="challengeSucceeded">{{ $t('challenges.completed') }}</button>
       </div>
     </div>
   </div>
@@ -30,21 +30,12 @@ import { computed } from 'vue'
 import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
 
+const { t } = useI18n()
 const props = defineProps<{ type: string; description: string; amount: number }>()
 const challenges = useChallengesStore()
 const countdown = useCountdownStore()
 
-const typeLabels: Record<string, string> = {
-  body: 'Alongamento',
-  eye: 'Exercicio Ocular',
-  drink: 'Hidratacao',
-  breathe: 'Respiracao',
-  posture: 'Postura',
-  meditate: 'Meditacao Rapida',
-  walk: 'Caminhada',
-}
-
-const typeLabel = computed(() => typeLabels[props.type] || 'Desafio')
+const typeLabel = computed(() => t(`challengeTypes.${props.type}`))
 
 const typeBg = computed(() => {
   const map: Record<string, string> = {
