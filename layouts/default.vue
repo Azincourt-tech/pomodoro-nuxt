@@ -24,7 +24,7 @@
 
           <!-- Language selector -->
           <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2" :title="$t('nav.language')">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2 items-baseline" :title="$t('nav.language')">
               <span class="text-lg">{{ currentLocale === 'pt-BR' ? '🇧🇷' : '🇺🇸' }}</span>
               <span class="hidden sm:inline text-xs font-medium">{{ currentLocale === 'pt-BR' ? 'PT' : 'EN' }}</span>
               <svg class="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
