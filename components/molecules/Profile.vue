@@ -1,6 +1,6 @@
 <template>
-  <div class="card bg-base-100 shadow-sm">
-    <div class="card-body p-4">
+  <div class="card bg-base-100 shadow-sm overflow-hidden">
+    <div class="card-body p-4 min-w-0">
       <!-- Display Mode -->
       <div v-if="!profile.isEditing" class="flex items-center gap-4">
         <div class="avatar">
@@ -25,12 +25,12 @@
       </div>
 
       <!-- Edit Mode -->
-      <div v-else class="space-y-4">
+      <div v-else class="space-y-3">
         <h3 class="font-bold text-lg">{{ $t('profile.editProfile') }}</h3>
 
         <!-- GitHub Login -->
         <div class="form-control">
-          <label class="label">
+          <label class="label py-1">
             <span class="label-text font-medium">{{ $t('profile.githubUsername') }}</span>
           </label>
           <div class="flex gap-2">
@@ -38,63 +38,63 @@
               v-model="githubInput"
               type="text"
               :placeholder="$t('profile.githubPlaceholder')"
-              class="input input-bordered input-sm flex-1"
+              class="input input-bordered input-sm flex-1 min-w-0"
               @keyup.enter="saveGithub"
             />
-            <button class="btn btn-sm btn-primary" @click="saveGithub">
+            <button class="btn btn-sm btn-primary shrink-0" @click="saveGithub">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
               </svg>
               {{ $t('profile.save') }}
             </button>
           </div>
-          <label class="label" v-if="profile.profile.githubUsername">
-            <span class="label-text-alt text-success">{{ $t('profile.connectedAs', { username: profile.profile.githubUsername }) }}</span>
-            <button class="label-text-alt link link-error" @click="clearGithub">{{ $t('profile.remove') }}</button>
+          <label class="label py-1" v-if="profile.profile.githubUsername">
+            <span class="label-text-alt text-success truncate">{{ $t('profile.connectedAs', { username: profile.profile.githubUsername }) }}</span>
+            <button class="label-text-alt link link-error shrink-0" @click="clearGithub">{{ $t('profile.remove') }}</button>
           </label>
         </div>
 
-        <div class="divider text-xs">{{ $t('profile.or') }}</div>
+        <div class="divider text-xs my-2">{{ $t('profile.or') }}</div>
 
         <!-- Manual Name -->
         <div class="form-control">
-          <label class="label">
+          <label class="label py-1">
             <span class="label-text font-medium">{{ $t('profile.name') }}</span>
           </label>
           <input
             v-model="nameInput"
             type="text"
             :placeholder="$t('profile.namePlaceholder')"
-            class="input input-bordered input-sm"
+            class="input input-bordered input-sm w-full"
           />
         </div>
 
         <!-- Manual Avatar URL -->
         <div class="form-control">
-          <label class="label">
+          <label class="label py-1">
             <span class="label-text font-medium">{{ $t('profile.photoUrl') }}</span>
           </label>
           <input
             v-model="avatarInput"
             type="url"
             placeholder="https://..."
-            class="input input-bordered input-sm"
+            class="input input-bordered input-sm w-full"
             :disabled="!!profile.profile.githubUsername"
           />
-          <label class="label">
+          <label class="label py-1">
             <span class="label-text-alt">{{ $t('profile.pasteLink') }}</span>
           </label>
         </div>
 
         <!-- Preview -->
-        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg">
-          <div class="avatar">
+        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg overflow-hidden">
+          <div class="avatar shrink-0">
             <div class="w-12 rounded-full">
               <img :src="previewAvatar" :alt="nameInput" />
             </div>
           </div>
-          <div>
-            <p class="font-medium text-sm">{{ nameInput || $t('profile.defaultName') }}</p>
+          <div class="min-w-0">
+            <p class="font-medium text-sm truncate">{{ nameInput || $t('profile.defaultName') }}</p>
             <p class="text-xs text-base-content/60">{{ $t('profile.preview') }}</p>
           </div>
         </div>

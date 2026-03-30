@@ -7,7 +7,7 @@
     :title="isOpen ? $t('pip.closeWindow') : $t('pip.openWindow')"
   >
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path v-if="!isOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      <path v-if="!isOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 4a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2h-7l3 2v1H8v-1l3-2H4a2 2 0 01-2-2V4zm10 9h6a1 1 0 001-1V6a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1z" />
       <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>
   </button>
