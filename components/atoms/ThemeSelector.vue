@@ -12,20 +12,20 @@
         <button
           v-for="t in themes"
           :key="t"
-          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200"
+          class="w-full flex items-baseline gap-3 px-3 py-2 rounded-lg transition-all duration-200"
           :class="theme.currentTheme === t
             ? 'bg-primary/10 ring-1 ring-primary/30'
             : 'hover:bg-base-200'"
           @click="theme.setTheme(t)"
         >
           <span
-            class="w-6 h-6 rounded-full shrink-0 shadow-sm ring-1 ring-base-300 transition-transform duration-200"
+            class="w-6 h-6 rounded-full shrink-0 self-center shadow-sm ring-1 ring-base-300 transition-transform duration-200"
             :class="[previewColor(t), theme.currentTheme === t ? 'scale-110' : '']"
           />
           <span class="capitalize text-sm font-medium flex-1 text-left">{{ t }}</span>
           <svg
             v-if="theme.currentTheme === t"
-            class="w-4 h-4 text-primary"
+            class="w-4 h-4 text-primary self-center"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

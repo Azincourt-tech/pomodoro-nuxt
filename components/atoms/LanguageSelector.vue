@@ -12,7 +12,7 @@
         <button
           v-for="locale in availableLocales"
           :key="locale.code"
-          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200"
+          class="w-full flex items-baseline gap-3 px-3 py-2 rounded-lg transition-all duration-200"
           :class="currentLocale === locale.code
             ? 'bg-primary/10 ring-1 ring-primary/30'
             : 'hover:bg-base-200'"
@@ -22,7 +22,7 @@
           <span class="text-sm font-medium flex-1 text-left">{{ locale.name }}</span>
           <svg
             v-if="currentLocale === locale.code"
-            class="w-4 h-4 text-primary"
+            class="w-4 h-4 text-primary self-center"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

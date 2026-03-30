@@ -30,7 +30,7 @@
 
         <!-- GitHub Login -->
         <div class="form-control">
-          <label class="label py-1 items-center">
+          <label class="label py-1 items-baseline">
             <span class="label-text font-medium">{{ $t('profile.githubUsername') }}</span>
           </label>
           <div class="grid grid-cols-[1fr_auto] gap-2">
@@ -48,7 +48,7 @@
               {{ $t('profile.save') }}
             </button>
           </div>
-          <label class="label py-1 items-center" v-if="profile.profile.githubUsername">
+          <label class="label py-1 items-baseline" v-if="profile.profile.githubUsername">
             <span class="label-text-alt text-success truncate">{{ $t('profile.connectedAs', { username: profile.profile.githubUsername }) }}</span>
             <button class="label-text-alt link link-error shrink-0" @click="clearGithub">{{ $t('profile.remove') }}</button>
           </label>
@@ -58,7 +58,7 @@
 
         <!-- Manual Name -->
         <div class="form-control">
-          <label class="label py-1 items-center">
+          <label class="label py-1 items-baseline">
             <span class="label-text font-medium">{{ $t('profile.name') }}</span>
           </label>
           <input
@@ -71,7 +71,7 @@
 
         <!-- Manual Avatar URL -->
         <div class="form-control">
-          <label class="label py-1 items-center">
+          <label class="label py-1 items-baseline">
             <span class="label-text font-medium">{{ $t('profile.photoUrl') }}</span>
           </label>
           <input
@@ -81,14 +81,14 @@
             class="input input-bordered input-sm w-full"
             :disabled="!!profile.profile.githubUsername"
           />
-          <label class="label py-1 items-center">
+          <label class="label py-1 items-baseline">
             <span class="label-text-alt">{{ $t('profile.pasteLink') }}</span>
           </label>
         </div>
 
         <!-- Preview -->
-        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg overflow-hidden">
-          <div class="avatar shrink-0">
+        <div class="flex items-baseline gap-3 p-3 bg-base-200 rounded-lg overflow-hidden">
+          <div class="avatar shrink-0 self-center">
             <div class="w-12 rounded-full">
               <img :src="previewAvatar" :alt="nameInput" />
             </div>
