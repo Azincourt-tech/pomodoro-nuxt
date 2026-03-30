@@ -6,7 +6,23 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
   ],
+
+  i18n: {
+    locales: [
+      { code: 'pt-BR', name: 'Portugues', file: 'pt-BR.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'pt-BR',
+    lazy: true,
+    langDir: './',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: false,
+      fallbackLocale: 'pt-BR',
+    },
+  },
 
   app: {
     head: {
