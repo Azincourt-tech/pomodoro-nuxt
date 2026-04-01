@@ -1,64 +1,63 @@
 <template>
-  <div class="py-6 lg:py-10">
-    <!-- PiP Window com botao -->
-    <PiPWindow />
+	<div class="py-6 lg:py-10">
+		<!-- PiP Window com botao -->
+		<PiPWindow />
 
-    <!-- Linha principal: 3 colunas -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8" id="main-row">
+		<!-- Linha principal: 3 colunas -->
+		<div id="main-row" class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+			<!-- LEFT -->
+			<div class="flex flex-col gap-4">
+				<Profile />
+				<CompletedChallenges />
+				<TimerPresets class="flex-1" />
+			</div>
 
-      <!-- LEFT -->
-      <div class="flex flex-col gap-4">
-        <Profile />
-        <CompletedChallenges />
-        <TimerPresets class="flex-1" />
-      </div>
+			<!-- CENTER -->
+			<div class="flex flex-col items-center gap-6">
+				<div class="w-full flex flex-col items-center">
+					<Countdown @completed="getNewChallenge" />
 
-      <!-- CENTER -->
-      <div class="flex flex-col items-center gap-6">
-        <div class="w-full flex flex-col items-center">
-          <Countdown @completed="getNewChallenge" />
+					<div class="mt-6 w-full max-w-sm">
+						<button
+							v-if="countdown.hasCompleted"
+							disabled
+							class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
+						>
+							{{ $t('timer.cycleCompleted') }}
+						</button>
+						<button
+							v-else-if="countdown.isActive"
+							class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
+							@click="setCountdownState(false)"
+						>
+							{{ $t('timer.abandonCycle') }}
+						</button>
+						<button
+							v-else
+							class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+							@click="setCountdownState(true)"
+						>
+							{{ $t('timer.startCycle') }}
+						</button>
+					</div>
+				</div>
 
-          <div class="mt-6 w-full max-w-sm">
-            <button
-              v-if="countdown.hasCompleted"
-              disabled
-              class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
-            >
-              {{ $t('timer.cycleCompleted') }}
-            </button>
-            <button
-              v-else-if="countdown.isActive"
-              class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
-              @click="setCountdownState(false)"
-            >
-              {{ $t('timer.abandonCycle') }}
-            </button>
-            <button
-              v-else
-              class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
-              @click="setCountdownState(true)"
-            >
-              {{ $t('timer.startCycle') }}
-            </button>
-          </div>
-        </div>
+				<div class="w-full flex-1">
+					<Card id="challenge" />
+				</div>
+			</div>
 
-        <div class="w-full flex-1">
-          <Card id="challenge" />
-        </div>
-      </div>
+			<!-- RIGHT -->
+			<div class="flex flex-col">
+				<SpotifyPlayer class="flex-1" />
+			</div>
+		</div>
 
-      <!-- RIGHT -->
-      <div class="flex flex-col">
-        <SpotifyPlayer class="flex-1" />
-      </div>
-    </div>
-
-    <!-- Challenges Browser -->
-    <div class="mt-8">
-      <ChallengeBrowser />
-    </div>
-  </div>
+		<!-- Challenges Browser -->
+		<div class="mt-8">
+			<ChallengeBrowser />
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -86,40 +85,40 @@ const theme = useThemeStore()
 const profile = useProfileStore()
 
 onMounted(() => {
-  theme.initTheme()
-  challenges.initFromStorage()
-  profile.loadFromStorage()
-  countdown.initFromStorage()
-  requestNotificationPermission()
+	theme.initTheme()
+	challenges.initFromStorage()
+	profile.loadFromStorage()
+	countdown.initFromStorage()
+	requestNotificationPermission()
 })
 
 function requestNotificationPermission() {
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission()
-  }
+	if ('Notification' in window && Notification.permission === 'default') {
+		Notification.requestPermission()
+	}
 }
 
 function setCountdownState(flag: boolean) {
-  countdown.setHasCompleted(false)
-  countdown.setIsActive(flag)
+	countdown.setHasCompleted(false)
+	countdown.setIsActive(flag)
 }
 
 function getNewChallenge() {
-  const index = getRandomNumber(0, challenges.challengesLength)
-  countdown.setHasCompleted(true)
-  challenges.setCurrentChallengeIndex(index)
+	const index = getRandomNumber(0, challenges.challengesLength)
+	countdown.setHasCompleted(true)
+	challenges.setCurrentChallengeIndex(index)
 
-  // Notificacao do navegador
-  if ('Notification' in window && Notification.permission === 'granted') {
-    playAudio('/notification.mp3')
-    const challenge = challenges.currentChallenge
-    sendNotification(t('notifications.cycleCompleted'), {
-      body: challenge ? challenge.description : t('notifications.newChallenge'),
-      icon: '/favicon.png',
-      tag: 'pomodoro-challenge',
-    })
-  }
+	// Notificacao do navegador
+	if ('Notification' in window && Notification.permission === 'granted') {
+		playAudio('/notification.mp3')
+		const challenge = challenges.currentChallenge
+		sendNotification(t('notifications.cycleCompleted'), {
+			body: challenge ? challenge.description : t('notifications.newChallenge'),
+			icon: '/favicon.png',
+			tag: 'pomodoro-challenge'
+		})
+	}
 
-  nextTick(() => scrollToElement('#challenge'))
+	nextTick(() => scrollToElement('#challenge'))
 }
 </script>
