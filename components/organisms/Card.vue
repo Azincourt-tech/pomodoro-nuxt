@@ -1,6 +1,9 @@
 <template>
   <div class="bg-base-100 rounded-box shadow-sm flex flex-1 w-full">
-    <Challenge v-if="challenges.currentChallenge" v-bind="challenges.currentChallenge" />
+    <Challenge
+      v-if="challenges.currentChallenge"
+      v-bind="challenges.currentChallenge"
+    />
     <StartCycle v-else />
     <LevelUpModal />
   </div>

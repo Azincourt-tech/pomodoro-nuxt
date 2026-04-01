@@ -1,115 +1,148 @@
 /* Base font sizing */
 @media (max-width: 1023px) {
-  html { font-size: 93.75%; }
+	html {
+		font-size: 93.75%;
+	}
 }
 @media (max-width: 639px) {
-  html { font-size: 87.5%; }
+	html {
+		font-size: 87.5%;
+	}
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: 'Inter', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .font-rajdhani {
-  font-family: 'Rajdhani', sans-serif;
+	font-family: 'Rajdhani', sans-serif;
 }
 
 /* Smooth theme transitions */
 html {
-  transition: background-color 0.3s ease, color 0.3s ease;
-  scroll-behavior: smooth;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
+	scroll-behavior: smooth;
 }
 
 /* Card hover effects */
 .card {
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
+	transition:
+		box-shadow 0.25s ease,
+		transform 0.25s ease;
 }
 .card:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Button transitions */
 .btn {
-  transition: all 0.2s ease;
+	transition: all 0.2s ease;
 }
 
 /* Collapse animation */
 .collapse-content {
-  transition: padding 0.2s ease;
+	transition: padding 0.2s ease;
 }
 
 /* Slide fade transitions */
-.slide-fade-enter-active { transition: all 0.4s ease; }
-.slide-fade-leave-active { transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1); }
+.slide-fade-enter-active {
+	transition: all 0.4s ease;
+}
+.slide-fade-leave-active {
+	transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateY(10px);
-  opacity: 0;
+	transform: translateY(10px);
+	opacity: 0;
 }
 
 /* Fade transitions */
-.fade-enter-active { transition: opacity 0.3s ease; }
-.fade-leave-active { transition: opacity 0.2s ease; }
+.fade-enter-active {
+	transition: opacity 0.3s ease;
+}
+.fade-leave-active {
+	transition: opacity 0.2s ease;
+}
 .fade-enter-from,
-.fade-leave-to { opacity: 0; }
+.fade-leave-to {
+	opacity: 0;
+}
 
 /* Scale transitions */
-.scale-enter-active { transition: all 0.3s ease; }
-.scale-leave-active { transition: all 0.2s ease; }
-.scale-enter-from { opacity: 0; transform: scale(0.95); }
-.scale-leave-to { opacity: 0; transform: scale(0.95); }
+.scale-enter-active {
+	transition: all 0.3s ease;
+}
+.scale-leave-active {
+	transition: all 0.2s ease;
+}
+.scale-enter-from {
+	opacity: 0;
+	transform: scale(0.95);
+}
+.scale-leave-to {
+	opacity: 0;
+	transform: scale(0.95);
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+	width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: oklch(var(--bc) / 0.15);
-  border-radius: 3px;
+	background: oklch(var(--bc) / 0.15);
+	border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(var(--bc) / 0.25);
+	background: oklch(var(--bc) / 0.25);
 }
 
 /* Progress bar animation */
 .progress {
-  transition: value 0.5s ease;
+	transition: value 0.5s ease;
 }
 
 /* Desktop-specific: sidebar sticky behavior */
 @media (min-width: 1024px) {
-  aside {
-    align-self: flex-start;
-  }
+	aside {
+		align-self: flex-start;
+	}
 }
 
 /* Countdown digit styling */
 @keyframes countdown-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.7;
+	}
 }
 
 /* Glass effect for navbar */
 .navbar {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
 }
 
 /* Desktop: add subtle borders between sections */
 @media (min-width: 1024px) {
-  .lg\:border-l {
-    border-left: 1px solid oklch(var(--bc) / 0.1);
-  }
+	.lg\:border-l {
+		border-left: 1px solid oklch(var(--bc) / 0.1);
+	}
 }
 
 /* Better focus states */
 *:focus-visible {
-  outline: 2px solid oklch(var(--p));
-  outline-offset: 2px;
-  border-radius: 4px;
+	outline: 2px solid oklch(var(--p));
+	outline-offset: 2px;
+	border-radius: 4px;
 }

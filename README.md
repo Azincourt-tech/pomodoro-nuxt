@@ -5,15 +5,15 @@
 <h1 align="center">Pomodoro Move.it</h1>
 
 <p align="center">
-  Gamified Pomodoro app with health challenges, Spotify integration, and Picture-in-Picture mode
+  Aplicacao de Pomodoro gamificada com desafios de saude e bem-estar
 </p>
 
 <p align="center">
   <a href="https://pomodoro-nuxt-ten.vercel.app">Live Demo</a>
-  &middot;
-  <a href="https://github.com/Azincourt-tech/pomodoro-nuxt/issues">Report Bug</a>
-  &middot;
-  <a href="https://github.com/Azincourt-tech/pomodoro-nuxt/issues">Request Feature</a>
+  ·
+  <a href="https://github.com/Azincourt-tech/pomodoro-nuxt/issues">Reportar Bug</a>
+  ·
+  <a href="https://github.com/Azincourt-tech/pomodoro-nuxt/issues">Sugerir Feature</a>
 </p>
 
 <p align="center">
@@ -22,169 +22,113 @@
   <img src="https://img.shields.io/badge/TailwindCSS-3-38BDF8?style=flat-square&logo=tailwindcss" />
   <img src="https://img.shields.io/badge/DaisyUI-4-5A0EF8?style=flat-square" />
   <img src="https://img.shields.io/badge/Pinia-2-FBE334?style=flat-square" />
-  <img src="https://img.shields.io/badge/i18n-PT%20%2F%20EN-blue?style=flat-square" />
-  <img src="https://img.shields.io/badge/Tests-50%20passing-brightgreen?style=flat-square" />
   <img src="https://img.shields.io/badge/Vercel-Deployed-000?style=flat-square&logo=vercel" />
 </p>
 
 ---
 
-## About
+## Sobre
 
-Pomodoro Move.it is a gamified Pomodoro application that combines the Pomodoro technique with health and wellness challenges. After each completed cycle, you receive a challenge to stretch, rest your eyes, hydrate, or practice breathing exercises.
+Pomodoro Move.it e uma aplicacao que combina a tecnica Pomodoro com desafios de saude e bem-estar. A cada ciclo completado, voce recebe um desafio para alongar, descansar os olhos, se hidratar ou praticar respiracao.
 
-## Features
+### Funcionalidades
 
-### Core
-- **Pomodoro Timer** with presets (15, 25, 35, 45, 60 min) and custom time input
-- **27 challenges** across 7 categories (stretching, eye exercises, hydration, breathing, posture, meditation, walking)
-- **XP and leveling system** for sustained motivation
-- **10 DaisyUI themes** (dark, light, cupcake, dracula, etc.) with dark mode as default
+- **Timer Pomodoro** com presets (15, 25, 35, 45, 60 min) e tempo personalizado
+- **27 desafios** em 7 categorias diferentes
+- **Sistema de XP e niveis** para manter a motivacao
+- **10 temas** do DaisyUI (dark, light, cupcake, dracula, etc.)
+- **Spotify integrado** para ouvir musica enquanto trabalha
+- **Perfil editavel** com suporte a GitHub avatar
+- **Persistencia** via localStorage (progresso salvo automaticamente)
+- **Notificacoes** quando o ciclo termina
+- **Design responsivo** (desktop e mobile)
 
-### Integration
-- **Spotify integration** - paste a playlist/album/track URL and listen while working
-- **Picture-in-Picture (PiP)** - floating timer window that inherits the current DaisyUI theme
-- **Browser notifications** when a cycle ends
+### Desafios Disponiveis
 
-### Internationalization
-- **i18n support** with PT-BR (default) and EN locales
-- Language selector in navbar
-- Language preference persisted in localStorage
-
-### UX
-- **Editable profile** with GitHub avatar support
-- **localStorage persistence** (progress saved automatically)
-- **Responsive design** (desktop sidebar layout + mobile)
-- **Modern UI** with cards, smooth shadows, and transitions
-
-### Dev Experience
-- **ESLint** with @nuxt/eslint-config (flat config)
-- **Prettier** for code formatting
-- **Vitest** unit tests (50 tests across stores and components)
-- **Conventional Commits** for commit history
-
-### Challenges Available
-
-| Category | Count | Example |
-|----------|-------|---------|
-| Stretching | 8 | Stretch your arms and legs |
-| Eye Exercises | 3 | Rest your eyes for 2 min |
-| Hydration | 2 | Drink a glass of water |
-| Breathing | 3 | Deep breathing exercise |
-| Posture | 3 | Adjust your posture |
-| Quick Meditation | 3 | 1-min meditation |
-| Walking | 3 | Walk for 1 min |
+| Categoria        | Quantidade | Exemplo                          |
+| ---------------- | ---------- | -------------------------------- |
+| Alongamento      | 8          | Estique os bracos e pernas       |
+| Exercicio Ocular | 3          | Descanse os olhos por 2 min      |
+| Hidratacao       | 2          | Beba um copo de agua             |
+| Respiracao       | 3          | Exercicio de respiracao profunda |
+| Postura          | 3          | Ajuste sua postura               |
+| Meditacao        | 3          | Meditacao rapida de 1 min        |
+| Caminhada        | 3          | Caminhe por 1 min                |
 
 ---
 
-## Tech Stack
+## Tecnologias
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | [Nuxt 3](https://nuxt.com) |
-| State | [Pinia](https://pinia.vuejs.org) |
-| Styling | [TailwindCSS](https://tailwindcss.com) + [DaisyUI](https://daisyui.com) |
-| i18n | [@nuxtjs/i18n](https://i18n.nuxtjs.org) |
-| Language | [TypeScript](https://typescriptlang.org) |
-| Testing | [Vitest](https://vitest.dev) + @vue/test-utils |
-| Linting | [ESLint](https://eslint.org) + [Prettier](https://prettier.io) |
-| Deploy | [Vercel](https://vercel.com) |
+| Camada    | Tecnologia                                                              |
+| --------- | ----------------------------------------------------------------------- |
+| Framework | [Nuxt 3](https://nuxt.com)                                              |
+| State     | [Pinia](https://pinia.vuejs.org)                                        |
+| Styling   | [TailwindCSS](https://tailwindcss.com) + [DaisyUI](https://daisyui.com) |
+| Linguagem | [TypeScript](https://typescriptlang.org)                                |
+| Deploy    | [Vercel](https://vercel.com)                                            |
 
 ---
 
-## Setup
+## Setup Local
 
 ```bash
-# Clone the repository
+# Clonar o repositorio
 git clone https://github.com/Azincourt-tech/pomodoro-nuxt.git
 cd pomodoro-nuxt
 
-# Install dependencies
+# Instalar dependencias
 npm install
 
-# Start development server
+# Iniciar servidor de desenvolvimento
 npm run dev
 
-# Build for production
+# Build para producao
 npm run build
 
-# Preview the build
+# Preview do build
 npm run preview
 ```
 
-The app will be available at `http://localhost:3000`
+O app estara disponivel em `http://localhost:3000`
 
 ---
 
-## Scripts
-
-```bash
-npm run dev          # Start dev server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-npm run lint:fix     # Run ESLint with auto-fix
-npm run format       # Format code with Prettier
-npm run test         # Run Vitest unit tests
-```
-
----
-
-## Project Structure
+## Estrutura do Projeto
 
 ```
 pomodoro-nuxt/
 ├── assets/
-│   ├── challenges/    # Challenge data (27 challenges, 7 categories)
-│   └── css/           # Global styles
+│   ├── challenges/    # Dados dos desafios
+│   └── css/           # Estilos globais
 ├── components/
-│   ├── atoms/         # Basic components (CountdownDigits, ExperienceBar)
-│   ├── molecules/     # Composite components
-│   └── organisms/     # Complex components
-├── i18n/              # Translation files (pt-BR.json, en.json)
-├── layouts/           # Application layouts
-├── pages/             # Pages (auto-routes)
-├── public/            # Static files
-├── stores/            # Pinia stores
-│   ├── challenges.ts  # Challenges and XP
-│   ├── countdown.ts   # Timer logic
-│   ├── profile.ts     # User profile
-│   └── theme.ts       # DaisyUI themes
-├── utils/             # Utility functions
-├── nuxt.config.ts     # Nuxt configuration
-└── tailwind.config.js # Tailwind/DaisyUI configuration
-```
-
----
-
-## Tests
-
-```bash
-# Run all tests
-npm run test
-
-# Test coverage:
-# - countdown store: 10 tests
-# - challenges store: 12 tests
-# - profile store: 11 tests
-# - theme store: 6 tests
-# - CountdownDigits component: 5 tests
-# - ExperienceBar component: 6 tests
-# Total: 50 tests
+│   ├── atoms/         # Componentes basicos
+│   ├── molecules/     # Componentes compostos
+│   └── organisms/     # Componentes complexos
+├── layouts/           # Layouts da aplicacao
+├── pages/             # Paginas (rotas automaticas)
+├── public/            # Arquivos estaticos
+├── stores/            # Stores Pinia
+│   ├── challenges.ts  # Desafios e XP
+│   ├── countdown.ts   # Timer
+│   ├── profile.ts     # Perfil do usuario
+│   └── theme.ts       # Temas DaisyUI
+├── utils/             # Funcoes utilitarias
+├── nuxt.config.ts     # Configuracao do Nuxt
+└── tailwind.config.js # Configuracao do Tailwind/DaisyUI
 ```
 
 ---
 
 ## Deploy
 
-The project is hosted on [Vercel](https://vercel.com) with automatic deployment:
+O projeto esta hospedado na [Vercel](https://vercel.com) com deploy automatico:
 
-- `develop` -> Preview
-- `master` -> Production (https://pomodoro-nuxt-ten.vercel.app)
+- `develop` → Preview
+- `master` → Producao (https://pomodoro-nuxt-ten.vercel.app)
 
 ---
 
-## Authors
+## Autores
 
 <table>
   <tr>
@@ -207,6 +151,6 @@ The project is hosted on [Vercel](https://vercel.com) with automatic deployment:
 
 ---
 
-## License
+## Licenca
 
 MIT

@@ -12,18 +12,26 @@ export const useCountdownStore = defineStore('countdown', {
   }),
 
   getters: {
-    minutes: (state) => Math.floor(state.time / 60),
-    seconds: (state) => state.time % 60,
+    minutes: state => Math.floor(state.time / 60),
+    seconds: state => state.time % 60,
   },
 
   actions: {
-    setTime(newTime: number) { this.time = newTime },
+    setTime(newTime: number) {
+      this.time = newTime
+    },
 
-    resetTime() { this.time = this.customMinutes * 60 },
+    resetTime() {
+      this.time = this.customMinutes * 60
+    },
 
-    setIsActive(flag: boolean) { this.isActive = flag },
+    setIsActive(flag: boolean) {
+      this.isActive = flag
+    },
 
-    setHasCompleted(flag: boolean) { this.hasCompleted = flag },
+    setHasCompleted(flag: boolean) {
+      this.hasCompleted = flag
+    },
 
     setCustomMinutes(minutes: number) {
       this.customMinutes = minutes

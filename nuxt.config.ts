@@ -1,28 +1,6 @@
 export default defineNuxtConfig({
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/i18n'],
   devtools: { enabled: false },
-
-  css: ['~/assets/css/global.css'],
-
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-    '@nuxtjs/i18n',
-  ],
-
-  i18n: {
-    locales: [
-      { code: 'pt-BR', name: 'Portugues', file: 'pt-BR.json' },
-      { code: 'en', name: 'English', file: 'en.json' },
-    ],
-    defaultLocale: 'pt-BR',
-    lazy: true,
-    langDir: './',
-    strategy: 'no_prefix',
-    detectBrowserLanguage: {
-      useCookie: false,
-      fallbackLocale: 'pt-BR',
-    },
-  },
 
   app: {
     head: {
@@ -46,5 +24,22 @@ export default defineNuxtConfig({
     },
   },
 
+  css: ['~/assets/css/global.css'],
+
   compatibilityDate: '2024-11-01',
+
+  i18n: {
+    locales: [
+      { code: 'pt-BR', name: 'Portugues', file: 'pt-BR.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'pt-BR',
+    lazy: true,
+    langDir: './',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: false,
+      fallbackLocale: 'pt-BR',
+    },
+  },
 })

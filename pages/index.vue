@@ -4,8 +4,10 @@
     <PiPWindow />
 
     <!-- Linha principal: 3 colunas -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8" id="main-row">
-
+    <div
+      id="main-row"
+      class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
+    >
       <!-- LEFT -->
       <div class="flex flex-col gap-4">
         <Profile />

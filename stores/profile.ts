@@ -19,7 +19,7 @@ export const useProfileStore = defineStore('profile', {
   }),
 
   getters: {
-    displayName: (state) => state.profile.name,
+    displayName: state => state.profile.name,
     avatarUrl: (state) => {
       if (state.profile.githubUsername) {
         return `https://github.com/${state.profile.githubUsername}.png`
@@ -59,7 +59,8 @@ export const useProfileStore = defineStore('profile', {
           try {
             const data = JSON.parse(saved) as UserProfile
             this.profile = { ...DEFAULT_PROFILE, ...data }
-          } catch {
+          }
+          catch {
             // ignore invalid data
           }
         }
@@ -72,19 +73,31 @@ export const useProfileStore = defineStore('profile', {
       }
     },
 
-    saveProgressToStorage(level: number, xp: { current: number; start: number; end: number }, completedChallenges: number) {
+    saveProgressToStorage(
+      level: number,
+      xp: { current: number, start: number, end: number },
+      completedChallenges: number,
+    ) {
       if (import.meta.client) {
-        localStorage.setItem('pomodoro-progress', JSON.stringify({ level, xp, completedChallenges }))
+        localStorage.setItem(
+          'pomodoro-progress',
+          JSON.stringify({ level, xp, completedChallenges }),
+        )
       }
     },
 
-    loadProgressFromStorage(): { level: number; xp: { current: number; start: number; end: number }; completedChallenges: number } | null {
+    loadProgressFromStorage(): {
+      level: number
+      xp: { current: number, start: number, end: number }
+      completedChallenges: number
+    } | null {
       if (import.meta.client) {
         const saved = localStorage.getItem('pomodoro-progress')
         if (saved) {
           try {
             return JSON.parse(saved)
-          } catch {
+          }
+          catch {
             return null
           }
         }

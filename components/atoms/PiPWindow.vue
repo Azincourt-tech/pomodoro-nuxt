@@ -3,12 +3,29 @@
   <button
     class="btn btn-circle shadow-lg fixed bottom-4 right-4 z-[9998]"
     :class="isOpen ? 'btn-error' : 'btn-primary'"
-    @click="togglePiP"
     :title="isOpen ? $t('pip.closeWindow') : $t('pip.openWindow')"
+    @click="togglePiP"
   >
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path v-if="!isOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 4a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2h-7l3 2v1H8v-1l3-2H4a2 2 0 01-2-2V4zm10 9h6a1 1 0 001-1V6a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1z" />
-      <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    <svg
+      class="w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        v-if="!isOpen"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M2 4a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2h-7l3 2v1H8v-1l3-2H4a2 2 0 01-2-2V4zm10 9h6a1 1 0 001-1V6a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1z"
+      />
+      <path
+        v-else
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      />
     </svg>
   </button>
 </template>
@@ -25,29 +42,36 @@ const challenges = useChallengesStore()
 const themeStore = useThemeStore()
 const isOpen = ref(false)
 
-let pipWindow: any = null
+let pipWindow: Window | null = null
 let animFrameId: number | null = null
 
 // Watch for theme changes and update PiP (with nextTick for CSS recalc)
-watch(() => themeStore.currentTheme, () => {
-  if (isOpen.value && pipWindow) {
-    nextTick(() => {
-      updatePiPTheme()
-    })
-  }
-})
+watch(
+  () => themeStore.currentTheme,
+  () => {
+    if (isOpen.value && pipWindow) {
+      nextTick(() => {
+        updatePiPTheme()
+      })
+    }
+  },
+)
 
 // Watch for locale changes and update PiP
-watch(() => locale.value, () => {
-  if (isOpen.value && pipWindow) {
-    updatePiPContent()
-  }
-})
+watch(
+  () => locale.value,
+  () => {
+    if (isOpen.value && pipWindow) {
+      updatePiPContent()
+    }
+  },
+)
 
 function togglePiP() {
   if (isOpen.value) {
     closePiP()
-  } else {
+  }
+  else {
     openPiP()
   }
 }
@@ -58,7 +82,7 @@ async function openPiP() {
   // Tenta Document PiP API primeiro (Chrome 116+, Edge)
   if ('documentPictureInPicture' in window) {
     try {
-      // @ts-ignore
+      // @ts-expect-error Document PiP API not yet in TypeScript types
       pipWindow = await window.documentPictureInPicture.requestWindow({
         width: 340,
         height: 380,
@@ -97,7 +121,8 @@ async function openPiP() {
       })
 
       return
-    } catch (err) {
+    }
+    catch (err) {
       console.warn('Document PiP falhou, usando fallback:', err)
     }
   }
@@ -228,9 +253,23 @@ function syncDaisyUITheme() {
 
   // Extract DaisyUI theme colors - these are raw OKLCH component values
   const themeVars = [
-    '--p', '--pc', '--s', '--sc', '--a', '--ac',
-    '--n', '--nc', '--b1', '--b2', '--b3', '--bc',
-    '--inc', '--suc', '--wa', '--er', '--in',
+    '--p',
+    '--pc',
+    '--s',
+    '--sc',
+    '--a',
+    '--ac',
+    '--n',
+    '--nc',
+    '--b1',
+    '--b2',
+    '--b3',
+    '--bc',
+    '--inc',
+    '--suc',
+    '--wa',
+    '--er',
+    '--in',
     '--su',
   ]
 

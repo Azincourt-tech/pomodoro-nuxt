@@ -24,7 +24,7 @@ export const useChallengesStore = defineStore('challenges', {
   }),
 
   getters: {
-    challengesLength: (state) => state.allChallenges.length,
+    challengesLength: state => state.allChallenges.length,
     currentXpPercentage: (state) => {
       if (state.xp.end === 0) return 0
       return Number(((state.xp.current / state.xp.end) * 100).toFixed(2))
@@ -67,11 +67,12 @@ export const useChallengesStore = defineStore('challenges', {
         const saved = localStorage.getItem('pomodoro-progress')
         if (saved) {
           try {
-            const data = JSON.parse(saved) as { level: number; xp: XP; completedChallenges: number }
+            const data = JSON.parse(saved) as { level: number, xp: XP, completedChallenges: number }
             this.level = data.level
             this.xp = data.xp
             this.completedChallenges = data.completedChallenges
-          } catch {
+          }
+          catch {
             // ignore invalid data
           }
         }
@@ -80,11 +81,14 @@ export const useChallengesStore = defineStore('challenges', {
 
     saveToStorage() {
       if (import.meta.client) {
-        localStorage.setItem('pomodoro-progress', JSON.stringify({
-          level: this.level,
-          xp: this.xp,
-          completedChallenges: this.completedChallenges,
-        }))
+        localStorage.setItem(
+          'pomodoro-progress',
+          JSON.stringify({
+            level: this.level,
+            xp: this.xp,
+            completedChallenges: this.completedChallenges,
+          }),
+        )
       }
     },
   },

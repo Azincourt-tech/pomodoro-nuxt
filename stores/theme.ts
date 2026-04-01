@@ -1,8 +1,16 @@
 import { defineStore } from 'pinia'
 
 export const AVAILABLE_THEMES = [
-  'light', 'dark', 'cupcake', 'dracula', 'synthwave',
-  'retro', 'cyberpunk', 'valentine', 'aqua', 'lofi',
+  'light',
+  'dark',
+  'cupcake',
+  'dracula',
+  'synthwave',
+  'retro',
+  'cyberpunk',
+  'valentine',
+  'aqua',
+  'lofi',
 ] as const
 
 export type ThemeName = (typeof AVAILABLE_THEMES)[number]
