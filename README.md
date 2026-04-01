@@ -45,27 +45,27 @@ Pomodoro Move.it e uma aplicacao que combina a tecnica Pomodoro com desafios de 
 
 ### Desafios Disponiveis
 
-| Categoria | Quantidade | Exemplo |
-|-----------|-----------|---------|
-| Alongamento | 8 | Estique os bracos e pernas |
-| Exercicio Ocular | 3 | Descanse os olhos por 2 min |
-| Hidratacao | 2 | Beba um copo de agua |
-| Respiracao | 3 | Exercicio de respiracao profunda |
-| Postura | 3 | Ajuste sua postura |
-| Meditacao | 3 | Meditacao rapida de 1 min |
-| Caminhada | 3 | Caminhe por 1 min |
+| Categoria        | Quantidade | Exemplo                          |
+| ---------------- | ---------- | -------------------------------- |
+| Alongamento      | 8          | Estique os bracos e pernas       |
+| Exercicio Ocular | 3          | Descanse os olhos por 2 min      |
+| Hidratacao       | 2          | Beba um copo de agua             |
+| Respiracao       | 3          | Exercicio de respiracao profunda |
+| Postura          | 3          | Ajuste sua postura               |
+| Meditacao        | 3          | Meditacao rapida de 1 min        |
+| Caminhada        | 3          | Caminhe por 1 min                |
 
 ---
 
 ## Tecnologias
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Framework | [Nuxt 3](https://nuxt.com) |
-| State | [Pinia](https://pinia.vuejs.org) |
-| Styling | [TailwindCSS](https://tailwindcss.com) + [DaisyUI](https://daisyui.com) |
-| Linguagem | [TypeScript](https://typescriptlang.org) |
-| Deploy | [Vercel](https://vercel.com) |
+| Camada    | Tecnologia                                                              |
+| --------- | ----------------------------------------------------------------------- |
+| Framework | [Nuxt 3](https://nuxt.com)                                              |
+| State     | [Pinia](https://pinia.vuejs.org)                                        |
+| Styling   | [TailwindCSS](https://tailwindcss.com) + [DaisyUI](https://daisyui.com) |
+| Linguagem | [TypeScript](https://typescriptlang.org)                                |
+| Deploy    | [Vercel](https://vercel.com)                                            |
 
 ---
 
