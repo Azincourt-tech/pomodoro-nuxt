@@ -1,28 +1,33 @@
 <template>
-	<!-- PiP Toggle Button -->
-	<button
-		class="btn btn-circle shadow-lg fixed bottom-4 right-4 z-[9998]"
-		:class="isOpen ? 'btn-error' : 'btn-primary'"
-		:title="isOpen ? $t('pip.closeWindow') : $t('pip.openWindow')"
-		@click="togglePiP"
-	>
-		<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path
-				v-if="!isOpen"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M2 4a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2h-7l3 2v1H8v-1l3-2H4a2 2 0 01-2-2V4zm10 9h6a1 1 0 001-1V6a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1z"
-			/>
-			<path
-				v-else
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M6 18L18 6M6 6l12 12"
-			/>
-		</svg>
-	</button>
+  <!-- PiP Toggle Button -->
+  <button
+    class="btn btn-circle shadow-lg fixed bottom-4 right-4 z-[9998]"
+    :class="isOpen ? 'btn-error' : 'btn-primary'"
+    :title="isOpen ? $t('pip.closeWindow') : $t('pip.openWindow')"
+    @click="togglePiP"
+  >
+    <svg
+      class="w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        v-if="!isOpen"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M2 4a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2h-7l3 2v1H8v-1l3-2H4a2 2 0 01-2-2V4zm10 9h6a1 1 0 001-1V6a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1z"
+      />
+      <path
+        v-else
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      />
+    </svg>
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -42,182 +47,184 @@ let animFrameId: number | null = null
 
 // Watch for theme changes and update PiP (with nextTick for CSS recalc)
 watch(
-	() => themeStore.currentTheme,
-	() => {
-		if (isOpen.value && pipWindow) {
-			nextTick(() => {
-				updatePiPTheme()
-			})
-		}
-	}
+  () => themeStore.currentTheme,
+  () => {
+    if (isOpen.value && pipWindow) {
+      nextTick(() => {
+        updatePiPTheme()
+      })
+    }
+  },
 )
 
 // Watch for locale changes and update PiP
 watch(
-	() => locale.value,
-	() => {
-		if (isOpen.value && pipWindow) {
-			updatePiPContent()
-		}
-	}
+  () => locale.value,
+  () => {
+    if (isOpen.value && pipWindow) {
+      updatePiPContent()
+    }
+  },
 )
 
 function togglePiP() {
-	if (isOpen.value) {
-		closePiP()
-	} else {
-		openPiP()
-	}
+  if (isOpen.value) {
+    closePiP()
+  }
+  else {
+    openPiP()
+  }
 }
 
 async function openPiP() {
-	if (!import.meta.client) return
+  if (!import.meta.client) return
 
-	// Tenta Document PiP API primeiro (Chrome 116+, Edge)
-	if ('documentPictureInPicture' in window) {
-		try {
-			// @ts-expect-error Document PiP API not yet in TypeScript types
-			pipWindow = await window.documentPictureInPicture.requestWindow({
-				width: 340,
-				height: 380
-			})
+  // Tenta Document PiP API primeiro (Chrome 116+, Edge)
+  if ('documentPictureInPicture' in window) {
+    try {
+      // @ts-expect-error Document PiP API not yet in TypeScript types
+      pipWindow = await window.documentPictureInPicture.requestWindow({
+        width: 340,
+        height: 380,
+      })
 
-			// Copiar estilos
-			const styles = document.querySelectorAll('link[rel="stylesheet"], style')
-			styles.forEach(style => pipWindow.document.head.appendChild(style.cloneNode(true)))
+      // Copiar estilos
+      const styles = document.querySelectorAll('link[rel="stylesheet"], style')
+      styles.forEach(style => pipWindow.document.head.appendChild(style.cloneNode(true)))
 
-			// Injetar CSS customizado com tema DaisyUI
-			const customStyle = pipWindow.document.createElement('style')
-			customStyle.textContent = getPiPCSS()
-			pipWindow.document.head.appendChild(customStyle)
+      // Injetar CSS customizado com tema DaisyUI
+      const customStyle = pipWindow.document.createElement('style')
+      customStyle.textContent = getPiPCSS()
+      pipWindow.document.head.appendChild(customStyle)
 
-			// Injetar HTML
-			pipWindow.document.body.innerHTML = getPiPBody()
-			pipWindow.document.title = 'Pomodoro'
+      // Injetar HTML
+      pipWindow.document.body.innerHTML = getPiPBody()
+      pipWindow.document.title = 'Pomodoro'
 
-			// Wait for browser to recalculate CSS before syncing theme
-			await nextTick()
-			syncDaisyUITheme()
+      // Wait for browser to recalculate CSS before syncing theme
+      await nextTick()
+      syncDaisyUITheme()
 
-			// Configurar eventos
-			setupPiPEvents()
+      // Configurar eventos
+      setupPiPEvents()
 
-			// Iniciar atualizacao
-			updatePiPLoop()
+      // Iniciar atualizacao
+      updatePiPLoop()
 
-			isOpen.value = true
+      isOpen.value = true
 
-			// Detectar fechamento
-			pipWindow.addEventListener('pagehide', () => {
-				isOpen.value = false
-				pipWindow = null
-				if (animFrameId) cancelAnimationFrame(animFrameId)
-			})
+      // Detectar fechamento
+      pipWindow.addEventListener('pagehide', () => {
+        isOpen.value = false
+        pipWindow = null
+        if (animFrameId) cancelAnimationFrame(animFrameId)
+      })
 
-			return
-		} catch (err) {
-			console.warn('Document PiP falhou, usando fallback:', err)
-		}
-	}
+      return
+    }
+    catch (err) {
+      console.warn('Document PiP falhou, usando fallback:', err)
+    }
+  }
 
-	// Fallback: window.open
-	pipWindow = window.open('', 'pomodoro-pip', 'width=340,height=380')
+  // Fallback: window.open
+  pipWindow = window.open('', 'pomodoro-pip', 'width=340,height=380')
 
-	if (!pipWindow || pipWindow.closed) {
-		alert(t('pip.allowPopups'))
-		return
-	}
+  if (!pipWindow || pipWindow.closed) {
+    alert(t('pip.allowPopups'))
+    return
+  }
 
-	pipWindow.document.write(getFullHTML())
-	pipWindow.document.close()
+  pipWindow.document.write(getFullHTML())
+  pipWindow.document.close()
 
-	setupPiPEvents()
-	updatePiPLoop()
-	isOpen.value = true
+  setupPiPEvents()
+  updatePiPLoop()
+  isOpen.value = true
 
-	pipWindow.addEventListener('beforeunload', () => {
-		isOpen.value = false
-		pipWindow = null
-		if (animFrameId) cancelAnimationFrame(animFrameId)
-	})
+  pipWindow.addEventListener('beforeunload', () => {
+    isOpen.value = false
+    pipWindow = null
+    if (animFrameId) cancelAnimationFrame(animFrameId)
+  })
 }
 
 function closePiP() {
-	if (pipWindow && !pipWindow.closed) pipWindow.close()
-	pipWindow = null
-	isOpen.value = false
-	if (animFrameId) cancelAnimationFrame(animFrameId)
+  if (pipWindow && !pipWindow.closed) pipWindow.close()
+  pipWindow = null
+  isOpen.value = false
+  if (animFrameId) cancelAnimationFrame(animFrameId)
 }
 
 function setupPiPEvents() {
-	pipWindow?.document.getElementById('pip-toggle-btn')?.addEventListener('click', () => {
-		countdown.setIsActive(!countdown.isActive)
-		if (!countdown.isActive) countdown.setHasCompleted(false)
-	})
+  pipWindow?.document.getElementById('pip-toggle-btn')?.addEventListener('click', () => {
+    countdown.setIsActive(!countdown.isActive)
+    if (!countdown.isActive) countdown.setHasCompleted(false)
+  })
 
-	pipWindow?.document.getElementById('pip-reset-btn')?.addEventListener('click', () => {
-		countdown.setIsActive(false)
-		countdown.setHasCompleted(false)
-		countdown.resetTime()
-	})
+  pipWindow?.document.getElementById('pip-reset-btn')?.addEventListener('click', () => {
+    countdown.setIsActive(false)
+    countdown.setHasCompleted(false)
+    countdown.resetTime()
+  })
 }
 
 function updatePiPLoop() {
-	if (!pipWindow || pipWindow.closed) return
+  if (!pipWindow || pipWindow.closed) return
 
-	const timerEl = pipWindow.document.getElementById('pip-timer')
-	const statusEl = pipWindow.document.getElementById('pip-status')
-	const toggleBtn = pipWindow.document.getElementById('pip-toggle-btn')
-	const challengeText = pipWindow.document.getElementById('pip-challenge-text')
+  const timerEl = pipWindow.document.getElementById('pip-timer')
+  const statusEl = pipWindow.document.getElementById('pip-status')
+  const toggleBtn = pipWindow.document.getElementById('pip-toggle-btn')
+  const challengeText = pipWindow.document.getElementById('pip-challenge-text')
 
-	if (timerEl) {
-		timerEl.textContent = `${countdown.minutes}:${String(countdown.seconds).padStart(2, '0')}`
-	}
+  if (timerEl) {
+    timerEl.textContent = `${countdown.minutes}:${String(countdown.seconds).padStart(2, '0')}`
+  }
 
-	if (statusEl) {
-		statusEl.textContent = countdown.isActive ? t('pip.inProgress') : t('pip.paused')
-	}
+  if (statusEl) {
+    statusEl.textContent = countdown.isActive ? t('pip.inProgress') : t('pip.paused')
+  }
 
-	if (toggleBtn) {
-		toggleBtn.textContent = countdown.isActive ? t('pip.stop') : t('pip.start')
-	}
+  if (toggleBtn) {
+    toggleBtn.textContent = countdown.isActive ? t('pip.stop') : t('pip.start')
+  }
 
-	if (challengeText) {
-		challengeText.textContent = challenges.currentChallenge
-			? challenges.currentChallenge.description
-			: t('pip.startForChallenges')
-	}
+  if (challengeText) {
+    challengeText.textContent = challenges.currentChallenge
+      ? challenges.currentChallenge.description
+      : t('pip.startForChallenges')
+  }
 
-	animFrameId = requestAnimationFrame(updatePiPLoop)
+  animFrameId = requestAnimationFrame(updatePiPLoop)
 }
 
 function updatePiPContent() {
-	if (!pipWindow || pipWindow.closed) return
+  if (!pipWindow || pipWindow.closed) return
 
-	const challengeHeader = pipWindow.document.querySelector('.pip-challenge-header')
-	if (challengeHeader) {
-		challengeHeader.textContent = t('pip.challenge')
-	}
+  const challengeHeader = pipWindow.document.querySelector('.pip-challenge-header')
+  if (challengeHeader) {
+    challengeHeader.textContent = t('pip.challenge')
+  }
 
-	const statusEl = pipWindow.document.getElementById('pip-status')
-	if (statusEl) {
-		statusEl.textContent = countdown.isActive ? t('pip.inProgress') : t('pip.paused')
-	}
+  const statusEl = pipWindow.document.getElementById('pip-status')
+  if (statusEl) {
+    statusEl.textContent = countdown.isActive ? t('pip.inProgress') : t('pip.paused')
+  }
 
-	const toggleBtn = pipWindow.document.getElementById('pip-toggle-btn')
-	if (toggleBtn) {
-		toggleBtn.textContent = countdown.isActive ? t('pip.stop') : t('pip.start')
-	}
+  const toggleBtn = pipWindow.document.getElementById('pip-toggle-btn')
+  if (toggleBtn) {
+    toggleBtn.textContent = countdown.isActive ? t('pip.stop') : t('pip.start')
+  }
 
-	const resetBtn = pipWindow.document.getElementById('pip-reset-btn')
-	if (resetBtn) {
-		resetBtn.textContent = t('pip.reset')
-	}
+  const resetBtn = pipWindow.document.getElementById('pip-reset-btn')
+  if (resetBtn) {
+    resetBtn.textContent = t('pip.reset')
+  }
 
-	const challengeText = pipWindow.document.getElementById('pip-challenge-text')
-	if (challengeText && !challenges.currentChallenge) {
-		challengeText.textContent = t('pip.startForChallenges')
-	}
+  const challengeText = pipWindow.document.getElementById('pip-challenge-text')
+  if (challengeText && !challenges.currentChallenge) {
+    challengeText.textContent = t('pip.startForChallenges')
+  }
 }
 
 /**
@@ -227,62 +234,62 @@ function updatePiPContent() {
  * already wrapped as "oklch(0.933 0.018 272.8)". We extract just the values.
  */
 function extractOklchValues(raw: string): string {
-	const trimmed = raw.trim()
-	const match = trimmed.match(/^oklch\((.+)\)$/i)
-	return match ? match[1].trim() : trimmed
+  const trimmed = raw.trim()
+  const match = trimmed.match(/^oklch\((.+)\)$/i)
+  return match ? match[1].trim() : trimmed
 }
 
 function syncDaisyUITheme() {
-	if (!pipWindow || pipWindow.closed) return
+  if (!pipWindow || pipWindow.closed) return
 
-	// Copy data-theme attribute
-	const dataTheme = document.documentElement.getAttribute('data-theme')
-	if (dataTheme) {
-		pipWindow.document.documentElement.setAttribute('data-theme', dataTheme)
-	}
+  // Copy data-theme attribute
+  const dataTheme = document.documentElement.getAttribute('data-theme')
+  if (dataTheme) {
+    pipWindow.document.documentElement.setAttribute('data-theme', dataTheme)
+  }
 
-	// Get computed CSS variables from the parent document
-	const rootStyles = getComputedStyle(document.documentElement)
+  // Get computed CSS variables from the parent document
+  const rootStyles = getComputedStyle(document.documentElement)
 
-	// Extract DaisyUI theme colors - these are raw OKLCH component values
-	const themeVars = [
-		'--p',
-		'--pc',
-		'--s',
-		'--sc',
-		'--a',
-		'--ac',
-		'--n',
-		'--nc',
-		'--b1',
-		'--b2',
-		'--b3',
-		'--bc',
-		'--inc',
-		'--suc',
-		'--wa',
-		'--er',
-		'--in',
-		'--su'
-	]
+  // Extract DaisyUI theme colors - these are raw OKLCH component values
+  const themeVars = [
+    '--p',
+    '--pc',
+    '--s',
+    '--sc',
+    '--a',
+    '--ac',
+    '--n',
+    '--nc',
+    '--b1',
+    '--b2',
+    '--b3',
+    '--bc',
+    '--inc',
+    '--suc',
+    '--wa',
+    '--er',
+    '--in',
+    '--su',
+  ]
 
-	let cssVars = ''
-	for (const varName of themeVars) {
-		const raw = rootStyles.getPropertyValue(varName).trim()
-		if (raw) {
-			cssVars += `${varName}: ${extractOklchValues(raw)};\n`
-		}
-	}
+  let cssVars = ''
+  for (const varName of themeVars) {
+    const raw = rootStyles.getPropertyValue(varName).trim()
+    if (raw) {
+      cssVars += `${varName}: ${extractOklchValues(raw)};\n`
+    }
+  }
 
-	// Update or create style element with theme variables
-	let themeStyleEl = pipWindow.document.getElementById('pip-theme-vars')
-	if (!themeStyleEl) {
-		themeStyleEl = pipWindow.document.createElement('style')
-		themeStyleEl.id = 'pip-theme-vars'
-		pipWindow.document.head.appendChild(themeStyleEl)
-	}
+  // Update or create style element with theme variables
+  let themeStyleEl = pipWindow.document.getElementById('pip-theme-vars')
+  if (!themeStyleEl) {
+    themeStyleEl = pipWindow.document.createElement('style')
+    themeStyleEl.id = 'pip-theme-vars'
+    pipWindow.document.head.appendChild(themeStyleEl)
+  }
 
-	themeStyleEl.textContent = `
+  themeStyleEl.textContent = `
     :root {
       ${cssVars}
     }
@@ -326,11 +333,11 @@ function syncDaisyUITheme() {
 }
 
 function updatePiPTheme() {
-	syncDaisyUITheme()
+  syncDaisyUITheme()
 }
 
 function getPiPCSS(): string {
-	return `
+  return `
     body {
       font-family: 'Inter', -apple-system, sans-serif !important;
       background: oklch(var(--b1, 15% 0 0)) !important;
@@ -345,7 +352,7 @@ function getPiPCSS(): string {
 }
 
 function getPiPBody(): string {
-	return `
+  return `
     <div class="pip-timer-wrapper">
       <div class="pip-timer" id="pip-timer">${countdown.minutes}:${String(countdown.seconds).padStart(2, '0')}</div>
       <div class="pip-status" id="pip-status">${countdown.isActive ? t('pip.inProgress') : t('pip.paused')}</div>
@@ -363,7 +370,7 @@ function getPiPBody(): string {
 }
 
 function getPiPStyles(): string {
-	return `
+  return `
     .pip-timer-wrapper { text-align: center; margin-bottom: 12px; }
     .pip-timer {
       font-family: 'Rajdhani', sans-serif;
@@ -415,7 +422,7 @@ function getPiPStyles(): string {
 }
 
 function getFullHTML(): string {
-	return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html data-theme="${themeStore.currentTheme}">
 <head>
   <title>Pomodoro</title>
@@ -441,6 +448,6 @@ function getFullHTML(): string {
 }
 
 onUnmounted(() => {
-	closePiP()
+  closePiP()
 })
 </script>
