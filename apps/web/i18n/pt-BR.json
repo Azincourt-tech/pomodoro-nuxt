@@ -35,6 +35,19 @@
 		"edit": "Editar perfil",
 		"defaultName": "Usuario"
 	},
+	"auth": {
+		"signIn": "Entrar",
+		"signUp": "Criar Conta",
+		"name": "Nome",
+		"namePlaceholder": "Seu nome",
+		"email": "E-mail",
+		"password": "Senha",
+		"passwordPlaceholder": "Sua senha",
+		"optional": "Login e opcional. O app funciona sem conta.",
+		"orContinue": "ou continue sem conta",
+		"skip": "Continuar sem login",
+		"loggedOut": "Voce saiu da sua conta"
+	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
 		"allChallenges": "Todos os Challenges",
@@ -140,5 +153,8 @@
 		"syncing": "Sincronizando...",
 		"synced": "Sincronizado",
 		"error": "Erro ao sincronizar"
+	},
+	"pwa": {
+		"install": "Instalar App"
 	}
 }
