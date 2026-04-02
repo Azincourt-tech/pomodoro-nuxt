@@ -1,24 +1,42 @@
 import { Hono } from 'hono'
+import { getAuth } from '../services/auth'
 import type { Env } from '../types/env'
+
+interface PomodoroUser {
+  id: string
+  email: string
+  name: string
+}
 
 const sessions = new Hono<{ Bindings: Env }>()
 
-async function validateSession(c: { env: Env; req: { header: (name: string) => string | undefined } }): Promise<string | null> {
-  const authHeader = c.req.header('Authorization')
-  if (!authHeader) return null
+async function getUserFromSession(c: { env: Env; req: { header: (name: string) => string | undefined } }, cookieHeader?: string): Promise<PomodoroUser | null> {
+  const auth = getAuth({
+    DB: c.env.DB,
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+  })
 
-  const token = authHeader.replace('Bearer ', '')
-  const session = await c.env.DB.prepare(
-    'SELECT user_id FROM sessions WHERE token = ? AND expires_at > datetime("now")',
-  ).bind(token).first<{ user_id: string }>()
+  try {
+    const headers: Record<string, string> = {}
+    if (cookieHeader) {
+      headers.cookie = cookieHeader
+    }
 
-  return session?.user_id ?? null
+    const result = await auth.api.getSession({ headers })
+    if (!result) return null
+    const data = result as Record<string, unknown>
+    return (data.user ?? null) as PomodoroUser | null
+  } catch {
+    return null
+  }
 }
 
 // GET /api/pomodoro/sessions - List user sessions
 sessions.get('/', async (c) => {
-  const userId = await validateSession(c)
-  if (!userId) {
+  const cookieHeader = c.req.header('Cookie')
+  const user = await getUserFromSession(c, cookieHeader ?? '')
+  if (!user) {
     return c.json({ error: 'Unauthorized' }, 401)
   }
 
@@ -27,7 +45,7 @@ sessions.get('/', async (c) => {
 
   const results = await c.env.DB.prepare(
     'SELECT * FROM pomodoro_sessions WHERE user_id = ? ORDER BY started_at DESC LIMIT ? OFFSET ?',
-  ).bind(userId, limit, offset).all()
+  ).bind(user.id, limit, offset).all()
 
   return c.json({
     sessions: results.results,
@@ -37,8 +55,9 @@ sessions.get('/', async (c) => {
 
 // POST /api/pomodoro/sessions - Create a new session
 sessions.post('/', async (c) => {
-  const userId = await validateSession(c)
-  if (!userId) {
+  const cookieHeader = c.req.header('Cookie')
+  const user = await getUserFromSession(c, cookieHeader ?? '')
+  if (!user) {
     return c.json({ error: 'Unauthorized' }, 401)
   }
 
@@ -47,18 +66,20 @@ sessions.post('/', async (c) => {
     started_at: string
     duration_minutes: number
     challenge_type?: string | null
+    challenge_desc?: string | null
     xp_gained?: number
   }>()
 
   await c.env.DB.prepare(`
-    INSERT INTO pomodoro_sessions (id, user_id, started_at, duration_minutes, challenge_type, xp_gained)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO pomodoro_sessions (id, user_id, started_at, duration_minutes, challenge_type, challenge_desc, xp_gained)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `).bind(
     body.id,
-    userId,
+    user.id,
     body.started_at,
     body.duration_minutes,
     body.challenge_type ?? null,
+    body.challenge_desc ?? null,
     body.xp_gained ?? 0,
   ).run()
 
