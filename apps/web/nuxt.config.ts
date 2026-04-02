@@ -70,6 +70,12 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-11-01',
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8787',
+    },
+  },
+
   i18n: {
     locales: [
       { code: 'pt-BR', name: 'Portugues', file: 'pt-BR.json' },

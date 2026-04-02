@@ -36,6 +36,8 @@ const lastSyncedAt = ref<string | null>(null)
 const STORAGE_KEY = 'pomodoro-sync-token'
 
 export function useSync() {
+  const config = useRuntimeConfig()
+  const apiBase = config.public.apiBase as string
   const profile = useProfileStore()
   const history = useHistoryStore()
   const challenges = useChallengesStore()
@@ -64,7 +66,7 @@ export function useSync() {
   async function login(email: string, password: string): Promise<boolean> {
     syncError.value = null
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${apiBase}/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -90,7 +92,7 @@ export function useSync() {
   async function register(email: string, password: string, name: string): Promise<boolean> {
     syncError.value = null
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(`${apiBase}/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }),
@@ -116,7 +118,7 @@ export function useSync() {
   async function logout() {
     if (token.value) {
       try {
-        await fetch('/api/auth/logout', {
+        await fetch(`${apiBase}/api/auth/logout', {
           method: 'POST',
           headers: { Authorization: `Bearer ${token.value}` },
         })
@@ -136,7 +138,7 @@ export function useSync() {
 
     try {
       // Fetch remote profile
-      const profileRes = await fetch('/api/pomodoro/profile', {
+      const profileRes = await fetch(`${apiBase}/api/pomodoro/profile', {
         headers: { Authorization: `Bearer ${token.value}` },
       })
 
@@ -146,7 +148,7 @@ export function useSync() {
       }
 
       // Fetch remote sessions
-      const sessionsRes = await fetch('/api/pomodoro/sessions?limit=100', {
+      const sessionsRes = await fetch(`${apiBase}/api/pomodoro/sessions?limit=100', {
         headers: { Authorization: `Bearer ${token.value}` },
       })
 
@@ -226,7 +228,7 @@ export function useSync() {
     if (!token.value) return
 
     // Push profile
-    await fetch('/api/pomodoro/profile', {
+    await fetch(`${apiBase}/api/pomodoro/profile', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -245,7 +247,7 @@ export function useSync() {
     })
 
     // Push local-only sessions
-    const remoteIdsRes = await fetch('/api/pomodoro/sessions?limit=1000', {
+    const remoteIdsRes = await fetch(`${apiBase}/api/pomodoro/sessions?limit=1000', {
       headers: { Authorization: `Bearer ${token.value}` },
     })
 
@@ -255,7 +257,7 @@ export function useSync() {
 
       for (const session of history.sessions) {
         if (!remoteIds.has(session.id)) {
-          await fetch('/api/pomodoro/sessions', {
+          await fetch(`${apiBase}/api/pomodoro/sessions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
