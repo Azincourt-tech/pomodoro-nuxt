@@ -16,7 +16,9 @@
 		"customTime": "Tempo personalizado (minutos)",
 		"apply": "Aplicar",
 		"resetTimer": "Resetar Timer",
-		"minutes": "{minutes}min"
+		"minutes": "{minutes}min",
+		"inProgress": "Em andamento",
+		"ready": "Pronto"
 	},
 	"profile": {
 		"editProfile": "Editar Perfil",

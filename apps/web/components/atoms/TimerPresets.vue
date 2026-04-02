@@ -23,8 +23,8 @@
         </h3>
       </div>
 
-      <!-- Preset buttons -->
-      <div class="flex flex-wrap gap-2 mb-3">
+      <!-- Preset buttons - uniform grid -->
+      <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-4">
         <button
           v-for="preset in presets"
           :key="preset"
@@ -33,7 +33,7 @@
           :disabled="countdown.isActive"
           @click="selectPreset(preset)"
         >
-          {{ $t('timer.minutes', { minutes: preset }) }}
+          {{ preset }}
         </button>
       </div>
 

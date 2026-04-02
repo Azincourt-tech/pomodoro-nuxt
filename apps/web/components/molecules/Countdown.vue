@@ -1,10 +1,15 @@
 <template>
-  <div
-    class="flex justify-center items-center text-6xl md:text-8xl lg:text-9xl font-rajdhani font-bold text-base-content"
-  >
-    <CountdownDigits :digits="countdown.minutes" />
-    <span class="px-1 md:px-3 text-primary animate-pulse">:</span>
-    <CountdownDigits :digits="countdown.seconds" />
+  <div class="flex flex-col items-center">
+    <div
+      class="flex justify-center items-center text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-rajdhani font-bold text-base-content tabular-nums"
+    >
+      <CountdownDigits :digits="countdown.minutes" />
+      <span class="px-1 md:px-3 text-primary animate-pulse">:</span>
+      <CountdownDigits :digits="countdown.seconds" />
+    </div>
+    <p class="text-sm text-base-content/50 mt-2 font-medium">
+      {{ countdown.isActive ? $t('timer.inProgress') : $t('timer.ready') }}
+    </p>
   </div>
 </template>
 
