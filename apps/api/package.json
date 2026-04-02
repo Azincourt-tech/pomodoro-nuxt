@@ -12,11 +12,14 @@
     "db:migrate:prod": "wrangler d1 migrations apply pomodoro-db --remote"
   },
   "dependencies": {
+    "better-auth": "^1.2.0",
+    "drizzle-orm": "^0.38.0",
     "hono": "^4.6.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241106.0",
+    "drizzle-kit": "^0.31.0",
     "typescript": "^5.7.0",
     "vitest": "^4.1.2",
     "wrangler": "^3.90.0"

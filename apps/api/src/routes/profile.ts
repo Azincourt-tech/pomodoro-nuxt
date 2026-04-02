@@ -1,33 +1,55 @@
 import { Hono } from 'hono'
+import { getCookie } from 'hono/cookie'
+import { getAuth } from '../services/auth'
 import type { Env } from '../types/env'
+
+interface PomodoroUser {
+  id: string
+  email: string
+  name: string
+  avatarUrl?: string | null
+}
 
 const profile = new Hono<{ Bindings: Env }>()
 
+async function getUserFromSession(c: { env: Env; req: { header: (name: string) => string | undefined } }, cookieHeader?: string): Promise<PomodoroUser | null> {
+  const auth = getAuth({
+    DB: c.env.DB,
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+  })
+
+  try {
+    const headers: Record<string, string> = {}
+    if (cookieHeader) {
+      headers.cookie = cookieHeader
+    }
+
+    const result = await auth.api.getSession({ headers })
+    if (!result) return null
+    const data = result as Record<string, unknown>
+    return (data.user ?? null) as PomodoroUser | null
+  } catch {
+    return null
+  }
+}
+
 // GET /api/pomodoro/profile - Get user profile
 profile.get('/', async (c) => {
-  const authHeader = c.req.header('Authorization')
-  if (!authHeader) {
+  const cookieHeader = c.req.header('Cookie')
+  const user = await getUserFromSession(c, cookieHeader ?? '')
+
+  if (!user) {
     return c.json({ error: 'Unauthorized' }, 401)
   }
 
-  const token = authHeader.replace('Bearer ', '')
-
-  // Validate session
-  const session = await c.env.DB.prepare(
-    'SELECT user_id FROM sessions WHERE token = ? AND expires_at > datetime("now")',
-  ).bind(token).first<{ user_id: string }>()
-
-  if (!session) {
-    return c.json({ error: 'Invalid or expired session' }, 401)
-  }
-
-  const profile = await c.env.DB.prepare(
+  const profileData = await c.env.DB.prepare(
     'SELECT * FROM pomodoro_profiles WHERE user_id = ?',
-  ).bind(session.user_id).first()
+  ).bind(user.id).first()
 
-  if (!profile) {
+  if (!profileData) {
     return c.json({
-      user_id: session.user_id,
+      user_id: user.id,
       level: 1,
       xp_current: 0,
       xp_start: 0,
@@ -36,27 +58,21 @@ profile.get('/', async (c) => {
       streak_best: 0,
       completed_challenges: 0,
       last_session_date: null,
+      display_name: user.name,
+      avatar_url: null,
     })
   }
 
-  return c.json(profile)
+  return c.json(profileData)
 })
 
 // POST /api/pomodoro/profile - Update user profile
 profile.post('/', async (c) => {
-  const authHeader = c.req.header('Authorization')
-  if (!authHeader) {
+  const cookieHeader = c.req.header('Cookie')
+  const user = await getUserFromSession(c, cookieHeader ?? '')
+
+  if (!user) {
     return c.json({ error: 'Unauthorized' }, 401)
-  }
-
-  const token = authHeader.replace('Bearer ', '')
-
-  const session = await c.env.DB.prepare(
-    'SELECT user_id FROM sessions WHERE token = ? AND expires_at > datetime("now")',
-  ).bind(token).first<{ user_id: string }>()
-
-  if (!session) {
-    return c.json({ error: 'Invalid or expired session' }, 401)
   }
 
   const body = await c.req.json<{
@@ -68,11 +84,13 @@ profile.post('/', async (c) => {
     streak_best?: number
     completed_challenges?: number
     last_session_date?: string | null
+    display_name?: string
+    avatar_url?: string | null
   }>()
 
   const existing = await c.env.DB.prepare(
     'SELECT user_id FROM pomodoro_profiles WHERE user_id = ?',
-  ).bind(session.user_id).first()
+  ).bind(user.id).first()
 
   if (existing) {
     await c.env.DB.prepare(`
@@ -85,6 +103,8 @@ profile.post('/', async (c) => {
         streak_best = COALESCE(?, streak_best),
         completed_challenges = COALESCE(?, completed_challenges),
         last_session_date = COALESCE(?, last_session_date),
+        display_name = COALESCE(?, display_name),
+        avatar_url = COALESCE(?, avatar_url),
         updated_at = datetime('now')
       WHERE user_id = ?
     `).bind(
@@ -96,16 +116,17 @@ profile.post('/', async (c) => {
       body.streak_best ?? null,
       body.completed_challenges ?? null,
       body.last_session_date ?? null,
-      session.user_id,
+      body.display_name ?? null,
+      body.avatar_url ?? null,
+      user.id,
     ).run()
-  }
-  else {
+  } else {
     await c.env.DB.prepare(`
       INSERT INTO pomodoro_profiles
-        (user_id, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges, last_session_date)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (user_id, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges, last_session_date, display_name, avatar_url)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
-      session.user_id,
+      user.id,
       body.level ?? 1,
       body.xp_current ?? 0,
       body.xp_start ?? 0,
@@ -114,6 +135,8 @@ profile.post('/', async (c) => {
       body.streak_best ?? 0,
       body.completed_challenges ?? 0,
       body.last_session_date ?? null,
+      body.display_name ?? user.name,
+      body.avatar_url ?? null,
     ).run()
   }
 

@@ -34,9 +34,8 @@
       id="main-row"
       class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
     >
-      <!-- LEFT -->
+      <!-- LEFT — CompletedChallenges + TimerPresets only (Profile moved to navbar dropdown) -->
       <div class="flex flex-col gap-4">
-        <Profile />
         <CompletedChallenges />
         <TimerPresets class="flex-1" />
       </div>
@@ -113,14 +112,11 @@
       <ChallengeBrowser />
     </div>
 
-    <!-- Share Card Modal -->
+    <!-- Share Card Modal (used by both navbar and post-completion button) -->
     <ShareCard
       ref="shareCardRef"
       :stats="shareStats"
     />
-
-    <!-- Keyboard Shortcuts Help -->
-    <ShortcutsHelp ref="shortcutsHelpRef" />
   </div>
 </template>
 
@@ -138,11 +134,9 @@ import TimerPresets from '~/components/atoms/TimerPresets.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
 import ChallengeBrowser from '~/components/atoms/ChallengeBrowser.vue'
 import PiPWindow from '~/components/atoms/PiPWindow.vue'
-import Profile from '~/components/molecules/Profile.vue'
 import Countdown from '~/components/molecules/Countdown.vue'
 import Card from '~/components/organisms/Card.vue'
 import ShareCard from '~/components/molecules/ShareCard.vue'
-import ShortcutsHelp from '~/components/molecules/ShortcutsHelp.vue'
 import { scrollToElement, getRandomNumber, sendNotification } from '~/utils'
 
 const { t } = useI18n()
@@ -156,7 +150,6 @@ const history = useHistoryStore()
 const { playStart, playPause, playComplete } = useSound()
 
 const shareCardRef = ref<InstanceType<typeof ShareCard> | null>(null)
-const shortcutsHelpRef = ref<InstanceType<typeof ShortcutsHelp> | null>(null)
 const isFocusMode = ref(false)
 const sessionStartTime = ref<number | null>(null)
 
@@ -267,7 +260,7 @@ function toggleFocusMode() {
   }
 }
 
-// Keyboard shortcuts
+// Keyboard shortcuts — shortcuts modal opened via layout navbar button
 useKeyboardShortcuts({
   onTogglePlay: () => {
     if (countdown.hasCompleted) return
@@ -285,7 +278,8 @@ useKeyboardShortcuts({
   },
   onFocusMode: toggleFocusMode,
   onShowHelp: () => {
-    shortcutsHelpRef.value?.open()
+    // Shortcuts modal is now opened from the navbar `?` button
+    // This is kept for keyboard shortcut compatibility
   },
 })
 

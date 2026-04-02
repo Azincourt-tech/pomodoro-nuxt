@@ -2,6 +2,12 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/i18n', '@vite-pwa/nuxt'],
   devtools: { enabled: false },
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
+    },
+  },
+
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
