@@ -2,18 +2,18 @@
   <div class="min-h-screen bg-base-200 flex flex-col">
     <!-- Navbar -->
     <nav
-      class="navbar bg-base-100/80 backdrop-blur-md shadow-sm px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/50"
+      class="navbar bg-base-100/80 backdrop-blur-md shadow-sm px-3 sm:px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/50"
     >
       <div class="flex-1">
         <NuxtLink
           to="/"
-          class="flex items-center gap-3 group"
+          class="flex items-center gap-2 sm:gap-3 group"
         >
           <div
-            class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors"
+            class="w-8 h-8 sm:w-9 sm:h-9 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors"
           >
             <svg
-              class="w-5 h-5 text-primary"
+              class="w-4 h-4 sm:w-5 sm:h-5 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -26,11 +26,49 @@
               />
             </svg>
           </div>
-          <span class="text-xl font-bold font-rajdhani tracking-wide">Pomodoro</span>
+          <span class="text-lg sm:text-xl font-bold font-rajdhani tracking-wide">Pomodoro</span>
         </NuxtLink>
       </div>
       <div class="flex-none">
-        <div class="flex items-center gap-2">
+        <!-- Mobile: hamburger menu -->
+        <div class="lg:hidden">
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-square" :title="$t('nav.menu', 'Menu')">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </div>
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-64 p-2 shadow-xl border border-base-300/50 mt-2">
+              <li class="menu-title pt-2">
+                <div class="flex items-center gap-3 px-2 py-1">
+                  <div class="avatar"><div class="w-10 rounded-full ring ring-primary/30"><img :src="profile.avatarUrl" :alt="profile.displayName" /></div></div>
+                  <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-sm truncate">{{ profile.displayName }}</p>
+                    <span class="text-xs text-base-content/60">{{ $t('nav.level', { level: challenges.level }) }}</span>
+                  </div>
+                </div>
+              </li>
+              <div class="divider my-1" />
+              <li><NuxtLink to="/history"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>{{ $t('history.navLink') }}</NuxtLink></li>
+              <li><button @click="toggleSound"><svg v-if="soundEnabled" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg><svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" /></svg>{{ soundEnabled ? $t('sound.enabled') : $t('sound.disabled') }}</button></li>
+              <li><button @click="openShortcuts"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>{{ $t('shortcuts.title') }}</button></li>
+              <div class="divider my-1" />
+              <li class="menu-title px-2"><span class="text-xs">{{ $t('nav.theme') }}</span></li>
+              <li><div class="p-0"><ThemeSelector /></div></li>
+              <li class="menu-title px-2"><span class="text-xs">{{ $t('nav.language') }}</span></li>
+              <li><div class="p-0"><LanguageSelector /></div></li>
+              <div class="divider my-1" />
+              <li><button @click="openEditProfile"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>{{ $t('profile.editProfile') }}</button></li>
+              <li><button @click="openShare"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>{{ $t('share.button') }}</button></li>
+              <li v-if="canInstall"><button @click="installPwa"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>{{ $t('pwa.install', 'Instalar App') }}</button></li>
+              <div class="divider my-1" />
+              <li v-if="!isAuthenticated"><NuxtLink to="/login"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>{{ $t('sync.login') }}</NuxtLink></li>
+              <li v-else><button class="text-error" @click="handleLogout"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>{{ $t('sync.logout') }}</button></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Desktop: inline buttons -->
+        <div class="hidden lg:flex items-center gap-2">
           <!-- History link -->
           <NuxtLink
             to="/history"
@@ -310,18 +348,18 @@
     </nav>
 
     <!-- Experience Bar -->
-    <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 pt-4 lg:pt-6">
+    <div class="max-w-7xl mx-auto w-full px-3 sm:px-4 lg:px-8 pt-4 lg:pt-6">
       <ExperienceBar />
     </div>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 pb-8 flex-1">
+    <main class="max-w-7xl mx-auto w-full px-3 sm:px-4 lg:px-8 pb-8 flex-1">
       <slot />
     </main>
 
     <!-- Footer -->
     <footer class="bg-base-100/50 border-t border-base-300/50 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+      <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
           <div class="flex items-center gap-2 text-base-content/50">
             <svg

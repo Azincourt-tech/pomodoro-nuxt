@@ -4,7 +4,7 @@
     class="modal"
     :class="{ 'modal-open': isOpen }"
   >
-    <div class="modal-box max-w-md">
+    <div class="modal-box max-w-md w-[calc(100%-2rem)] sm:w-auto">
       <h3 class="text-lg font-bold font-rajdhani mb-4">
         {{ $t('share.title') }}
       </h3>
@@ -15,20 +15,20 @@
           ref="canvasRef"
           width="600"
           height="400"
-          class="rounded-xl max-w-full"
+          class="rounded-xl max-w-full h-auto"
         />
       </div>
 
-      <div class="flex gap-3">
+      <div class="flex flex-col sm:flex-row gap-3">
         <button
           v-if="canShare"
-          class="btn btn-primary flex-1"
+          class="btn btn-primary w-full sm:flex-1"
           @click="shareNative"
         >
           {{ $t('share.button') }}
         </button>
         <button
-          class="btn btn-outline flex-1"
+          class="btn btn-outline w-full sm:flex-1"
           @click="downloadImage"
         >
           {{ $t('share.download') }}

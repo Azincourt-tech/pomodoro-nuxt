@@ -52,7 +52,8 @@ describe('CountdownDigits Component', () => {
 
     const span = wrapper.find('span')
     expect(span.classes()).toContain('bg-base-200')
-    expect(span.classes()).toContain('rounded-2xl')
+    // Check for responsive rounded classes
+    expect(span.classes()).toContain('rounded-xl')
     expect(span.classes()).toContain('font-rajdhani')
     expect(span.classes()).toContain('font-bold')
   })

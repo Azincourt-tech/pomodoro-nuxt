@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 lg:py-10" :class="{ 'focus-mode-active': isFocusMode }">
+  <div class="py-4 sm:py-6 lg:py-10" :class="{ 'focus-mode-active': isFocusMode }">
     <!-- Focus Mode Exit Button -->
     <div
       v-if="isFocusMode"
@@ -30,7 +30,7 @@
     <PiPWindow />
 
     <!-- HERO: Timer Centralizado -->
-    <section class="flex flex-col items-center gap-6 mb-10">
+    <section class="flex flex-col items-center gap-4 sm:gap-6 mb-8 sm:mb-10">
       <!-- Countdown Display -->
       <Countdown @completed="getNewChallenge" />
 
@@ -40,24 +40,24 @@
       </div>
 
       <!-- Start / Pause / Abandon Button -->
-      <div class="w-full max-w-sm">
+      <div class="w-full max-w-sm px-4 sm:px-0">
         <button
           v-if="countdown.hasCompleted"
           disabled
-          class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
+          class="btn btn-disabled btn-block h-12 sm:h-14 text-base font-semibold rounded-xl"
         >
           {{ $t('timer.cycleCompleted') }}
         </button>
         <button
           v-else-if="countdown.isActive"
-          class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
+          class="btn btn-error btn-outline btn-block h-11 sm:h-12 sm:h-14 text-base font-semibold rounded-xl"
           @click="setCountdownState(false)"
         >
           {{ $t('timer.abandonCycle') }}
         </button>
         <button
           v-else
-          class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+          class="btn btn-primary btn-block h-12 sm:h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
           @click="setCountdownState(true)"
         >
           {{ $t('timer.startCycle') }}
@@ -67,10 +67,10 @@
       <!-- Share button after completion -->
       <div
         v-if="countdown.hasCompleted"
-        class="w-full max-w-sm"
+        class="w-full max-w-sm px-4 sm:px-0"
       >
         <button
-          class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl"
+          class="btn btn-outline btn-block h-11 sm:h-12 text-base font-semibold rounded-xl"
           @click="showShareCard"
         >
           <svg
@@ -92,7 +92,7 @@
     </section>
 
     <!-- CHALLENGE CARD -->
-    <section class="max-w-lg mx-auto w-full mb-8">
+    <section class="max-w-lg mx-auto w-full mb-6 sm:mb-8 px-4 sm:px-0">
       <Card id="challenge" />
     </section>
 

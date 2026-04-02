@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex justify-center items-center text-6xl md:text-8xl lg:text-9xl font-rajdhani font-bold text-base-content"
+    class="flex justify-center items-center text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-rajdhani font-bold text-base-content"
   >
     <CountdownDigits :digits="countdown.minutes" />
-    <span class="px-1 md:px-3 text-primary animate-pulse">:</span>
+    <span class="px-1 sm:px-2 md:px-3 text-primary animate-pulse">:</span>
     <CountdownDigits :digits="countdown.seconds" />
   </div>
 </template>

@@ -1,16 +1,16 @@
 <template>
-  <div class="mb-4">
-    <div class="flex items-center gap-3">
-      <span class="text-sm font-medium text-base-content/60">{{ challenges.xp.start }} xp</span>
+  <div class="mb-3 sm:mb-4">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <span class="text-xs sm:text-sm font-medium text-base-content/60">{{ challenges.xp.start }} xp</span>
       <progress
-        class="progress progress-success flex-1 h-3"
+        class="progress progress-success flex-1 h-2 sm:h-3"
         :value="challenges.currentXpPercentage"
         max="100"
       />
-      <span class="text-sm font-medium text-base-content/60">{{ challenges.xp.end }} xp</span>
+      <span class="text-xs sm:text-sm font-medium text-base-content/60">{{ challenges.xp.end }} xp</span>
     </div>
     <div class="text-center mt-1 flex items-center justify-center gap-3">
-      <span class="badge badge-success badge-sm font-medium">
+      <span class="badge badge-success badge-xs sm:badge-sm font-medium">
         {{ challenges.xp.current }} xp ({{ challenges.currentXpPercentage }}%)
       </span>
       <!-- Streak badge -->

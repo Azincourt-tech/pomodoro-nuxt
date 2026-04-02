@@ -1,7 +1,7 @@
 <template>
   <!-- PiP Toggle Button -->
   <button
-    class="btn btn-circle shadow-lg fixed bottom-4 right-4 z-[9998]"
+    class="btn btn-circle shadow-lg fixed bottom-4 right-4 z-[9998] w-12 h-12 sm:w-auto sm:h-auto"
     :class="isOpen ? 'btn-error' : 'btn-primary'"
     :title="isOpen ? $t('pip.closeWindow') : $t('pip.openWindow')"
     @click="togglePiP"

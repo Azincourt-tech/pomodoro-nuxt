@@ -24,11 +24,11 @@
       </div>
 
       <!-- Preset buttons -->
-      <div class="flex flex-wrap gap-2 mb-3">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
         <button
           v-for="preset in presets"
           :key="preset"
-          class="btn btn-sm"
+          class="btn btn-sm min-h-11 h-11"
           :class="countdown.customMinutes === preset ? 'btn-primary' : 'btn-ghost'"
           :disabled="countdown.isActive"
           @click="selectPreset(preset)"
@@ -39,8 +39,8 @@
 
       <!-- Custom input -->
       <div class="form-control">
-        <div class="grid grid-cols-[1fr_auto] gap-2 items-end">
-          <div>
+        <div class="flex gap-2 items-end">
+          <div class="flex-1">
             <label class="label py-1">
               <span class="label-text text-xs">{{ $t('timer.customTime') }}</span>
             </label>
@@ -56,7 +56,7 @@
             >
           </div>
           <button
-            class="btn btn-sm btn-outline self-end"
+            class="btn btn-sm btn-outline h-9 min-w-16 shrink-0"
             :disabled="countdown.isActive || !customInput || customInput < 1"
             @click="applyCustom"
           >
@@ -67,7 +67,7 @@
 
       <!-- Reset button -->
       <button
-        class="btn btn-sm mt-5 gap-1 w-full"
+        class="btn btn-sm mt-4 gap-1 w-full"
         :class="countdown.isActive ? 'btn-error' : 'btn-ghost'"
         :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60"
         @click="resetTimer"

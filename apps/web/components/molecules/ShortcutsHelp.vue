@@ -4,7 +4,7 @@
     class="modal"
     :class="{ 'modal-open': isOpen }"
   >
-    <div class="modal-box">
+    <div class="modal-box max-w-sm w-[calc(100%-2rem)] sm:w-auto">
       <h3 class="text-lg font-bold font-rajdhani mb-4">
         {{ $t('shortcuts.title') }}
       </h3>
