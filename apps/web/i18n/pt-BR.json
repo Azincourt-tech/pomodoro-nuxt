@@ -1,0 +1,144 @@
+{
+	"app": {
+		"title": "Pomodoro Move.it",
+		"description": "Pomodoro timer com desafios de saude e bem-estar"
+	},
+	"nav": {
+		"level": "Level {level}",
+		"theme": "Tema",
+		"language": "Idioma"
+	},
+	"timer": {
+		"startCycle": "Iniciar ciclo",
+		"abandonCycle": "Abandonar ciclo",
+		"cycleCompleted": "Ciclo completado",
+		"pomodoroTime": "Tempo do Pomodoro",
+		"customTime": "Tempo personalizado (minutos)",
+		"apply": "Aplicar",
+		"resetTimer": "Resetar Timer",
+		"minutes": "{minutes}min"
+	},
+	"profile": {
+		"editProfile": "Editar Perfil",
+		"githubUsername": "Username do GitHub",
+		"githubPlaceholder": "ex: Azincourt-tech",
+		"connectedAs": "Conectado como {username}",
+		"remove": "Remover",
+		"or": "ou",
+		"name": "Nome",
+		"namePlaceholder": "Seu nome",
+		"photoUrl": "URL da foto",
+		"pasteLink": "Cole o link de uma imagem",
+		"preview": "Preview",
+		"save": "Salvar",
+		"cancel": "Cancelar",
+		"edit": "Editar perfil",
+		"defaultName": "Usuario"
+	},
+	"challenges": {
+		"completedChallenges": "Desafios completados",
+		"allChallenges": "Todos os Challenges",
+		"available": "{count} disponiveis",
+		"challenges": "challenges",
+		"failed": "Falhou",
+		"completed": "Completou",
+		"startCycle": "Inicie um ciclo para receber novos desafios",
+		"levelUp": "Aumente seu nivel completando os desafios"
+	},
+	"challengeTypes": {
+		"body": "Alongamento",
+		"eye": "Exercicio Ocular",
+		"drink": "Hidratacao",
+		"breathe": "Respiracao",
+		"posture": "Postura",
+		"meditate": "Meditacao Rapida",
+		"walk": "Caminhada"
+	},
+	"levelUp": {
+		"congratulations": "Parabens!",
+		"newLevel": "Voce alcancou um novo nivel!",
+		"continue": "Continuar"
+	},
+	"pip": {
+		"closeWindow": "Fechar janela flutuante",
+		"openWindow": "Abrir janela flutuante",
+		"inProgress": "Em andamento",
+		"paused": "Pausado",
+		"stop": "Parar",
+		"start": "Iniciar",
+		"reset": "Reset",
+		"challenge": "Desafio",
+		"startForChallenges": "Inicie um ciclo para receber desafios",
+		"allowPopups": "Permita popups para usar a janela flutuante"
+	},
+	"spotify": {
+		"player": "Spotify Player",
+		"playlistLink": "Link da playlist...",
+		"use": "Usar",
+		"activePlaylist": "Playlist ativa",
+		"remove": "Remover",
+		"loginInfo": "Para ouvir as musicas completas, faca login na sua conta do Spotify no navegador",
+		"pasteLink": "Cole um link do Spotify"
+	},
+	"experience": {
+		"xp": "xp"
+	},
+	"footer": {
+		"madeBy": "Feito por"
+	},
+	"notifications": {
+		"cycleCompleted": "Ciclo completado!",
+		"newChallenge": "Novo desafio disponivel!"
+	},
+	"shortcuts": {
+		"title": "Atalhos de Teclado",
+		"togglePlay": "Iniciar / Pausar",
+		"reset": "Resetar timer",
+		"nextChallenge": "Proximo desafio",
+		"focusMode": "Modo foco",
+		"showHelp": "Mostrar atalhos",
+		"close": "Fechar"
+	},
+	"history": {
+		"title": "Historico",
+		"navLink": "Historico",
+		"totalSessions": "Total de sessoes",
+		"totalTime": "Tempo total focado",
+		"avgDaily": "Media diaria",
+		"noSessions": "Nenhuma sessao registrada ainda",
+		"today": "Hoje",
+		"yesterday": "Ontem",
+		"thisWeek": "Esta semana",
+		"older": "Mais antigas",
+		"sessionCompleted": "Sessao completada",
+		"xpGained": "+{xp} xp",
+		"minutes": "{minutes} min",
+		"days": "{days} dias"
+	},
+	"streak": {
+		"title": "Sequencia",
+		"current": "{days} dias",
+		"best": "Melhor: {days} dias"
+	},
+	"focusMode": {
+		"exit": "Sair do modo foco (ESC)",
+		"title": "Modo Foco"
+	},
+	"share": {
+		"title": "Compartilhar",
+		"button": "Compartilhar resultado",
+		"download": "Baixar imagem"
+	},
+	"sound": {
+		"toggle": "Sons",
+		"enabled": "Sons ativados",
+		"disabled": "Sons desativados"
+	},
+	"sync": {
+		"login": "Entrar",
+		"logout": "Sair",
+		"syncing": "Sincronizando...",
+		"synced": "Sincronizado",
+		"error": "Erro ao sincronizar"
+	}
+}
