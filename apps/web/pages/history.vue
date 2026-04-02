@@ -1,8 +1,31 @@
 <template>
   <div class="py-6 lg:py-10">
-    <h1 class="text-2xl font-bold font-rajdhani mb-6">
-      {{ $t('history.title') }}
-    </h1>
+    <!-- Back button + title -->
+    <div class="flex items-center gap-3 mb-6">
+      <NuxtLink
+        to="/"
+        class="btn btn-ghost btn-sm gap-1"
+        :title="$t('nav.back', 'Voltar')"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        <span class="text-sm">{{ $t('nav.back', 'Voltar') }}</span>
+      </NuxtLink>
+      <h1 class="text-2xl font-bold font-rajdhani">
+        {{ $t('history.title') }}
+      </h1>
+    </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

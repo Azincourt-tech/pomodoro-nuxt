@@ -6,7 +6,8 @@
 	"nav": {
 		"level": "Level {level}",
 		"theme": "Theme",
-		"language": "Language"
+		"language": "Language",
+		"back": "Back"
 	},
 	"timer": {
 		"startCycle": "Start cycle",
