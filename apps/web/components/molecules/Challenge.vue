@@ -55,6 +55,10 @@ import { useCountdownStore } from '~/stores/countdown'
 
 const { t } = useI18n()
 const props = defineProps<{ type: string, description: string, amount: number }>()
+const emit = defineEmits<{
+  (e: 'challenge-succeeded'): void
+  (e: 'challenge-failed'): void
+}>()
 const challenges = useChallengesStore()
 const countdown = useCountdownStore()
 
@@ -91,15 +95,10 @@ const typeSvg = computed(() => {
 })
 
 function resetChallenges() {
-  countdown.resetTime()
-  countdown.setIsActive(false)
-  countdown.setHasCompleted(false)
-  challenges.setCurrentChallengeIndex(null)
+  emit('challenge-failed')
 }
 
 function challengeSucceeded() {
-  resetChallenges()
-  challenges.completeChallenge(props.amount)
-  challenges.saveToStorage()
+  emit('challenge-succeeded')
 }
 </script>
