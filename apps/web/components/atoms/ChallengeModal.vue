@@ -1,79 +1,83 @@
 <template>
-  <div class="modal-backdrop" @click.self="onBackdropClick">
-    <div class="modal-box">
-      <header class="modal-box-header bg-primary text-primary-content">
-        <h2 class="text-lg font-bold">
-          {{ $t('challenges.modalTitle') }}
-        </h2>
-        <div class="modal-action">
-          <button
-            class="btn btn-ghost btn-square"
-            aria-label="Close"
-            @click="onCloseClick"
-          >
-            ×
-          </button>
-        </div>
+  <dialog
+    ref="modalRef"
+    class="modal modal-bottom sm:modal-middle"
+    @close="$emit('close')"
+  >
+    <div class="modal-box p-0 overflow-hidden border border-base-300 shadow-2xl">
+      <header class="bg-primary p-4 flex justify-between items-center text-primary-content">
+        <h3 class="font-bold text-lg flex items-center gap-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          {{ $t('challenges.modalTitle', 'Novo Desafio!') }}
+        </h3>
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost">✕</button>
+        </form>
       </header>
 
-      <div class="modal-body py-6">
+      <div class="p-6">
         <Challenge
+          v-if="challenge"
           v-bind="challenge"
           @challenge-succeeded="onChallengeSucceeded"
           @challenge-failed="onChallengeFailed"
         />
       </div>
 
-      <footer class="modal-box-footer">
-        <button
-          class="btn btn-ghost"
-          @click="onCloseClick"
-        >
-          {{ $t('challenges.modalSkip') }}
-        </button>
-      </footer>
+      <div class="modal-action p-4 bg-base-200/50 mt-0">
+        <form method="dialog" class="w-full">
+          <button class="btn btn-ghost btn-block" @click="$emit('close')">
+            {{ $t('challenges.modalSkip', 'Fazer depois') }}
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Challenge from '~/components/molecules/Challenge.vue'
 import { useChallengesStore } from '~/stores/challenges'
 
 const props = defineProps<{
-  challenge: {
-    type: string
-    description: string
-    amount: number
-  } | null
+  challenge: any
+  isOpen: boolean
 }>()
 
-const emits = defineEmits<{
-  (e: 'close'): void
-  (e: 'complete'): void
-}>()
-
+const emit = defineEmits(['close', 'complete'])
+const modalRef = ref<HTMLDialogElement | null>(null)
 const challenges = useChallengesStore()
 
-function onBackdropClick() {
-  emits('close')
-}
+watch(() => props.isOpen, (value) => {
+  if (value) {
+    modalRef.value?.showModal()
+  } else {
+    modalRef.value?.close()
+  }
+})
 
-function onCloseClick() {
-  emits('close')
-}
+onMounted(() => {
+  if (props.isOpen) {
+    modalRef.value?.showModal()
+  }
+})
 
 function onChallengeSucceeded() {
   if (props.challenge) {
     challenges.completeChallenge(props.challenge.amount)
     challenges.saveToStorage()
-    emits('complete')
+    emit('complete')
   }
-  emits('close')
+  emit('close')
 }
 
 function onChallengeFailed() {
-  emits('close')
+  emit('close')
 }
 </script>
