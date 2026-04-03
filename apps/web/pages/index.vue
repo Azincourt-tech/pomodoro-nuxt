@@ -43,31 +43,7 @@
       <!-- CENTER -->
       <div class="flex flex-col items-center gap-6">
         <div class="w-full flex flex-col items-center">
-          <Countdown @completed="getNewChallenge" />
-
-          <div class="mt-6 w-full max-w-sm">
-            <button
-              v-if="countdown.hasCompleted"
-              disabled
-              class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
-            >
-              {{ $t('timer.cycleCompleted') }}
-            </button>
-            <button
-              v-else-if="countdown.isActive"
-              class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
-              @click="setCountdownState(false)"
-            >
-              {{ $t('timer.abandonCycle') }}
-            </button>
-            <button
-              v-else
-              class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
-              @click="setCountdownState(true)"
-            >
-              {{ $t('timer.startCycle') }}
-            </button>
-          </div>
+          <Countdown @start="setCountdownState(true)" @pause="setCountdownState(false)" @completed="getNewChallenge" />
 
           <!-- Share button after completion -->
           <div

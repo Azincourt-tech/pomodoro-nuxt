@@ -33,7 +33,7 @@
       <div class="absolute inset-0 flex flex-col items-center justify-center gap-0 sm:gap-1">
         <!-- Digits -->
         <div
-          class="flex justify-center items-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-rajdhani font-bold text-base-content tabular-nums"
+          class="flex justify-center items-center text-3xl sm:text-4xl md:text-5xl font-rajdhani font-bold text-base-content tabular-nums"
         >
           <CountdownDigits :digits="countdown.minutes" />
           <span class="px-1 md:px-2 text-primary animate-pulse">:</span>
