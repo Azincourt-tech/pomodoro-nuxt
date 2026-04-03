@@ -1,138 +1,197 @@
 <template>
-  <div class="py-6 lg:py-10" :class="{ 'focus-mode-active': isFocusMode }">
-    <!-- Focus Mode Exit Button -->
-    <div
-      v-if="isFocusMode"
-      class="fixed top-4 right-4 z-50"
-    >
-      <button
-        class="btn btn-ghost btn-sm gap-2"
-        @click="exitFocusMode"
-      >
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-        {{ $t('focusMode.exit') }}
-      </button>
-    </div>
-
+  <div class="py-4 lg:py-6 space-y-4 lg:space-y-6">
     <!-- PiP Window com botao -->
     <PiPWindow />
 
-    <!-- HERO: Timer Centralizado -->
-    <section class="flex flex-col items-center gap-6 mb-10">
-      <!-- Countdown Display -->
-      <Countdown @completed="getNewChallenge" />
+    <!-- Hero Timer Section -->
+    <div class="card bg-gradient-to-br from-base-100 to-base-200 shadow-lg">
+      <div class="card-body p-4 lg:p-6">
+        <div class="flex flex-col lg:flex-row items-center gap-4 lg:gap-8">
+          <!-- Timer Display -->
+          <div class="flex-1 flex flex-col items-center">
+            <div class="flex items-center justify-center text-6xl md:text-8xl lg:text-[10rem] font-rajdhani font-bold text-base-content">
+              <CountdownDigits :digits="countdown.minutes" />
+              <span class="px-2 md:px-4 text-primary animate-pulse">:</span>
+              <CountdownDigits :digits="countdown.seconds" />
+            </div>
 
-      <!-- Timer Presets + Controls -->
-      <div class="w-full max-w-md">
-        <TimerPresets />
+            <!-- Status badge -->
+            <div class="mt-2">
+              <span
+                v-if="countdown.isActive"
+                class="badge badge-success badge-lg gap-2"
+              >
+                <span class="loading loading-dots loading-xs" />
+                {{ $t('timer.inProgress') }}
+              </span>
+              <span
+                v-else-if="countdown.hasCompleted"
+                class="badge badge-primary badge-lg gap-2"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                {{ $t('timer.cycleCompleted') }}
+              </span>
+              <span
+                v-else
+                class="badge badge-ghost badge-lg"
+              >
+                {{ $t('timer.ready') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Controls + Presets -->
+          <div class="flex flex-col gap-4 w-full lg:w-80">
+            <!-- Action Button -->
+            <button
+              v-if="countdown.hasCompleted"
+              disabled
+              class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
+            >
+              {{ $t('timer.cycleCompleted') }}
+            </button>
+            <button
+              v-else-if="countdown.isActive"
+              class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
+              @click="setCountdownState(false)"
+            >
+              {{ $t('timer.abandonCycle') }}
+            </button>
+            <button
+              v-else
+              class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+              @click="setCountdownState(true)"
+            >
+              {{ $t('timer.startCycle') }}
+            </button>
+
+            <!-- Timer Presets (inline) -->
+            <div class="flex flex-wrap justify-center gap-2">
+              <button
+                v-for="preset in [15, 25, 35, 45, 60]"
+                :key="preset"
+                class="btn btn-sm"
+                :class="countdown.customMinutes === preset ? 'btn-primary' : 'btn-ghost'"
+                :disabled="countdown.isActive"
+                @click="selectPreset(preset)"
+              >
+                {{ preset }}min
+              </button>
+            </div>
+
+            <!-- Custom time input -->
+            <div class="flex gap-2">
+              <input
+                v-model.number="customInput"
+                type="number"
+                min="1"
+                max="120"
+                :placeholder="$t('timer.customTime')"
+                class="input input-bordered input-sm flex-1"
+                :disabled="countdown.isActive"
+                @keyup.enter="applyCustom"
+              >
+              <button
+                class="btn btn-sm btn-outline"
+                :disabled="countdown.isActive || !customInput || customInput < 1"
+                @click="applyCustom"
+              >
+                {{ $t('timer.apply') }}
+              </button>
+            </div>
+
+            <!-- Reset button -->
+            <button
+              class="btn btn-sm gap-1 w-full"
+              :class="countdown.isActive ? 'btn-error' : 'btn-ghost'"
+              :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60"
+              @click="resetTimer"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              {{ $t('timer.resetTimer') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenge Card (appears when cycle completes) -->
+    <div
+      v-if="challenges.currentChallenge || countdown.hasCompleted"
+      id="challenge"
+    >
+      <Card />
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+      <!-- Left Column: Profile + Stats -->
+      <div class="flex flex-col gap-4">
+        <Profile />
+
+        <!-- Stats Row -->
+        <div class="stats stats-vertical lg:stats-horizontal shadow-sm bg-base-100">
+          <div class="stat p-4">
+            <div class="stat-title text-xs">
+              {{ $t('challenges.completedChallenges') }}
+            </div>
+            <div class="stat-value text-primary text-2xl">
+              {{ challenges.completedChallenges }}
+            </div>
+          </div>
+          <div class="stat p-4">
+            <div class="stat-title text-xs">
+              {{ $t('nav.level', { level: '' }) }}
+            </div>
+            <div class="stat-value text-warning text-2xl">
+              {{ challenges.level }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience Bar -->
+        <div class="card bg-base-100 shadow-sm">
+          <div class="card-body p-4">
+            <ExperienceBar />
+          </div>
+        </div>
+
+        <!-- Completed Challenges List -->
+        <CompletedChallenges />
       </div>
 
-      <!-- Start / Pause / Abandon Button -->
-      <div class="w-full max-w-sm">
-        <button
-          v-if="countdown.hasCompleted"
-          disabled
-          class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
-        >
-          {{ $t('timer.cycleCompleted') }}
-        </button>
-        <button
-          v-else-if="countdown.isActive"
-          class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
-          @click="setCountdownState(false)"
-        >
-          {{ $t('timer.abandonCycle') }}
-        </button>
-        <button
-          v-else
-          class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
-          @click="setCountdownState(true)"
-        >
-          {{ $t('timer.startCycle') }}
-        </button>
+      <!-- Middle Column: Spotify -->
+      <div class="lg:col-span-1">
+        <SpotifyPlayer class="h-full" />
       </div>
 
-      <!-- Share button after completion -->
-      <div
-        v-if="countdown.hasCompleted"
-        class="w-full max-w-sm"
-      >
-        <button
-          class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl"
-          @click="showShareCard"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-            />
-          </svg>
-          {{ $t('share.button') }}
-        </button>
+      <!-- Right Column: Challenge Browser -->
+      <div class="lg:col-span-1">
+        <ChallengeBrowser class="h-full" />
       </div>
-    </section>
-
-    <!-- CHALLENGE CARD -->
-    <section class="max-w-lg mx-auto w-full mb-8">
-      <Card id="challenge" />
-    </section>
-
-    <!-- SECONDARY: Stats / Spotify -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <CompletedChallenges />
-      <SpotifyPlayer />
-    </section>
-
-    <!-- Challenges Browser -->
-    <section class="mt-8">
-      <ChallengeBrowser />
-    </section>
-
-    <!-- Share Card Modal -->
-    <ShareCard
-      ref="shareCardRef"
-      :stats="shareStats"
-    />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, nextTick, ref, computed } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
 import { useThemeStore } from '~/stores/theme'
 import { useProfileStore } from '~/stores/profile'
-import { useHistoryStore, type SessionRecord } from '~/stores/history'
-import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts'
-import { useSound } from '~/composables/useSound'
 import CompletedChallenges from '~/components/atoms/CompletedChallenges.vue'
-import TimerPresets from '~/components/atoms/TimerPresets.vue'
+import ExperienceBar from '~/components/atoms/ExperienceBar.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
 import ChallengeBrowser from '~/components/atoms/ChallengeBrowser.vue'
 import PiPWindow from '~/components/atoms/PiPWindow.vue'
-import Countdown from '~/components/molecules/Countdown.vue'
+import Profile from '~/components/molecules/Profile.vue'
+import CountdownDigits from '~/components/atoms/CountdownDigits.vue'
 import Card from '~/components/organisms/Card.vue'
-import ShareCard from '~/components/molecules/ShareCard.vue'
-import { scrollToElement, getRandomNumber, sendNotification } from '~/utils'
+import { scrollToElement, getRandomNumber, playAudio, sendNotification } from '~/utils'
 
 const { t } = useI18n()
 useHead({ title: 'Pomodoro | Move.it' })
@@ -141,30 +200,13 @@ const challenges = useChallengesStore()
 const countdown = useCountdownStore()
 const theme = useThemeStore()
 const profile = useProfileStore()
-const history = useHistoryStore()
-const { playStart, playPause, playComplete } = useSound()
-
-const shareCardRef = ref<InstanceType<typeof ShareCard> | null>(null)
-const isFocusMode = ref(false)
-const sessionStartTime = ref<number | null>(null)
-
-const shareStats = computed(() => ({
-  level: challenges.level,
-  xp: challenges.xp.current,
-  completedChallenges: challenges.completedChallenges,
-  streakCurrent: profile.streakCurrent,
-  streakBest: profile.streakBest,
-  totalSessions: history.totalSessions,
-  totalTime: history.totalTimeMinutes,
-  userName: profile.displayName,
-}))
+const customInput = ref<number | null>(null)
 
 onMounted(() => {
   theme.initTheme()
   challenges.initFromStorage()
   profile.loadFromStorage()
   countdown.initFromStorage()
-  history.loadFromStorage()
   requestNotificationPermission()
 })
 
@@ -177,12 +219,23 @@ function requestNotificationPermission() {
 function setCountdownState(flag: boolean) {
   countdown.setHasCompleted(false)
   countdown.setIsActive(flag)
-  if (flag) {
-    sessionStartTime.value = Date.now()
-    playStart()
-  } else {
-    playPause()
+}
+
+function selectPreset(minutes: number) {
+  countdown.setCustomMinutes(minutes)
+  customInput.value = null
+}
+
+function applyCustom() {
+  if (customInput.value && customInput.value > 0 && customInput.value <= 120) {
+    countdown.setCustomMinutes(customInput.value)
   }
+}
+
+function resetTimer() {
+  countdown.setIsActive(false)
+  countdown.setHasCompleted(false)
+  countdown.resetTime()
 }
 
 function getNewChallenge() {
@@ -190,31 +243,10 @@ function getNewChallenge() {
   countdown.setHasCompleted(true)
   challenges.setCurrentChallengeIndex(index)
 
-  const challenge = challenges.currentChallenge
-  const xpGained = challenge?.amount ?? 0
-
-  if (challenge) {
-    challenges.completeChallenge(xpGained)
-  }
-
-  const session: SessionRecord = {
-    id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-    startedAt: sessionStartTime.value ?? Date.now(),
-    duration: countdown.customMinutes,
-    challengeCompleted: challenge?.description ?? null,
-    xpGained,
-  }
-  history.addSession(session)
-  profile.updateStreak()
-  profile.saveProgressToStorage(challenges.level, challenges.xp, challenges.completedChallenges)
-
-  playComplete()
-
-  if (navigator.vibrate) {
-    navigator.vibrate([200])
-  }
-
+  // Notificacao do navegador
   if ('Notification' in window && Notification.permission === 'granted') {
+    playAudio('/notification.mp3')
+    const challenge = challenges.currentChallenge
     sendNotification(t('notifications.cycleCompleted'), {
       body: challenge ? challenge.description : t('notifications.newChallenge'),
       icon: '/favicon.png',
@@ -224,59 +256,4 @@ function getNewChallenge() {
 
   nextTick(() => scrollToElement('#challenge'))
 }
-
-function showShareCard() {
-  shareCardRef.value?.open()
-}
-
-function exitFocusMode() {
-  isFocusMode.value = false
-  if (document.fullscreenElement) {
-    document.exitFullscreen().catch(() => {})
-  }
-}
-
-function toggleFocusMode() {
-  isFocusMode.value = !isFocusMode.value
-  if (isFocusMode.value) {
-    document.documentElement.requestFullscreen?.().catch(() => {})
-  } else {
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {})
-    }
-  }
-}
-
-useKeyboardShortcuts({
-  onTogglePlay: () => {
-    if (countdown.hasCompleted) return
-    setCountdownState(!countdown.isActive)
-  },
-  onReset: () => {
-    countdown.setIsActive(false)
-    countdown.setHasCompleted(false)
-    countdown.resetTime()
-  },
-  onNextChallenge: () => {
-    const index = getRandomNumber(0, challenges.challengesLength)
-    challenges.setCurrentChallengeIndex(index)
-    nextTick(() => scrollToElement('#challenge'))
-  },
-  onFocusMode: toggleFocusMode,
-  onShowHelp: () => {},
-})
-
-onMounted(() => {
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isFocusMode.value) {
-      exitFocusMode()
-    }
-  })
-})
 </script>
-
-<style scoped>
-.focus-mode-active .focus-hidden {
-  display: none;
-}
-</style>
