@@ -3,7 +3,7 @@
     <!-- Circular Timer -->
     <div class="relative inline-flex items-center justify-center">
       <svg
-        class="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 transform -rotate-90"
+        class="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 transform -rotate-90"
         viewBox="0 0 200 200"
       >
         <!-- Background circle -->
