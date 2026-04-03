@@ -30,11 +30,15 @@
       </svg>
 
       <!-- Timer digits inside circle -->
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span
-          class="font-rajdhani font-bold text-base-content tabular-nums select-none"
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <div
+          class="flex justify-center items-center font-rajdhani font-bold text-base-content tabular-nums"
           :class="countdown.time >= 6000 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-6xl sm:text-7xl md:text-8xl'"
-        >{{ countdown.minutes }}:{{ countdown.seconds }}</span>
+        >
+          <CountdownDigits :digits="countdown.minutes" />
+          <span class="px-1 md:px-2 text-primary animate-pulse">:</span>
+          <CountdownDigits :digits="countdown.seconds" />
+        </div>
       </div>
     </div>
   </div>
@@ -43,6 +47,7 @@
 <script setup lang="ts">
 import { watch, computed } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
+import CountdownDigits from '~/components/atoms/CountdownDigits.vue'
 
 const emit = defineEmits<{
   completed: []
