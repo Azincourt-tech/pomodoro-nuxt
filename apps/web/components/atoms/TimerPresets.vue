@@ -3,7 +3,7 @@
     class="card bg-base-100 shadow-sm"
     v-bind="$attrs"
   >
-    <div class="card-body p-4">
+    <div class="card-body p-4 flex justify-between">
       <div class="flex items-center gap-2 mb-3">
         <svg
           class="w-5 h-5 text-primary"
