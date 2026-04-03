@@ -176,7 +176,7 @@
           </div>
 
           <!-- Divider -->
-          <div class="divider divider-horizontal mx-1 h-6" />
+          <div class="divider divider-horizontal mx-1 h-6 my-auto" />
 
           <!-- User profile dropdown -->
           <div class="dropdown dropdown-end">
