@@ -26,86 +26,95 @@
       </button>
     </div>
 
-    <!-- PiP Window com botao -->
+    <!-- PiP Window -->
     <PiPWindow />
 
-    <!-- HERO: Timer Centralizado -->
-    <section class="flex flex-col items-center gap-6 mb-10">
-      <!-- Countdown Display -->
-      <Countdown @completed="getNewChallenge" />
+    <!-- 3-Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+      <!-- LEFT: Profile + Stats -->
+      <aside class="lg:col-span-3 flex flex-col gap-4">
+        <Profile />
+        <CompletedChallenges />
+      </aside>
 
-      <!-- Timer Presets + Controls -->
-      <div class="w-full max-w-md">
-        <TimerPresets />
-      </div>
+      <!-- CENTER: Timer + Challenge -->
+      <main class="lg:col-span-6 flex flex-col items-center gap-6">
+        <!-- Countdown Display -->
+        <Countdown @completed="getNewChallenge" />
 
-      <!-- Start / Pause / Abandon Button -->
-      <div class="w-full max-w-sm">
-        <button
-          v-if="countdown.hasCompleted"
-          disabled
-          class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
-        >
-          {{ $t('timer.cycleCompleted') }}
-        </button>
-        <button
-          v-else-if="countdown.isActive"
-          class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
-          @click="setCountdownState(false)"
-        >
-          {{ $t('timer.abandonCycle') }}
-        </button>
-        <button
-          v-else
-          class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
-          @click="setCountdownState(true)"
-        >
-          {{ $t('timer.startCycle') }}
-        </button>
-      </div>
+        <!-- Timer Presets (mobile only) -->
+        <div class="w-full max-w-md lg:hidden">
+          <TimerPresets />
+        </div>
 
-      <!-- Share button after completion -->
-      <div
-        v-if="countdown.hasCompleted"
-        class="w-full max-w-sm"
-      >
-        <button
-          class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl"
-          @click="showShareCard"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <!-- Action Buttons -->
+        <div class="w-full max-w-xs">
+          <button
+            v-if="countdown.hasCompleted"
+            disabled
+            class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-            />
-          </svg>
-          {{ $t('share.button') }}
-        </button>
-      </div>
-    </section>
+            {{ $t('timer.cycleCompleted') }}
+          </button>
+          <button
+            v-else-if="countdown.isActive"
+            class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
+            @click="setCountdownState(false)"
+          >
+            {{ $t('timer.abandonCycle') }}
+          </button>
+          <button
+            v-else
+            class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+            @click="setCountdownState(true)"
+          >
+            {{ $t('timer.startCycle') }}
+          </button>
+        </div>
 
-    <!-- CHALLENGE CARD -->
-    <section class="max-w-lg mx-auto w-full mb-8">
-      <Card id="challenge" />
-    </section>
+        <!-- Share button after completion -->
+        <div
+          v-if="countdown.hasCompleted"
+          class="w-full max-w-xs"
+        >
+          <button
+            class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl"
+            @click="showShareCard"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              />
+            </svg>
+            {{ $t('share.button') }}
+          </button>
+        </div>
 
-    <!-- SECONDARY: Stats / Spotify -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <CompletedChallenges />
-      <SpotifyPlayer />
-    </section>
+        <!-- Challenge Card -->
+        <div class="w-full">
+          <Card id="challenge" />
+        </div>
 
-    <!-- Challenges Browser -->
-    <section class="mt-8">
-      <ChallengeBrowser />
-    </section>
+        <!-- Challenges Browser -->
+        <div class="w-full">
+          <ChallengeBrowser />
+        </div>
+      </main>
+
+      <!-- RIGHT: TimerPresets (desktop) + Spotify -->
+      <aside class="lg:col-span-3 flex flex-col gap-4">
+        <TimerPresets class="hidden lg:flex" />
+        <SpotifyPlayer class="flex-1" />
+      </aside>
+    </div>
 
     <!-- Share Card Modal -->
     <ShareCard
@@ -129,6 +138,7 @@ import TimerPresets from '~/components/atoms/TimerPresets.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
 import ChallengeBrowser from '~/components/atoms/ChallengeBrowser.vue'
 import PiPWindow from '~/components/atoms/PiPWindow.vue'
+import Profile from '~/components/molecules/Profile.vue'
 import Countdown from '~/components/molecules/Countdown.vue'
 import Card from '~/components/organisms/Card.vue'
 import ShareCard from '~/components/molecules/ShareCard.vue'
