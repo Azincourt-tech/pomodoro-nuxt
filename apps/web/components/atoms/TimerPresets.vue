@@ -3,7 +3,7 @@
     class="card bg-base-100 shadow-sm"
     v-bind="$attrs"
   >
-    <div class="card-body p-4">
+    <div class="card-body p-4 flex justify-between">
       <div class="flex items-center gap-2 mb-3">
         <svg
           class="w-5 h-5 text-primary"
@@ -24,7 +24,7 @@
       </div>
 
       <!-- Preset buttons - grid 3 cols with uniform gap -->
-      <div class="grid grid-cols-3 gap-2 mb-3">
+      <div class="grid grid-cols-4 gap-2 mb-3">
         <button
           v-for="preset in presets"
           :key="preset"
@@ -96,7 +96,7 @@ import { useCountdownStore } from '~/stores/countdown'
 const countdown = useCountdownStore()
 const customInput = ref<number | null>(null)
 
-const presets = [15, 25, 35, 45, 60]
+const presets = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
 
 function selectPreset(minutes: number) {
   countdown.setCustomMinutes(minutes)

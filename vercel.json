@@ -1,5 +1,5 @@
 {
 	"buildCommand": "cd apps/web && npx nuxt build",
 	"outputDirectory": "apps/web/.output",
-	"installCommand": "npm install"
+	"installCommand": "cd apps/web && npm install"
 }

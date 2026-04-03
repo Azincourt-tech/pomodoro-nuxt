@@ -75,7 +75,7 @@
       <!-- Embed ou Placeholder -->
       <div
         v-if="embedSrc"
-        class="rounded-lg overflow-hidden flex-1 min-h-0"
+        class="rounded-[1rem] overflow-hidden flex-1 min-h-[352px]"
       >
         <iframe
           :src="embedSrc"

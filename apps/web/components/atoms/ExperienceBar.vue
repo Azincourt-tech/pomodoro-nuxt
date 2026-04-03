@@ -1,6 +1,7 @@
 <template>
   <div class="mb-4">
     <div class="flex items-center gap-3">
+      <span class="badge badge-primary badge-sm font-bold">Lv {{ challenges.level }}</span>
       <span class="text-sm font-medium text-base-content/60">{{ challenges.xp.start }} xp</span>
       <progress
         class="progress progress-success flex-1 h-3"
