@@ -27,15 +27,10 @@
         />
       </div>
 
-      <div class="modal-action p-4 bg-base-200/50 mt-0 flex-col gap-2">
+      <div class="modal-action p-4 bg-base-200/50 mt-0">
         <button class="btn btn-ghost btn-block" @click="onSkipChallenge">
           {{ $t('challenges.modalSkip', 'Pular Desafio') }}
         </button>
-        <form method="dialog" class="w-full">
-          <button class="btn btn-ghost btn-block" @click="$emit('close')">
-            {{ $t('challenges.modalLater', 'Fazer depois') }}
-          </button>
-        </form>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -49,7 +44,6 @@ import { ref, onMounted, watch } from 'vue'
 import Challenge from '~/components/molecules/Challenge.vue'
 import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
-import { useSound } from '~/composables/useSound'
 
 const props = defineProps<{
   challenge: any
@@ -60,7 +54,6 @@ const emit = defineEmits(['close', 'complete'])
 const modalRef = ref<HTMLDialogElement | null>(null)
 const challenges = useChallengesStore()
 const countdown = useCountdownStore()
-const { playComplete } = useSound()
 
 watch(() => props.isOpen, (value) => {
   if (value) {
@@ -98,8 +91,9 @@ function onChallengeSucceeded() {
 }
 
 function onChallengeFailed() {
+  // Não perde XP nem reseta level - apenas não ganha XP
+  // O desafio continua disponível para tentar novamente
   resetCycle()
-  challenges.setCurrentChallengeIndex(null)
   emit('close')
 }
 
