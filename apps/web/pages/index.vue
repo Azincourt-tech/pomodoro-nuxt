@@ -43,7 +43,40 @@
       <!-- CENTER -->
       <div class="flex flex-col items-center gap-6">
         <div class="w-full flex flex-col items-center">
-          <Countdown @start="setCountdownState(true)" @pause="setCountdownState(false)" @completed="getNewChallenge" />
+          <Countdown @completed="getNewChallenge" />
+
+          <!-- Controls -->
+          <div class="flex items-center gap-3 mt-4">
+            <button
+              v-if="countdown.hasCompleted"
+              disabled
+              class="btn btn-disabled btn-md px-8"
+            >
+              {{ $t('timer.cycleCompleted') }}
+            </button>
+            <template v-else-if="!countdown.isActive">
+              <button
+                class="btn btn-primary btn-md gap-2 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+                @click="setCountdownState(true)"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                </svg>
+                {{ $t('timer.startCycle') }}
+              </button>
+            </template>
+            <template v-else>
+              <button
+                class="btn btn-error btn-outline btn-md gap-2 px-8"
+                @click="setCountdownState(false)"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{ $t('timer.abandonCycle') }}
+              </button>
+            </template>
+          </div>
 
           <!-- Share button after completion -->
           <div

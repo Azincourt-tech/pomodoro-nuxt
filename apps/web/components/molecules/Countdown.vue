@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center gap-4">
+  <div class="flex flex-col items-center">
     <!-- Circular Timer -->
     <div class="relative inline-flex items-center justify-center">
       <svg
@@ -30,64 +30,11 @@
       </svg>
 
       <!-- Timer digits inside circle -->
-      <div class="absolute inset-0 flex flex-col items-center justify-center">
-        <div
-          class="flex justify-center items-center font-rajdhani font-bold text-base-content tabular-nums"
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span
+          class="font-rajdhani font-bold text-base-content tabular-nums select-none"
           :class="countdown.time >= 6000 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-6xl sm:text-7xl md:text-8xl'"
-        >
-          <CountdownDigits :digits="countdown.minutes" />
-          <span class="px-1 md:px-2 text-primary animate-pulse">:</span>
-          <CountdownDigits :digits="countdown.seconds" />
-        </div>
-      </div>
-    </div>
-
-    <!-- Status + Controls below circle -->
-    <div class="flex flex-col items-center gap-3">
-      <p class="text-sm text-base-content/50 font-medium">
-        {{ countdown.hasCompleted ? $t('timer.cycleCompleted') : countdown.isActive ? $t('timer.inProgress') : $t('timer.ready') }}
-      </p>
-
-      <div class="flex items-center gap-3">
-        <button
-          v-if="countdown.hasCompleted"
-          disabled
-          class="btn btn-disabled btn-md px-8"
-        >
-          {{ $t('timer.cycleCompleted') }}
-        </button>
-        <template v-else>
-          <button
-            v-if="!countdown.isActive"
-            class="btn btn-primary btn-md gap-2 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
-            @click="$emit('start')"
-          >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-            </svg>
-            {{ $t('timer.startCycle') }}
-          </button>
-          <template v-else>
-            <button
-              class="btn btn-error btn-outline btn-md gap-2 px-8"
-              @click="$emit('pause')"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {{ $t('timer.pause') }}
-            </button>
-            <button
-              class="btn btn-ghost btn-md px-4"
-              @click="$emit('reset')"
-              :title="$t('timer.reset', 'Resetar')"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </button>
-          </template>
-        </template>
+        >{{ countdown.minutes }}:{{ countdown.seconds }}</span>
       </div>
     </div>
   </div>
@@ -96,12 +43,8 @@
 <script setup lang="ts">
 import { watch, computed } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
-import CountdownDigits from '~/components/atoms/CountdownDigits.vue'
 
 const emit = defineEmits<{
-  start: []
-  pause: []
-  reset: []
   completed: []
 }>()
 
