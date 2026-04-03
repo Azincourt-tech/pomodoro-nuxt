@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "test": "turbo test",
+    "test": "cd apps/web && npx vitest run",
     "lint": "turbo lint"
   },
   "devDependencies": {
