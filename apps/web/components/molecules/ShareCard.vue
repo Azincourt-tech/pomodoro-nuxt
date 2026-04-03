@@ -56,6 +56,9 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface ShareStats {
   level: number
@@ -118,10 +121,10 @@ function drawCard() {
 
   // Stats
   const statsItems = [
-    { label: 'Level', value: `${props.stats.level}`, color: '#fbbf24' },
-    { label: 'XP', value: `${props.stats.xp}`, color: '#34d399' },
-    { label: 'Challenges', value: `${props.stats.completedChallenges}`, color: '#60a5fa' },
-    { label: 'Streak', value: `${props.stats.streakCurrent}d`, color: '#f87171' },
+    { label: t('share.level'), value: `${props.stats.level}`, color: '#fbbf24' },
+    { label: t('share.xp'), value: `${props.stats.xp}`, color: '#34d399' },
+    { label: t('share.challenges'), value: `${props.stats.completedChallenges}`, color: '#60a5fa' },
+    { label: t('share.streak'), value: `${props.stats.streakCurrent}d`, color: '#f87171' },
   ]
 
   const colWidth = (w - 60) / 4
@@ -149,9 +152,9 @@ function drawCard() {
   // Summary text
   ctx.fillStyle = '#e2e8f0'
   ctx.font = '16px Inter, sans-serif'
-  ctx.fillText(`Total sessions: ${props.stats.totalSessions}`, 40, 260)
-  ctx.fillText(`Focused time: ${props.stats.totalTime} minutes`, 40, 290)
-  ctx.fillText(`Best streak: ${props.stats.streakBest} days`, 40, 320)
+  ctx.fillText(`${t('share.totalSessions')}: ${props.stats.totalSessions}`, 40, 260)
+  ctx.fillText(`${t('share.focusedTime')}: ${props.stats.totalTime} ${t('share.minutes')}`, 40, 290)
+  ctx.fillText(`${t('share.bestStreak')}: ${props.stats.streakBest} ${t('share.days')}`, 40, 320)
 
   // Fire emoji for streak
   if (props.stats.streakCurrent >= 3) {
