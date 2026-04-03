@@ -116,9 +116,10 @@
       </div>
     </div>
 
-    <!-- Challenges Browser -->
-    <div class="mt-8">
+    <!-- Challenges Browser + Mini History -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
       <ChallengeBrowser />
+      <MiniHistory />
     </div>
 
     <!-- Share Card Modal (used by both navbar and post-completion button) -->
@@ -142,6 +143,7 @@ import CompletedChallenges from '~/components/atoms/CompletedChallenges.vue'
 import TimerPresets from '~/components/atoms/TimerPresets.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
 import ChallengeBrowser from '~/components/atoms/ChallengeBrowser.vue'
+import MiniHistory from '~/components/atoms/MiniHistory.vue'
 import PiPWindow from '~/components/atoms/PiPWindow.vue'
 import Countdown from '~/components/molecules/Countdown.vue'
 import Card from '~/components/organisms/Card.vue'
