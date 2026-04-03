@@ -26,68 +26,93 @@
       </button>
     </div>
 
-    <!-- PiP Window -->
+    <!-- PiP Window com botao -->
     <PiPWindow />
 
-    <!-- Centered single column layout -->
-    <div class="max-w-2xl mx-auto flex flex-col items-center gap-6 lg:gap-8">
-      <!-- Timer (circular with buttons inside) -->
-      <Countdown
-        @start="handleStart"
-        @pause="handlePause"
-        @reset="handleReset"
-        @completed="getNewChallenge"
-      />
-
-      <!-- Share button after completion -->
-      <div
-        v-if="countdown.hasCompleted"
-        class="w-full max-w-sm"
-      >
-        <button
-          class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl"
-          @click="showShareCard"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-            />
-          </svg>
-          {{ $t('share.button') }}
-        </button>
-      </div>
-
-      <!-- Ciclos Completos + Presets (side by side) -->
-      <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- Linha principal: 3 colunas -->
+    <div
+      id="main-row"
+      class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
+    >
+      <!-- LEFT — CompletedChallenges + TimerPresets only (Profile moved to navbar dropdown) -->
+      <div class="flex flex-col gap-4">
         <CompletedChallenges />
-        <TimerPresets />
+        <TimerPresets class="flex-1" />
       </div>
 
-      <!-- Challenge Card -->
-      <div class="w-full">
-        <Card id="challenge" />
+      <!-- CENTER -->
+      <div class="flex flex-col items-center gap-6">
+        <div class="w-full flex flex-col items-center">
+          <Countdown @completed="getNewChallenge" />
+
+          <div class="mt-6 w-full max-w-sm">
+            <button
+              v-if="countdown.hasCompleted"
+              disabled
+              class="btn btn-disabled btn-block h-14 text-base font-semibold rounded-xl"
+            >
+              {{ $t('timer.cycleCompleted') }}
+            </button>
+            <button
+              v-else-if="countdown.isActive"
+              class="btn btn-error btn-outline btn-block h-14 text-base font-semibold rounded-xl"
+              @click="setCountdownState(false)"
+            >
+              {{ $t('timer.abandonCycle') }}
+            </button>
+            <button
+              v-else
+              class="btn btn-primary btn-block h-14 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+              @click="setCountdownState(true)"
+            >
+              {{ $t('timer.startCycle') }}
+            </button>
+          </div>
+
+          <!-- Share button after completion -->
+          <div
+            v-if="countdown.hasCompleted"
+            class="mt-4 w-full max-w-sm"
+          >
+            <button
+              class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl"
+              @click="showShareCard"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                />
+              </svg>
+              {{ $t('share.button') }}
+            </button>
+          </div>
+        </div>
+
+        <div class="w-full flex-1">
+          <Card id="challenge" />
+        </div>
       </div>
 
-      <!-- Challenges Browser -->
-      <div class="w-full">
-        <ChallengeBrowser />
-      </div>
-
-      <!-- Spotify Player -->
-      <div class="w-full">
-        <SpotifyPlayer />
+      <!-- RIGHT -->
+      <div class="flex flex-col">
+        <SpotifyPlayer class="flex-1" />
       </div>
     </div>
 
-    <!-- Share Card Modal -->
+    <!-- Challenges Browser -->
+    <div class="mt-8">
+      <ChallengeBrowser />
+    </div>
+
+    <!-- Share Card Modal (used by both navbar and post-completion button) -->
     <ShareCard
       ref="shareCardRef"
       :stats="shareStats"
@@ -154,22 +179,15 @@ function requestNotificationPermission() {
   }
 }
 
-function handleStart() {
+function setCountdownState(flag: boolean) {
   countdown.setHasCompleted(false)
-  countdown.setIsActive(true)
-  sessionStartTime.value = Date.now()
-  playStart()
-}
-
-function handlePause() {
-  countdown.setIsActive(false)
-  playPause()
-}
-
-function handleReset() {
-  countdown.setIsActive(false)
-  countdown.setHasCompleted(false)
-  countdown.resetTime()
+  countdown.setIsActive(flag)
+  if (flag) {
+    sessionStartTime.value = Date.now()
+    playStart()
+  } else {
+    playPause()
+  }
 }
 
 function getNewChallenge() {
@@ -180,10 +198,12 @@ function getNewChallenge() {
   const challenge = challenges.currentChallenge
   const xpGained = challenge?.amount ?? 0
 
+  // Complete challenge for XP
   if (challenge) {
     challenges.completeChallenge(xpGained)
   }
 
+  // Save session to history
   const session: SessionRecord = {
     id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
     startedAt: sessionStartTime.value ?? Date.now(),
@@ -192,15 +212,21 @@ function getNewChallenge() {
     xpGained,
   }
   history.addSession(session)
+
+  // Update streak
   profile.updateStreak()
+
+  // Save progress
   profile.saveProgressToStorage(challenges.level, challenges.xp, challenges.completedChallenges)
 
   playComplete()
 
+  // Vibrate on mobile
   if (navigator.vibrate) {
     navigator.vibrate([200])
   }
 
+  // Notification
   if ('Notification' in window && Notification.permission === 'granted') {
     sendNotification(t('notifications.cycleCompleted'), {
       body: challenge ? challenge.description : t('notifications.newChallenge'),
@@ -234,17 +260,16 @@ function toggleFocusMode() {
   }
 }
 
+// Keyboard shortcuts — shortcuts modal opened via layout navbar button
 useKeyboardShortcuts({
   onTogglePlay: () => {
     if (countdown.hasCompleted) return
-    if (countdown.isActive) {
-      handlePause()
-    } else {
-      handleStart()
-    }
+    setCountdownState(!countdown.isActive)
   },
   onReset: () => {
-    handleReset()
+    countdown.setIsActive(false)
+    countdown.setHasCompleted(false)
+    countdown.resetTime()
   },
   onNextChallenge: () => {
     const index = getRandomNumber(0, challenges.challengesLength)
@@ -252,9 +277,13 @@ useKeyboardShortcuts({
     nextTick(() => scrollToElement('#challenge'))
   },
   onFocusMode: toggleFocusMode,
-  onShowHelp: () => {},
+  onShowHelp: () => {
+    // Shortcuts modal is now opened from the navbar `?` button
+    // This is kept for keyboard shortcut compatibility
+  },
 })
 
+// Handle ESC to exit focus mode
 onMounted(() => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isFocusMode.value) {
