@@ -175,6 +175,7 @@ import { computed } from 'vue'
 import { useHistoryStore, type SessionRecord } from '~/stores/history'
 import { useProfileStore } from '~/stores/profile'
 
+const { t, locale } = useI18n()
 const history = useHistoryStore()
 const profile = useProfileStore()
 
