@@ -1,9 +1,9 @@
 <template>
-  <div class="w-1/2 flex gap-x-2">
+  <div class="flex gap-x-2">
     <span
       v-for="(digit, index) in splittedDigits"
       :key="index"
-      class="w-1/2 bg-base-200 rounded-2xl flex items-center justify-center py-4 text-5xl md:text-7xl lg:text-8xl font-rajdhani font-bold text-base-content shadow-inner"
+      class="flex-1 bg-base-200 rounded-2xl flex items-center justify-center py-4 text-inherit font-rajdhani font-bold text-base-content shadow-inner"
     >
       {{ digit }}
     </span>
