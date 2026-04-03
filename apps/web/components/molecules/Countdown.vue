@@ -3,25 +3,25 @@
     <!-- Circular Timer -->
     <div class="relative inline-flex items-center justify-center">
       <svg
-        class="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 transform -rotate-90"
+        class="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 transform -rotate-90"
         viewBox="0 0 200 200"
       >
         <!-- Background circle -->
         <circle
           cx="100"
           cy="100"
-          r="88"
+          r="90"
           fill="none"
-          stroke-width="8"
+          stroke-width="6"
           class="stroke-base-300/30"
         />
         <!-- Progress circle -->
         <circle
           cx="100"
           cy="100"
-          r="88"
+          r="90"
           fill="none"
-          stroke-width="8"
+          stroke-width="6"
           stroke-linecap="round"
           :stroke-dasharray="circumference"
           :stroke-dashoffset="dashOffset"
@@ -52,37 +52,37 @@
         <button
           v-if="countdown.hasCompleted"
           disabled
-          class="btn btn-disabled btn-sm px-6"
+          class="btn btn-disabled btn-md px-8"
         >
           {{ $t('timer.cycleCompleted') }}
         </button>
         <template v-else>
           <button
             v-if="!countdown.isActive"
-            class="btn btn-primary btn-sm gap-2 px-6 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+            class="btn btn-primary btn-md gap-2 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
             @click="$emit('start')"
           >
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
             </svg>
             {{ $t('timer.startCycle') }}
           </button>
           <template v-else>
             <button
-              class="btn btn-error btn-outline btn-sm gap-2 px-6"
+              class="btn btn-error btn-outline btn-md gap-2 px-8"
               @click="$emit('pause')"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               {{ $t('timer.pause') }}
             </button>
             <button
-              class="btn btn-ghost btn-sm px-3"
+              class="btn btn-ghost btn-md px-4"
               @click="$emit('reset')"
               :title="$t('timer.reset', 'Resetar')"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
             </button>
@@ -107,7 +107,7 @@ const emit = defineEmits<{
 
 const countdown = useCountdownStore()
 
-const circumference = 2 * Math.PI * 88
+const circumference = 2 * Math.PI * 90
 const progress = computed(() => {
   const total = countdown.customMinutes * 60
   if (total === 0) return 0
