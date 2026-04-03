@@ -1,7 +1,9 @@
 <template>
   <div class="bg-base-100 rounded-box shadow-sm flex flex-1 w-full min-h-[300px]">
-    <!-- Estado: Sem desafio ativo -->
-    <StartCycle v-if="!challenges.currentChallenge" />
+    <!-- Estado: Sem desafio ativo - não mostra nada -->
+    <div v-if="!challenges.currentChallenge" class="w-full flex items-center justify-center p-8 text-center">
+      <!-- Espaço reservado vazio (pode ser um placeholder sutil se quiser) -->
+    </div>
 
     <!-- Estado: Desafio ativo (Mostra um resumo ou convite para abrir o modal) -->
     <div v-else class="flex flex-col items-center justify-center w-full p-8 text-center animate-in fade-in zoom-in duration-300">
@@ -37,7 +39,6 @@
 import { ref, watch } from 'vue'
 import { useChallengesStore } from '~/stores/challenges'
 import LevelUpModal from '~/components/atoms/LevelUpModal.vue'
-import StartCycle from '~/components/atoms/StartCycle.vue'
 import ChallengeModal from '~/components/atoms/ChallengeModal.vue'
 
 const challenges = useChallengesStore()
