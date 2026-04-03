@@ -26,7 +26,7 @@
       </button>
     </div>
 
-    <!-- PiP Window com botao -->
+    <!-- PiP Window -->
     <PiPWindow />
 
     <!-- Linha principal: 3 colunas -->
@@ -34,7 +34,7 @@
       id="main-row"
       class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
     >
-      <!-- LEFT — CompletedChallenges + TimerPresets only (Profile moved to navbar dropdown) -->
+      <!-- LEFT — CompletedChallenges + TimerPresets -->
       <div class="flex flex-col gap-4">
         <CompletedChallenges />
         <TimerPresets class="flex-1" />
@@ -104,10 +104,6 @@
             </button>
           </div>
         </div>
-
-        <div class="w-full flex-1">
-          <Card id="challenge" />
-        </div>
       </div>
 
       <!-- RIGHT -->
@@ -116,13 +112,20 @@
       </div>
     </div>
 
-    <!-- Challenges Browser + Mini History -->
+    <!-- Challenges Browser + Challenge History -->
     <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
       <ChallengeBrowser />
       <ChallengeHistory />
     </div>
 
-    <!-- Share Card Modal (used by both navbar and post-completion button) -->
+    <!-- Modals -->
+    <ChallengeModal
+      :challenge="challenges.currentChallenge"
+      :is-open="isChallengeModalOpen"
+      @close="isChallengeModalOpen = false"
+      @complete="isChallengeModalOpen = false"
+    />
+    <LevelUpModal />
     <ShareCard
       ref="shareCardRef"
       :stats="shareStats"
@@ -131,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, nextTick, ref, computed } from 'vue'
+import { onMounted, nextTick, ref, computed, watch } from 'vue'
 import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
 import { useThemeStore } from '~/stores/theme'
@@ -146,8 +149,9 @@ import ChallengeBrowser from '~/components/atoms/ChallengeBrowser.vue'
 import ChallengeHistory from '~/components/atoms/ChallengeHistory.vue'
 import PiPWindow from '~/components/atoms/PiPWindow.vue'
 import Countdown from '~/components/molecules/Countdown.vue'
-import Card from '~/components/organisms/Card.vue'
 import ShareCard from '~/components/molecules/ShareCard.vue'
+import ChallengeModal from '~/components/atoms/ChallengeModal.vue'
+import LevelUpModal from '~/components/atoms/LevelUpModal.vue'
 import { scrollToElement, getRandomNumber, sendNotification } from '~/utils'
 
 const { t } = useI18n()
@@ -163,6 +167,7 @@ const { playStart, playPause, playComplete } = useSound()
 const shareCardRef = ref<InstanceType<typeof ShareCard> | null>(null)
 const isFocusMode = ref(false)
 const sessionStartTime = ref<number | null>(null)
+const isChallengeModalOpen = ref(false)
 
 const shareStats = computed(() => ({
   level: challenges.level,
@@ -245,8 +250,6 @@ function getNewChallenge() {
       tag: 'pomodoro-challenge',
     })
   }
-
-  nextTick(() => scrollToElement('#challenge'))
 }
 
 function showShareCard() {
@@ -271,7 +274,17 @@ function toggleFocusMode() {
   }
 }
 
-// Keyboard shortcuts — shortcuts modal opened via layout navbar button
+// Abre a modal quando um novo desafio é definido (via timer ou atalho 'n')
+watch(
+  () => challenges.currentChallenge,
+  (newChallenge) => {
+    if (newChallenge !== null) {
+      isChallengeModalOpen.value = true
+    }
+  }
+)
+
+// Keyboard shortcuts
 useKeyboardShortcuts({
   onTogglePlay: () => {
     if (countdown.hasCompleted) return
@@ -285,13 +298,9 @@ useKeyboardShortcuts({
   onNextChallenge: () => {
     const index = getRandomNumber(0, challenges.challengesLength)
     challenges.setCurrentChallengeIndex(index)
-    nextTick(() => scrollToElement('#challenge'))
   },
   onFocusMode: toggleFocusMode,
-  onShowHelp: () => {
-    // Shortcuts modal is now opened from the navbar `?` button
-    // This is kept for keyboard shortcut compatibility
-  },
+  onShowHelp: () => {},
 })
 
 // Handle ESC to exit focus mode
