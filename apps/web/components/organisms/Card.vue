@@ -1,8 +1,8 @@
 <template>
   <!-- Container principal - só exibir quando houver desafio ativo -->
-  <div v-if="challenges.currentChallenge" class="bg-base-100 rounded-box shadow-sm flex flex-1 w-full min-h-[300px]">
+  <div v-if="challenges.currentChallenge" class="bg-base-100 rounded-box shadow-sm flex flex-1 w-full min-h-[300px] animate-in fade-in zoom-in-95 duration-300">
     <!-- Estado: Desafio ativo (Mostra um resumo ou convite para abrir o modal) -->
-    <div class="flex flex-col items-center justify-center w-full p-8 text-center animate-in fade-in zoom-in duration-300">
+    <div class="flex flex-col items-center justify-center w-full p-8 text-center">
       <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
