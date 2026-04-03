@@ -310,18 +310,18 @@
     </nav>
 
     <!-- Experience Bar -->
-    <div class="max-w-[90rem] mx-auto w-full px-4 lg:px-8 pt-4 lg:pt-6">
+    <div class="max-w-[100rem] mx-auto w-full px-4 lg:px-8 pt-4 lg:pt-6">
       <ExperienceBar />
     </div>
 
     <!-- Main Content -->
-    <main class="max-w-[90rem] mx-auto w-full px-4 lg:px-8 pb-8 flex-1">
+    <main class="max-w-[100rem] mx-auto w-full px-4 lg:px-8 pb-8 flex-1">
       <slot />
     </main>
 
     <!-- Footer -->
     <footer class="bg-base-100/50 border-t border-base-300/50 mt-auto">
-      <div class="max-w-[90rem] mx-auto px-4 lg:px-8 py-6">
+      <div class="max-w-[100rem] mx-auto px-4 lg:px-8 py-6">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
           <div class="flex items-center gap-2 text-base-content/50">
             <svg
