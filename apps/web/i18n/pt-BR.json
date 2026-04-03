@@ -147,7 +147,16 @@
   "share": {
     "title": "Compartilhar",
     "button": "Compartilhar resultado",
-    "download": "Baixar imagem"
+    "download": "Baixar imagem",
+    "level": "Nível",
+    "xp": "XP",
+    "challenges": "Desafios",
+    "streak": "Sequência",
+    "totalSessions": "Total de sessões",
+    "focusedTime": "Tempo focado",
+    "minutes": "minutos",
+    "bestStreak": "Melhor sequência",
+    "days": "dias"
   },
   "sound": {
     "toggle": "Sons",

@@ -147,7 +147,16 @@
   "share": {
     "title": "Share",
     "button": "Share result",
-    "download": "Download image"
+    "download": "Download image",
+    "level": "Level",
+    "xp": "XP",
+    "challenges": "Challenges",
+    "streak": "Streak",
+    "totalSessions": "Total sessions",
+    "focusedTime": "Focused time",
+    "minutes": "minutes",
+    "bestStreak": "Best streak",
+    "days": "days"
   },
   "sound": {
     "toggle": "Sounds",
