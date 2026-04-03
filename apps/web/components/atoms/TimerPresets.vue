@@ -23,8 +23,8 @@
         </h3>
       </div>
 
-      <!-- Preset buttons -->
-      <div class="flex flex-wrap gap-2 mb-3">
+      <!-- Preset buttons - grid 3 cols with uniform gap -->
+      <div class="grid grid-cols-3 gap-2 mb-3">
         <button
           v-for="preset in presets"
           :key="preset"
@@ -37,38 +37,36 @@
         </button>
       </div>
 
-      <!-- Custom input -->
-      <div class="form-control">
-        <div class="grid grid-cols-[1fr_auto] gap-2 items-end">
-          <div>
-            <label class="label py-1">
-              <span class="label-text text-xs">{{ $t('timer.customTime') }}</span>
-            </label>
-            <input
-              v-model.number="customInput"
-              type="number"
-              min="1"
-              max="120"
-              placeholder="25"
-              class="input input-bordered input-sm w-full"
-              :disabled="countdown.isActive"
-              @keyup.enter="applyCustom"
-            >
-          </div>
-          <button
-            class="btn btn-sm btn-outline self-end"
-            :disabled="countdown.isActive || !customInput || customInput < 1"
-            @click="applyCustom"
+      <!-- Custom input + Apply aligned -->
+      <div class="flex gap-2 items-end">
+        <div class="flex-1">
+          <label class="label py-1">
+            <span class="label-text text-xs">{{ $t('timer.customTime') }}</span>
+          </label>
+          <input
+            v-model.number="customInput"
+            type="number"
+            min="1"
+            max="120"
+            placeholder="25"
+            class="input input-bordered input-sm w-full"
+            :disabled="countdown.isActive"
+            @keyup.enter="applyCustom"
           >
-            {{ $t('timer.apply') }}
-          </button>
         </div>
+        <button
+          class="btn btn-sm btn-primary shrink-0 h-9"
+          :disabled="countdown.isActive || !customInput || customInput < 1"
+          @click="applyCustom"
+        >
+          {{ $t('timer.apply') }}
+        </button>
       </div>
 
-      <!-- Reset button -->
+      <!-- Reset button aligned with grid -->
       <button
-        class="btn btn-sm mt-5 gap-1 w-full"
-        :class="countdown.isActive ? 'btn-error' : 'btn-ghost'"
+        class="btn btn-sm mt-3 gap-1 w-full"
+        :class="countdown.isActive ? 'btn-error' : 'btn-ghost btn-outline'"
         :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60"
         @click="resetTimer"
       >

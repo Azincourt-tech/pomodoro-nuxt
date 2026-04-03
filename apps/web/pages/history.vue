@@ -175,6 +175,7 @@ import { computed } from 'vue'
 import { useHistoryStore, type SessionRecord } from '~/stores/history'
 import { useProfileStore } from '~/stores/profile'
 
+const { t, locale } = useI18n()
 const history = useHistoryStore()
 const profile = useProfileStore()
 
@@ -185,7 +186,7 @@ const fireEmoji = computed(() => {
 })
 
 function formatTime(timestamp: number): string {
-  return new Date(timestamp).toLocaleTimeString('pt-BR', {
+  return new Date(timestamp).toLocaleTimeString(locale.value === 'pt-BR' ? 'pt-BR' : 'en', {
     hour: '2-digit',
     minute: '2-digit',
   })
@@ -198,12 +199,12 @@ function formatDayLabel(dayKey: string): string {
   yesterday.setDate(yesterday.getDate() - 1)
   const yesterdayKey = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`
 
-  if (dayKey === todayKey) return 'Hoje'
-  if (dayKey === yesterdayKey) return 'Ontem'
+  if (dayKey === todayKey) return t('history.today')
+  if (dayKey === yesterdayKey) return t('history.yesterday')
 
   const [year, month, day] = dayKey.split('-')
   const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
-  return date.toLocaleDateString('pt-BR', {
+  return date.toLocaleDateString(locale.value === 'pt-BR' ? 'pt-BR' : 'en', {
     weekday: 'short',
     day: 'numeric',
     month: 'short',

@@ -18,3 +18,6 @@ id = "0670d94f25ce4f51bf492034aa840d43"
 [vars]
 BETTER_AUTH_SECRET = "dev-secret-change-in-production"
 BETTER_AUTH_URL = "http://localhost:8787"
+# GitHub OAuth - configure via: wrangler secret put GITHUB_CLIENT_ID
+# GITHUB_CLIENT_ID = ""
+# GITHUB_CLIENT_SECRET = ""
