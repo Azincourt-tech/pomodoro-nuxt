@@ -11,7 +11,7 @@
   },
   "timer": {
     "startCycle": "Start cycle",
-    "abandonCycle": "Abandon cycle",
+    "pauseCycle": "Pause cycle",
     "cycleCompleted": "Cycle completed",
     "pomodoroTime": "Pomodoro Time",
     "customTime": "Custom time (minutes)",

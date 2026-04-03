@@ -11,7 +11,7 @@
   },
   "timer": {
     "startCycle": "Iniciar ciclo",
-    "abandonCycle": "Abandonar ciclo",
+    "pauseCycle": "Pausar ciclo",
     "cycleCompleted": "Ciclo completado",
     "pomodoroTime": "Tempo do Pomodoro",
     "customTime": "Tempo personalizado (minutos)",
