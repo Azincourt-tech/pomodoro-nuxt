@@ -49,7 +49,10 @@
 		"optional": "Login is optional. The app works without an account.",
 		"orContinue": "or continue without account",
 		"skip": "Continue without login",
-		"loggedOut": "You have been logged out"
+		"loggedOut": "You have been logged out",
+		"loginWithGitHub": "Sign in with GitHub",
+		"emailPassword": "Sign in with Email and Password",
+		"or": "or"
 	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",

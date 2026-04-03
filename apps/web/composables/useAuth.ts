@@ -5,6 +5,7 @@ export interface AuthUser {
   email: string
   name: string
   avatarUrl: string | null
+  githubUsername?: string | null
 }
 
 export interface AuthSession {
@@ -126,6 +127,10 @@ export function useAuth() {
     return authUser.value !== null
   }
 
+  function isGitHubUser(): boolean {
+    return !!authUser.value?.githubUsername
+  }
+
   return {
     user: authUser,
     session: authSession,
@@ -135,5 +140,6 @@ export function useAuth() {
     logout,
     fetchSession,
     isAuthenticated,
+    isGitHubUser,
   }
 }

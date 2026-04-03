@@ -7,6 +7,8 @@ interface Env {
   KV: KVNamespace
   BETTER_AUTH_SECRET: string
   BETTER_AUTH_URL: string
+  GITHUB_CLIENT_ID?: string
+  GITHUB_CLIENT_SECRET?: string
 }
 
 interface PomodoroUser {
@@ -14,6 +16,7 @@ interface PomodoroUser {
   email: string
   name: string
   avatarUrl?: string | null
+  githubUsername?: string | null
   [key: string]: unknown
 }
 
@@ -29,6 +32,8 @@ function getAuthFromContext(c: { env: Env }) {
     DB: c.env.DB,
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+    GITHUB_CLIENT_ID: c.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET,
   })
 }
 
@@ -213,4 +218,25 @@ authRoutes.get('/session', async (c) => {
   } catch {
     return c.json({ user: null, session: null }, 401)
   }
+})
+
+// Check if GitHub OAuth is enabled
+authRoutes.get('/github-enabled', async (c) => {
+  const enabled = !!(c.env.GITHUB_CLIENT_ID && c.env.GITHUB_CLIENT_SECRET)
+  return c.json({ enabled })
+})
+
+// Get GitHub OAuth URL
+authRoutes.get('/github-login', async (c) => {
+  const enabled = !!(c.env.GITHUB_CLIENT_ID && c.env.GITHUB_CLIENT_SECRET)
+  if (!enabled) {
+    return c.json({ error: 'GitHub OAuth não configurado' }, 400)
+  }
+
+  const callbackURL = c.req.query('callbackURL') || `${c.env.BETTER_AUTH_URL}/api/better-auth/callback/github`
+  const baseURL = c.env.BETTER_AUTH_URL || `${new URL(c.req.url).origin}`
+
+  return c.json({
+    url: `${baseURL}/api/better-auth/sign-in/social?provider=github&callbackURL=${encodeURIComponent(callbackURL)}`,
+  })
 })
