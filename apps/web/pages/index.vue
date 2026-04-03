@@ -84,7 +84,7 @@
             class="mt-4 w-full max-w-sm"
           >
             <button
-              class="btn btn btn-outline btn-block h-12 text-base font-semibold rounded-xl overflow-visible"
+              class="btn btn-outline btn-block h-12 text-base font-semibold rounded-xl overflow-visible"
               @click="showShareCard"
             >
               <svg
