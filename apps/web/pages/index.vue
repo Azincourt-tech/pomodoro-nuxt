@@ -228,55 +228,23 @@ function setCountdownState(flag: boolean) {
 }
 
 function getNewChallenge() {
-  // Increment completed cycles for long break tracking
-  countdown.incrementCompletedCycles()
-
-  // Check if it's time for a long break
-  const shouldLongBreak = countdown.completedCycles > 0 && countdown.completedCycles % countdown.longBreakAfterCycles === 0
+  // Show challenge modal FIRST
+  const index = getRandomNumber(0, challenges.challengesLength)
+  challenges.setCurrentChallengeIndex(index)
+  isChallengeModalOpen.value = true
   
-  if (shouldLongBreak) {
-    // Start long break
-    countdown.setHasCompleted(true)
-    countdown.setBreakMode(true, true)
-    countdown.setIsActive(false)
-    
-    playComplete()
-    
-    if (navigator.vibrate) {
-      navigator.vibrate([200, 100, 200])
-    }
-    
-    if ('Notification' in window && Notification.permission === 'granted') {
-      sendNotification(t('notifications.longBreak', 'Hora da Pausa Longa!'), {
-        body: t('notifications.longBreakDesc', 'Você completou {cycles} ciclos. Descanse {minutes} minutos.', {
-          cycles: countdown.longBreakAfterCycles,
-          minutes: countdown.longBreakMinutes
-        }),
-        icon: '/favicon.png',
-        tag: 'pomodoro-long-break',
-      })
-    }
-    return
-  }
-
-  // Start short break
-  countdown.setHasCompleted(true)
-  countdown.setBreakMode(true, false)
-  countdown.setIsActive(false)
-  
+  // Vibration and sound
   playComplete()
-  
   if (navigator.vibrate) {
     navigator.vibrate([200])
   }
   
+  // Notification
   if ('Notification' in window && Notification.permission === 'granted') {
-    sendNotification(t('notifications.shortBreak', 'Hora da Pausa!'), {
-      body: t('notifications.shortBreakDesc', 'Descanse {minutes} minutos antes do próximo ciclo.', {
-        minutes: countdown.breakMinutes
-      }),
+    sendNotification(t('notifications.challenge', 'Novo Desafio!'), {
+      body: t('notifications.challengeDesc', 'Complete o desafio para ganhar XP!'),
       icon: '/favicon.png',
-      tag: 'pomodoro-short-break',
+      tag: 'pomodoro-challenge',
     })
   }
 }
