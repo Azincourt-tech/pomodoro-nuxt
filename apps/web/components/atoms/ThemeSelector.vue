@@ -4,19 +4,7 @@
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
           <div class="p-2 bg-secondary/10 rounded-lg">
-            <svg
-              class="w-5 h-5 text-secondary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-              />
-            </svg>
+            <Icon name="lucide:palette" class="w-5 h-5 text-secondary" />
           </div>
           <h3 class="font-bold text-base">
             {{ $t('nav.theme') }}
@@ -80,19 +68,7 @@
       <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
         <div class="flex items-center gap-3">
           <div class="p-1.5 bg-base-300/50 rounded-md">
-            <svg
-              class="w-4 h-4 text-base-content/70"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-              />
-            </svg>
+            <Icon name="lucide:moon" class="w-4 h-4 text-base-content/70" />
           </div>
           <div>
             <span class="text-sm font-medium">{{ $t('theme.autoDarkMode', 'Modo escuro automático') }}</span>

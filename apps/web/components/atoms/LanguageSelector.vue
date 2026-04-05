@@ -4,19 +4,7 @@
       <!-- Header -->
       <div class="flex items-center gap-3 mb-4">
         <div class="p-2 bg-secondary/10 rounded-lg">
-          <svg
-            class="w-5 h-5 text-secondary"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-            />
-          </svg>
+          <Icon name="lucide:languages" class="w-5 h-5 text-secondary" />
         </div>
         <div>
           <h3 class="font-bold text-base">{{ $t('nav.language') }}</h3>
@@ -77,9 +65,7 @@
       <!-- Info Note -->
       <div class="mt-4 p-3 bg-info/10 rounded-lg border border-info/20">
         <p class="text-xs text-base-content/60 flex items-start gap-2">
-          <svg class="w-4 h-4 text-info shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <Icon name="lucide:info" class="w-4 h-4 text-info shrink-0 mt-0.5" />
           <span>{{ $t('language.info', 'Idioma salvo automaticamente') }}</span>
         </p>
       </div>
