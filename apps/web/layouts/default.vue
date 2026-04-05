@@ -123,85 +123,84 @@
             </div>
             <ul
               tabindex="0"
-              class="dropdown-content menu bg-base-100 rounded-box z-50 w-64 p-2 shadow-xl border border-base-300/50 mt-2"
+              class="dropdown-content menu bg-gradient-to-br from-base-100 via-base-100/95 to-base-200/80 backdrop-blur-xl rounded-2xl z-50 w-72 p-0 shadow-2xl border border-primary/20 mt-3 overflow-hidden"
             >
-              <!-- User info header -->
-              <li class="menu-title pt-2">
-                <div class="flex items-center gap-3 px-2 py-1">
-                  <div class="avatar">
-                    <div class="w-10 rounded-full ring ring-primary/30">
-                      <img
-                        :src="profile.avatarUrl"
-                        :alt="profile.displayName"
-                      >
+              <!-- User info header - Modernized -->
+              <li class="menu-title p-0">
+                <div class="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/5 p-4 border-b border-base-300/30">
+                  <div class="flex items-center gap-3">
+                    <div class="avatar ring-2 ring-primary/30 ring-offset-2 ring-offset-base-100 rounded-full">
+                      <div class="w-12 rounded-full shadow-lg">
+                        <img
+                          :src="profile.avatarUrl"
+                          :alt="profile.displayName"
+                          class="rounded-full"
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="font-semibold text-sm truncate">{{ profile.displayName }}</p>
-                    <div class="flex items-center gap-1">
-                      <svg
-                        class="w-3 h-3 text-warning"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                        />
-                      </svg>
-                      <span class="text-xs text-base-content/60">
-                        {{ $t('nav.level', { level: challenges.level }) }}
-                      </span>
+                    <div class="flex-1 min-w-0">
+                      <p class="font-bold text-sm truncate text-base-content">{{ profile.displayName }}</p>
+                      <div class="flex items-center gap-1.5 mt-1">
+                        <div class="badge badge-xs badge-warning font-bold shadow-md">
+                          <Icon name="lucide:trophy" class="w-2.5 h-2.5" />
+                        </div>
+                        <span class="text-xs font-semibold text-warning">
+                          {{ $t('nav.level', { level: challenges.level }) }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </li>
 
-              <div class="divider my-1" />
+              <!-- Menu items with enhanced design -->
+              <div class="p-2 space-y-1">
+                <li>
+                  <button @click="openEditProfile" class="rounded-xl hover:bg-primary/10 hover:text-primary transition-all duration-200 group">
+                    <Icon name="lucide:user" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span class="font-medium">{{ $t('profile.editProfile') }}</span>
+                  </button>
+                </li>
+                <li>
+                  <button @click="openShare" class="rounded-xl hover:bg-primary/10 hover:text-primary transition-all duration-200 group">
+                    <Icon name="lucide:share-2" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span class="font-medium">{{ $t('share.button') }}</span>
+                  </button>
+                </li>
 
-              <!-- Edit Profile -->
-              <li>
-                <button @click="openEditProfile">
-                  <Icon name="lucide:user" class="w-4 h-4" />
-                  {{ $t('profile.editProfile') }}
-                </button>
-              </li>
-              <li>
-                <button @click="openShare">
-                  <Icon name="lucide:share-2" class="w-4 h-4" />
-                  {{ $t('share.button') }}
-                </button>
-              </li>
+                <!-- PWA Install (conditional) -->
+                <li v-if="canInstall">
+                  <button @click="installPwa" class="rounded-xl hover:bg-primary/10 hover:text-primary transition-all duration-200 group">
+                    <Icon name="lucide:download" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span class="font-medium">{{ $t('pwa.install', 'Instalar App') }}</span>
+                  </button>
+                </li>
 
-              <!-- PWA Install (conditional) -->
-              <li v-if="canInstall">
-                <button @click="installPwa">
-                  <Icon name="lucide:download" class="w-4 h-4" />
-                  {{ $t('pwa.install', 'Instalar App') }}
-                </button>
-              </li>
+                <li>
+                  <button @click="openShortcuts" class="rounded-xl hover:bg-primary/10 hover:text-primary transition-all duration-200 group">
+                    <Icon name="lucide:keyboard" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span class="font-medium">{{ $t('shortcuts.title') }}</span>
+                  </button>
+                </li>
+              </div>
 
-              <li>
-                <button @click="openShortcuts">
-                  <Icon name="lucide:keyboard" class="w-4 h-4" />
-                  {{ $t('shortcuts.title') }}
-                </button>
-              </li>
-
-              <div class="divider my-1" />
+              <div class="divider my-1 mx-2" />
 
               <!-- Login/Logout -->
-              <li v-if="!isAuthenticated">
-                <NuxtLink to="/login">
-                  <Icon name="lucide:log-in" class="w-4 h-4" />
-                  {{ $t('sync.login') }}
-                </NuxtLink>
-              </li>
-              <li v-else>
-                <button class="text-error" @click="handleLogout">
-                  <Icon name="lucide:log-out" class="w-4 h-4" />
-                  {{ $t('sync.logout') }}
-                </button>
-              </li>
+              <div class="p-2">
+                <li v-if="!isAuthenticated">
+                  <NuxtLink to="/login" class="rounded-xl hover:bg-success/10 hover:text-success transition-all duration-200 group">
+                    <Icon name="lucide:log-in" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span class="font-medium">{{ $t('sync.login') }}</span>
+                  </NuxtLink>
+                </li>
+                <li v-else>
+                  <button class="text-error rounded-xl hover:bg-error/10 transition-all duration-200 group" @click="handleLogout">
+                    <Icon name="lucide:log-out" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span class="font-medium">{{ $t('sync.logout') }}</span>
+                  </button>
+                </li>
+              </div>
             </ul>
           </div>
         </div>
