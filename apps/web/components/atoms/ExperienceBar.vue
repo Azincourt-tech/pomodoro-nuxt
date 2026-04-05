@@ -73,8 +73,8 @@
       
       <!-- Percentage Label - Enhanced -->
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div class="px-2.5 py-0.5 bg-base-100/90 backdrop-blur-md rounded-full shadow-lg border border-base-300/30">
-          <span class="text-xs font-black text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
+        <div class="px-2.5 py-0.5 bg-base-100/95 backdrop-blur-md rounded-full shadow-lg border border-base-300/40">
+          <span class="text-xs font-black text-base-content">
             {{ challenges.currentXpPercentage }}%
           </span>
         </div>
