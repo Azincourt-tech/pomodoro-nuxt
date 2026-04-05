@@ -1,82 +1,85 @@
 <template>
   <div
-    class="card bg-base-100/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 h-full"
+    class="card bg-gradient-to-br from-base-100/95 via-base-100/90 to-base-200/80 backdrop-blur-xl shadow-2xl border border-success/20 hover:shadow-[0_25px_60px_rgba(30,215,96,0.25)] hover:border-success/40 transition-all duration-500 hover:-translate-y-1 h-full group relative overflow-hidden"
     v-bind="$attrs"
   >
-    <div class="card-body p-3 flex flex-col gap-2 [&>p]:flex-none">
-      <!-- Header compacto -->
-      <div class="flex items-center gap-2">
-        <svg
-          class="w-4 h-4 text-success"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
-          />
-        </svg>
-        <h3 class="font-semibold text-sm">
-          {{ $t('spotify.player') }}
-        </h3>
+    <!-- Background decoration -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-success/10 rounded-full blur-3xl group-hover:bg-success/15 transition-all duration-700" />
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-success/5 rounded-full blur-3xl group-hover:bg-success/10 transition-all duration-700" />
+    </div>
+    
+    <div class="card-body p-5 flex flex-col gap-3 [&>p]:flex-none relative z-10">
+      <!-- Header with gradient icon -->
+      <div class="flex items-center gap-3 mb-1">
+        <div class="p-2.5 bg-gradient-to-br from-success/20 to-success/5 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <Icon name="lucide:music" class="w-5 h-5 text-success" />
+        </div>
+        <div>
+          <h3 class="font-bold text-base bg-gradient-to-r from-success to-success/70 bg-clip-text text-transparent">
+            {{ $t('spotify.player') }}
+          </h3>
+          <p class="text-xs text-base-content/50">{{ $t('spotify.sub', 'Sua trilha sonora') }}</p>
+        </div>
       </div>
 
-      <!-- Input -->
-      <div class="flex gap-2">
-        <input
-          v-model="inputUrl"
-          type="url"
-          :placeholder="$t('spotify.playlistLink')"
-          class="input input-bordered input-sm flex-1 focus:ring-2 focus:ring-primary/30 transition-all"
-          @keyup.enter="saveUrl"
-        >
-        <button
-          class="btn btn-sm btn-primary"
-          :disabled="!inputUrl.trim()"
-          @click="saveUrl"
-        >
-          {{ $t('spotify.use') }}
-        </button>
+      <!-- Input with enhanced design -->
+      <div class="relative mb-1">
+        <div class="absolute inset-0 bg-gradient-to-r from-success/5 to-success/10 rounded-xl blur-lg -z-10" />
+        <div class="bg-base-200/50 backdrop-blur-sm rounded-xl p-3 border border-success/15">
+          <div class="flex gap-2">
+            <input
+              v-model="inputUrl"
+              type="url"
+              :placeholder="$t('spotify.playlistLink')"
+              class="input input-bordered input-sm flex-1 focus:border-success focus:ring-2 focus:ring-success/30 transition-all bg-base-100/80 backdrop-blur-sm placeholder:text-base-content/40"
+              @keyup.enter="saveUrl"
+            >
+            <button
+              class="btn btn-sm btn-success shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group/btn"
+              :disabled="!inputUrl.trim()"
+              @click="saveUrl"
+            >
+              <Icon name="lucide:check" class="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+              <span class="hidden sm:inline">{{ $t('spotify.use') }}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Status da playlist -->
+      <!-- Active playlist status -->
       <div
         v-if="savedUrl"
-        class="flex items-center justify-between text-xs"
+        class="flex items-center justify-between text-xs bg-gradient-to-r from-success/10 to-success/5 px-3 py-2 rounded-lg border border-success/25"
       >
-        <span class="text-success">{{ $t('spotify.activePlaylist') }}</span>
+        <div class="flex items-center gap-2">
+          <Icon name="lucide:check" class="w-3.5 h-3.5 text-success" />
+          <span class="font-medium text-success">{{ $t('spotify.activePlaylist') }}</span>
+        </div>
         <button
-          class="link link-error"
+          class="btn btn-ghost btn-xs text-error hover:bg-error/10 hover:text-error transition-all"
           @click="clearUrl"
         >
-          {{ $t('spotify.remove') }}
+          <Icon name="lucide:x" class="w-3.5 h-3.5" />
+          <span class="hidden sm:inline">{{ $t('spotify.remove') }}</span>
         </button>
       </div>
 
-      <!-- Aviso de login -->
+      <!-- Login info note -->
       <div
-        class="flex items-center gap-1.5 h-8 text-base-content/50 text-xs bg-base-200/50 rounded px-2"
+        class="flex items-start gap-2 p-3 text-xs bg-info/5 text-info/80 rounded-lg border border-info/15"
       >
-        <svg
-          class="w-3.5 h-3.5 flex-shrink-0 text-info"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <span>{{ $t('spotify.loginInfo') }}</span>
+        <Icon name="lucide:info" class="w-4 h-4 flex-shrink-0 mt-0.5 text-info" />
+        <span class="leading-relaxed">{{ $t('spotify.loginInfo') }}</span>
       </div>
 
-      <!-- Embed ou Placeholder -->
+      <!-- Embed player with glow -->
       <div
         v-if="embedSrc"
-        class="rounded-[1rem] overflow-hidden flex-1 min-h-[352px]"
+        class="relative rounded-2xl overflow-hidden flex-1 min-h-[352px] shadow-2xl border border-success/20 group/player"
       >
+        <!-- Glow effect around player -->
+        <div class="absolute inset-0 bg-gradient-to-br from-success/20 to-success/5 rounded-2xl blur-2xl -z-10 group-hover/player:from-success/30 group-hover/player:to-success/10 transition-all duration-700" />
         <iframe
           :src="embedSrc"
           width="100%"
@@ -86,24 +89,20 @@
           allowfullscreen
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"
+          class="rounded-2xl relative z-10"
         />
       </div>
 
+      <!-- Empty state with enhanced design -->
       <div
         v-else
-        class="flex items-center justify-center flex-1 bg-base-200 rounded-lg"
+        class="flex items-center justify-center flex-1 bg-gradient-to-br from-base-200/60 to-base-300/40 rounded-2xl border-2 border-dashed border-success/20 hover:border-success/40 transition-all duration-300 group/empty min-h-[180px]"
       >
-        <div class="flex flex-col items-center gap-2">
-          <svg
-            class="w-14 h-14 text-success/30"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
-            />
-          </svg>
-          <p class="text-base-content/40 text-sm">
+        <div class="flex flex-col items-center gap-3 p-4">
+          <div class="p-4 bg-gradient-to-br from-success/10 to-success/5 rounded-full shadow-lg group-hover/empty:scale-110 transition-transform duration-500">
+            <Icon name="lucide:music" class="w-10 h-10 text-success/40 group-hover/empty:text-success/60 transition-colors" />
+          </div>
+          <p class="text-base-content/50 text-sm text-center font-medium">
             {{ $t('spotify.pasteLink') }}
           </p>
         </div>
