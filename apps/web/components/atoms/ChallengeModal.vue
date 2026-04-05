@@ -96,6 +96,9 @@ onMounted(() => {
 
 function onChallengeSucceeded() {
   if (props.challenge) {
+    // DAR XP ao usuario
+    challenges.completeChallenge(props.challenge.amount)
+    
     // Increment completed cycles
     countdown.incrementCompletedCycles()
     
@@ -125,8 +128,9 @@ function onChallengeSucceeded() {
 }
 
 function onChallengeFailed() {
-  // Não perde XP nem reseta level - apenas não ganha XP
-  // Não starta pausa se falhar
+  // NAO perde XP, NAO penaliza usuario
+  // Apenas fecha o modal sem iniciar pausa
+  // Usuario pode tentar novamente no proximo ciclo
   emit('close')
 }
 
