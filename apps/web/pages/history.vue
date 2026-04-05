@@ -1,178 +1,163 @@
 <template>
   <div class="py-6 lg:py-10">
-    <!-- Back button + title -->
-    <div class="flex items-center gap-3 mb-6">
+    <!-- Back button + title - Modernized -->
+    <div class="flex items-center gap-3 mb-8">
       <NuxtLink
         to="/"
-        class="btn btn-ghost btn-sm gap-1"
+        class="btn btn-ghost btn-sm gap-2 group hover:bg-base-200/60 transition-all duration-300"
         :title="$t('nav.back', 'Voltar')"
       >
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-        <span class="text-sm">{{ $t('nav.back', 'Voltar') }}</span>
+        <Icon name="lucide:arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        <span class="text-sm font-medium">{{ $t('nav.back', 'Voltar') }}</span>
       </NuxtLink>
-      <h1 class="text-2xl font-bold font-rajdhani">
-        {{ $t('history.title') }}
-      </h1>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-      <!-- Level -->
-      <div class="stat bg-base-100/80 backdrop-blur-sm rounded-xl shadow-lg border border-base-300/40 hover:shadow-xl transition-all duration-300">
-        <div class="stat-figure text-info">
-          <svg class="w-9 h-9 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-          </svg>
+      <div class="flex items-center gap-2">
+        <div class="p-2 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl">
+          <Icon name="lucide:history" class="w-5 h-5 text-primary" />
         </div>
-        <div class="stat-title text-sm">{{ $t('stats.level', 'Level') }}</div>
-        <div class="stat-value text-2xl text-info">{{ challenges.level }}</div>
-        <div class="stat-desc">{{ challenges.xp.current }} / {{ challenges.xp.end }} xp</div>
-      </div>
-      <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
-        <div class="stat-figure text-primary">
-          <svg
-            class="w-9 h-9 drop-shadow-sm"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-            />
-          </svg>
-        </div>
-        <div class="stat-title text-sm">{{ $t('history.totalSessions') }}</div>
-        <div class="stat-value text-2xl text-primary">{{ history.totalSessions }}</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
-        <div class="stat-figure text-success">
-          <svg
-            class="w-9 h-9 drop-shadow-sm"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
-        <div class="stat-title text-sm">{{ $t('history.totalTime') }}</div>
-        <div class="stat-value text-2xl text-success">{{ history.totalTimeMinutes }}</div>
-        <div class="stat-desc">minutos</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
-        <div class="stat-figure text-warning">
-          <svg
-            class="w-9 h-9 drop-shadow-sm"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-            />
-          </svg>
-        </div>
-        <div class="stat-title text-sm">{{ $t('history.avgDaily') }}</div>
-        <div class="stat-value text-2xl text-warning">{{ history.avgDailySessions }}</div>
-        <div class="stat-desc">sessoes/dia</div>
-      </div>
-
-      <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
-        <div class="stat-figure text-error">
-          <span class="text-3xl drop-shadow-sm">{{ fireEmoji }}</span>
-        </div>
-        <div class="stat-title text-sm">{{ $t('streak.title') }}</div>
-        <div class="stat-value text-2xl text-error">{{ profile.streakCurrent }}</div>
-        <div class="stat-desc">{{ $t('streak.best', { days: profile.streakBest }) }}</div>
+        <h1 class="text-2xl lg:text-3xl font-bold font-rajdhani bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          {{ $t('history.title') }}
+        </h1>
       </div>
     </div>
 
-    <!-- Sessions List -->
-    <div v-if="history.sessions.length === 0" class="text-center py-12">
-      <svg
-        class="w-16 h-16 mx-auto text-base-content/20 mb-4"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="1.5"
-          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-      <p class="text-base-content/50">{{ $t('history.noSessions') }}</p>
+    <!-- Stats Cards - Modernized with glassmorphism -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+      <!-- Level Card -->
+      <div class="stats bg-gradient-to-br from-base-100/90 to-base-200/70 backdrop-blur-xl rounded-2xl shadow-xl border border-info/20 hover:shadow-2xl hover:shadow-info/20 hover:-translate-y-1 transition-all duration-500">
+        <div class="stat">
+          <div class="stat-figure text-info">
+            <div class="p-2 bg-gradient-to-br from-info/20 to-info/5 rounded-xl">
+              <Icon name="lucide:star" class="w-8 h-8 text-info drop-shadow-lg" />
+            </div>
+          </div>
+          <div class="stat-title text-xs font-semibold">{{ $t('stats.level', 'Level') }}</div>
+          <div class="stat-value text-3xl text-info font-black">{{ challenges.level }}</div>
+          <div class="stat-desc">
+            <div class="flex items-center gap-1 mt-1">
+              <Icon name="lucide:trending-up" class="w-3 h-3" />
+              {{ challenges.xp.current }} / {{ challenges.xp.end }} xp
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sessions Card -->
+      <div class="stats bg-gradient-to-br from-base-100/90 to-base-200/70 backdrop-blur-xl rounded-2xl shadow-xl border border-primary/20 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-500">
+        <div class="stat">
+          <div class="stat-figure text-primary">
+            <div class="p-2 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl">
+              <Icon name="lucide:calendar" class="w-8 h-8 text-primary drop-shadow-lg" />
+            </div>
+          </div>
+          <div class="stat-title text-xs font-semibold">{{ $t('history.totalSessions') }}</div>
+          <div class="stat-value text-3xl text-primary font-black">{{ history.totalSessions }}</div>
+        </div>
+      </div>
+
+      <!-- Time Card -->
+      <div class="stats bg-gradient-to-br from-base-100/90 to-base-200/70 backdrop-blur-xl rounded-2xl shadow-xl border border-success/20 hover:shadow-2xl hover:shadow-success/20 hover:-translate-y-1 transition-all duration-500">
+        <div class="stat">
+          <div class="stat-figure text-success">
+            <div class="p-2 bg-gradient-to-br from-success/20 to-success/5 rounded-xl">
+              <Icon name="lucide:clock" class="w-8 h-8 text-success drop-shadow-lg" />
+            </div>
+          </div>
+          <div class="stat-title text-xs font-semibold">{{ $t('history.totalTime') }}</div>
+          <div class="stat-value text-3xl text-success font-black">{{ history.totalTimeMinutes }}</div>
+          <div class="stat-desc flex items-center gap-1">
+            <Icon name="lucide:timer" class="w-3 h-3" />
+            minutos
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Average Card -->
+      <div class="stats bg-gradient-to-br from-base-100/90 to-base-200/70 backdrop-blur-xl rounded-2xl shadow-xl border border-warning/20 hover:shadow-2xl hover:shadow-warning/20 hover:-translate-y-1 transition-all duration-500">
+        <div class="stat">
+          <div class="stat-figure text-warning">
+            <div class="p-2 bg-gradient-to-br from-warning/20 to-warning/5 rounded-xl">
+              <Icon name="lucide:activity" class="w-8 h-8 text-warning drop-shadow-lg" />
+            </div>
+          </div>
+          <div class="stat-title text-xs font-semibold">{{ $t('history.avgDaily') }}</div>
+          <div class="stat-value text-3xl text-warning font-black">{{ history.avgDailySessions }}</div>
+          <div class="stat-desc flex items-center gap-1">
+            <Icon name="lucide:zap" class="w-3 h-3" />
+            sessoes/dia
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak Card -->
+      <div class="stats bg-gradient-to-br from-base-100/90 to-base-200/70 backdrop-blur-xl rounded-2xl shadow-xl border border-error/20 hover:shadow-2xl hover:shadow-error/20 hover:-translate-y-1 transition-all duration-500">
+        <div class="stat">
+          <div class="stat-figure text-error">
+            <div class="p-2 bg-gradient-to-br from-error/20 to-error/5 rounded-xl">
+              <Icon name="lucide:flame" class="w-8 h-8 text-error drop-shadow-lg animate-pulse" />
+            </div>
+          </div>
+          <div class="stat-title text-xs font-semibold">{{ $t('streak.title') }}</div>
+          <div class="stat-value text-3xl text-error font-black">{{ profile.streakCurrent }}</div>
+          <div class="stat-desc flex items-center gap-1">
+            <Icon name="lucide:trophy" class="w-3 h-3" />
+            {{ $t('streak.best', { days: profile.streakBest }) }}
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div v-else class="space-y-6">
+    <!-- Sessions List - Modernized -->
+    <div v-if="history.sessions.length === 0" class="text-center py-20">
+      <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-base-200/80 to-base-300/60 mb-6 shadow-lg">
+        <Icon name="lucide:inbox" class="w-12 h-12 text-base-content/30" />
+      </div>
+      <p class="text-base-content/50 font-medium text-lg">{{ $t('history.noSessions') }}</p>
+      <p class="text-base-content/40 text-sm mt-2 flex items-center justify-center gap-2">
+        <Icon name="lucide:play" class="w-4 h-4" />
+        Inicie um ciclo para comecar
+      </p>
+    </div>
+
+    <div v-else class="space-y-8">
       <div
         v-for="dayKey in history.sortedDayKeys"
         :key="dayKey"
+        class="animate-fadeIn"
       >
-        <h2 class="text-sm font-semibold text-base-content/60 mb-3">
-          {{ formatDayLabel(dayKey) }}
-        </h2>
-        <div class="space-y-2">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="h-px flex-1 bg-gradient-to-r from-transparent via-base-300/50 to-transparent" />
+          <h2 class="text-sm font-bold text-base-content/70 bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-2 rounded-full border border-primary/20">
+            {{ formatDayLabel(dayKey) }}
+          </h2>
+          <div class="h-px flex-1 bg-gradient-to-r from-transparent via-base-300/50 to-transparent" />
+        </div>
+        <div class="space-y-3">
           <div
             v-for="session in getSessionsForDay(dayKey)"
             :key="session.id"
-            class="flex items-center justify-between p-4 bg-base-100/80 backdrop-blur-sm rounded-xl border border-base-300/40 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+            class="group flex items-center justify-between p-5 bg-gradient-to-r from-base-100/80 via-base-100/60 to-base-200/50 backdrop-blur-xl rounded-2xl border border-base-300/20 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-0.5 transition-all duration-300"
           >
             <div class="flex items-center gap-4">
-              <div class="w-11 h-11 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center shadow-md">
-                <svg
-                  class="w-5 h-5 text-primary"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+              <div class="w-14 h-14 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300">
+                <Icon name="lucide:timer" class="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p class="text-sm font-medium">
+                <p class="text-base font-bold text-base-content/90">
                   {{ $t('history.minutes', { minutes: session.duration }) }}
                 </p>
-                <p class="text-xs text-base-content/50">
-                  {{ formatTime(session.startedAt) }}
-                </p>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <Icon name="lucide:clock" class="w-3.5 h-3.5 text-base-content/40" />
+                  <p class="text-xs text-base-content/50">
+                    {{ formatTime(session.startedAt) }}
+                  </p>
+                </div>
               </div>
             </div>
             <div class="text-right">
-              <p class="text-sm font-semibold text-success">
+              <div class="badge badge-success badge-lg font-bold shadow-md bg-gradient-to-br from-success to-success/80 border-0">
+                <Icon name="lucide:star" class="w-3.5 h-3.5 mr-1" />
                 {{ $t('history.xpGained', { xp: session.xpGained }) }}
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -228,3 +213,20 @@ function getSessionsForDay(dayKey: string): SessionRecord[] {
   return history.groupedByDay[dayKey] ?? []
 }
 </script>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+</style>
