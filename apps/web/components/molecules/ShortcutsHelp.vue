@@ -32,6 +32,7 @@
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-3">
             <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+</svg>
           </div>
           <h3 class="text-2xl font-black font-rajdhani bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {{ $t('shortcuts.title', 'Atalhos de Teclado') }}
