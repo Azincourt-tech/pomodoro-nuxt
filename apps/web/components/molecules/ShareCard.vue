@@ -149,18 +149,19 @@ function drawCard() {
   ctx.arc(50, h - 50, 60, 0, Math.PI * 2)
   ctx.fill()
 
-  // App title with glow
+  // App title with glow - increased top padding
   ctx.shadowColor = 'rgba(99, 102, 241, 0.5)'
   ctx.shadowBlur = 10
   ctx.fillStyle = '#e0e7ff'
   ctx.font = 'bold 26px Inter, sans-serif'
-  ctx.fillText('Pomodoro Move.it', 30, 48)
+  ctx.textAlign = 'left'
+  ctx.fillText('Pomodoro Move.it', 40, 55)
   ctx.shadowBlur = 0
 
   // User name
   ctx.fillStyle = '#a5b4fc'
   ctx.font = 'bold 15px Inter, sans-serif'
-  ctx.fillText(`@${props.stats.userName}`, 30, 76)
+  ctx.fillText(`@${props.stats.userName}`, 40, 82)
 
   // Divider with gradient
   const divGradient = ctx.createLinearGradient(30, 0, w - 30, 0)
