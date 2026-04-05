@@ -62,7 +62,10 @@
 		"presetApplied": "Time applied: {minutes}min",
 		"customTimeApplied": "Custom time applied: {minutes}min",
 		"breakSettingsApplied": "Break settings applied: {settings}",
-		"timerReset": "Timer reset"
+		"timerReset": "Timer reset",
+		"cycleStarted": "Cycle started! Full focus! 🎯",
+		"cyclePaused": "Cycle paused",
+		"nextCycleStarted": "Next cycle started! Let's go! 💪"
 	},
 	"profile": {
 		"editProfile": "Edit Profile",
@@ -136,6 +139,20 @@
 		"startForChallenges": "Start a cycle to receive challenges",
 		"allowPopups": "Allow popups to use the floating window"
 	},
+	"focusMode": {
+		"exit": "Exit focus mode",
+		"entered": "Focus mode activated! Full focus! 🎯",
+		"exited": "Focus mode deactivated"
+	},
+	"share": {
+		"button": "Share",
+		"opened": "Share card opened"
+	},
+	"shortcuts": {
+		"timerReseted": "Timer reset (shortcut R)",
+		"newChallenge": "New challenge: {desc}",
+		"help": "Shortcuts: Space (play/pause), R (reset), N (next challenge), F (focus), ? (help)"
+	},
 	"spotify": {
 		"player": "Spotify Player",
 		"playlistLink": "Playlist link...",
@@ -143,7 +160,10 @@
 		"activePlaylist": "Active playlist",
 		"remove": "Remove",
 		"loginInfo": "To listen to full songs, log in to your Spotify account in the browser",
-		"pasteLink": "Paste a Spotify link"
+		"pasteLink": "Paste a Spotify link",
+		"invalidUrl": "Invalid Spotify URL",
+		"playlistSaved": "Playlist saved! 🎵",
+		"playlistRemoved": "Playlist removed"
 	},
 	"experience": {
 		"xp": "xp"

@@ -114,6 +114,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useToast } from '~/composables/useToast'
+
+const { t } = useI18n()
+const { success, info, error } = useToast()
 
 const STORAGE_KEY = 'pomodoro-spotify-url'
 const inputUrl = ref('')
@@ -148,12 +152,16 @@ function saveUrl() {
   const url = inputUrl.value.trim()
   if (!url) return
   const embed = convertToEmbedUrl(url)
-  if (!embed) return
+  if (!embed) {
+    error(t('spotify.invalidUrl', 'URL do Spotify inválida'))
+    return
+  }
 
   savedUrl.value = url
   if (import.meta.client) {
     localStorage.setItem(STORAGE_KEY, url)
   }
+  success(t('spotify.playlistSaved', 'Playlist salva! 🎵'))
 }
 
 function clearUrl() {
@@ -162,6 +170,7 @@ function clearUrl() {
   if (import.meta.client) {
     localStorage.removeItem(STORAGE_KEY)
   }
+  info(t('spotify.playlistRemoved', 'Playlist removida'))
 }
 
 onMounted(() => {

@@ -157,6 +157,7 @@ import { useProfileStore } from '~/stores/profile'
 import { useHistoryStore, type SessionRecord } from '~/stores/history'
 import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts'
 import { useSound } from '~/composables/useSound'
+import { useToast } from '~/composables/useToast'
 import CompletedChallenges from '~/components/atoms/CompletedChallenges.vue'
 import TimerPresets from '~/components/atoms/TimerPresets.vue'
 import SpotifyPlayer from '~/components/atoms/SpotifyPlayer.vue'
@@ -178,6 +179,7 @@ const theme = useThemeStore()
 const profile = useProfileStore()
 const history = useHistoryStore()
 const { playStart, playPause, playComplete } = useSound()
+const { success, info } = useToast()
 
 const shareCardRef = ref<InstanceType<typeof ShareCard> | null>(null)
 const isFocusMode = ref(false)
@@ -216,8 +218,10 @@ function setCountdownState(flag: boolean) {
   if (flag) {
     sessionStartTime.value = Date.now()
     playStart()
+    success(t('timer.cycleStarted', 'Ciclo iniciado! Foco total! 🎯'))
   } else {
     playPause()
+    info(t('timer.cyclePaused', 'Ciclo pausado'))
   }
 }
 
@@ -311,10 +315,13 @@ function startNextCycle() {
   countdown.setIsActive(true)
   
   sessionStartTime.value = Date.now()
+  
+  success(t('timer.nextCycleStarted', 'Próximo ciclo iniciado! Vamos lá! 💪'))
 }
 
 function showShareCard() {
   shareCardRef.value?.open()
+  info(t('share.opened', 'Card de compartilhamento aberto'))
 }
 
 function exitFocusMode() {
@@ -322,16 +329,19 @@ function exitFocusMode() {
   if (document.fullscreenElement) {
     document.exitFullscreen().catch(() => {})
   }
+  info(t('focusMode.exited', 'Modo foco desativado'))
 }
 
 function toggleFocusMode() {
   isFocusMode.value = !isFocusMode.value
   if (isFocusMode.value) {
     document.documentElement.requestFullscreen?.().catch(() => {})
+    success(t('focusMode.entered', 'Modo foco ativado! Foco total! 🎯'))
   } else {
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {})
     }
+    info(t('focusMode.exited', 'Modo foco desativado'))
   }
 }
 
@@ -355,13 +365,20 @@ useKeyboardShortcuts({
     countdown.setIsActive(false)
     countdown.setHasCompleted(false)
     countdown.resetTime()
+    info(t('shortcuts.timerReseted', 'Timer resetado (atalho R)'))
   },
   onNextChallenge: () => {
     const index = getRandomNumber(0, challenges.challengesLength)
     challenges.setCurrentChallengeIndex(index)
+    const challenge = challenges.currentChallenge
+    if (challenge) {
+      info(t('shortcuts.newChallenge', 'Novo desafio: {desc}', { desc: challenge.description }))
+    }
   },
   onFocusMode: toggleFocusMode,
-  onShowHelp: () => {},
+  onShowHelp: () => {
+    info(t('shortcuts.help', 'Atalhos: Espaco (play/pause), R (reset), N (proximo desafio), F (foco), ? (ajuda)'))
+  },
 })
 
 // Handle ESC to exit focus mode

@@ -62,7 +62,10 @@
 		"presetApplied": "Tempo aplicado: {minutes}min",
 		"customTimeApplied": "Tempo personalizado aplicado: {minutes}min",
 		"breakSettingsApplied": "Configurações de pausa aplicadas: {settings}",
-		"timerReset": "Timer resetado"
+		"timerReset": "Timer resetado",
+		"cycleStarted": "Ciclo iniciado! Foco total! 🎯",
+		"cyclePaused": "Ciclo pausado",
+		"nextCycleStarted": "Próximo ciclo iniciado! Vamos lá! 💪"
 	},
 	"profile": {
 		"editProfile": "Editar Perfil",
@@ -136,6 +139,20 @@
 		"startForChallenges": "Inicie um ciclo para receber desafios",
 		"allowPopups": "Permita popups para usar a janela flutuante"
 	},
+	"focusMode": {
+		"exit": "Sair do modo foco",
+		"entered": "Modo foco ativado! Foco total! 🎯",
+		"exited": "Modo foco desativado"
+	},
+	"share": {
+		"button": "Compartilhar",
+		"opened": "Card de compartilhamento aberto"
+	},
+	"shortcuts": {
+		"timerReseted": "Timer resetado (atalho R)",
+		"newChallenge": "Novo desafio: {desc}",
+		"help": "Atalhos: Espaco (play/pause), R (reset), N (proximo desafio), F (foco), ? (ajuda)"
+	},
 	"spotify": {
 		"player": "Spotify Player",
 		"playlistLink": "Link da playlist...",
@@ -143,7 +160,10 @@
 		"activePlaylist": "Playlist ativa",
 		"remove": "Remover",
 		"loginInfo": "Para ouvir as musicas completas, faca login na sua conta do Spotify no navegador",
-		"pasteLink": "Cole um link do Spotify"
+		"pasteLink": "Cole um link do Spotify",
+		"invalidUrl": "URL do Spotify inválida",
+		"playlistSaved": "Playlist salva! 🎵",
+		"playlistRemoved": "Playlist removida"
 	},
 	"experience": {
 		"xp": "xp"
