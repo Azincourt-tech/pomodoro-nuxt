@@ -24,8 +24,7 @@
             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10"
             @click="challenges.setIsLevelUpModalOpen(false)"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <Icon name="lucide:x" class="w-4 h-4" />>
             </svg>
           </button>
 
@@ -36,8 +35,7 @@
                 <!-- Animated stars -->
                 <div class="absolute inset-0 flex items-center justify-center">
                   <div class="animate-spin-slow">
-                    <svg class="w-32 h-32 text-warning/20" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                    <Icon name="lucide:trophy" class="w-32 h-32 text-warning/20" />>
                     </svg>
                   </div>
                 </div>
@@ -63,8 +61,7 @@
 
               <!-- XP Info -->
               <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mt-4">
-                <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                <Icon name="lucide:star" class="w-5 h-5 text-primary" />>
                 </svg>
                 <span class="font-bold text-primary">Level {{ challenges.level }}</span>
                 <span class="text-base-content/50">•</span>
