@@ -39,9 +39,18 @@
             <stop offset="0%" :stop-color="'hsl(var(--p))'" stop-opacity="1" />
             <stop offset="100%" :stop-color="'hsl(var(--s))'" stop-opacity="1" />
           </linearGradient>
-          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            <feColorMatrix type="saturate" values="1.5" />
+          </filter>
+          <filter id="darkGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            <feColorMatrix type="saturate" values="2" />
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="1.5" />
+            </feComponentTransfer>
           </filter>
         </defs>
         <circle
@@ -55,8 +64,8 @@
           :stroke-dashoffset="dashOffset"
           stroke="url(#timerGradient)"
           class="transition-all duration-1000 ease-linear"
-          :class="countdown.isActive ? 'filter drop-shadow-[0_0_10px_rgba(99,102,241,0.7)] dark:drop-shadow-[0_0_12px_rgba(99,102,241,1)]' : ''"
           filter="url(#glow)"
+          :class="countdown.isActive ? 'dark:filter dark:filter-[url(#darkGlow)] drop-shadow-[0_0_10px_rgba(99,102,241,0.7)] dark:drop-shadow-[0_0_15px_rgba(140,145,255,1)]' : ''"
         />
       </svg>
 
