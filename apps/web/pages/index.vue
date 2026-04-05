@@ -180,7 +180,7 @@ const countdown = useCountdownStore()
 const theme = useThemeStore()
 const profile = useProfileStore()
 const history = useHistoryStore()
-const { playStart, playPause, playComplete } = useSound()
+const { playStart, playPause, playComplete, playBreakEnd } = useSound()
 const { success, info } = useToast()
 
 const shareCardRef = ref<InstanceType<typeof ShareCard> | null>(null)
@@ -228,7 +228,26 @@ function setCountdownState(flag: boolean) {
 }
 
 function getNewChallenge() {
-  // Show challenge modal FIRST
+  // Check if we're ending a break
+  if (countdown.isBreak) {
+    // Break ended - play specific sound and return to focus mode
+    playBreakEnd()
+    
+    if (navigator.vibrate) {
+      navigator.vibrate([300, 100, 300])
+    }
+    
+    if ('Notification' in window && Notification.permission === 'granted') {
+      sendNotification(t('notifications.breakEnded', 'Pausa terminada!'), {
+        body: t('notifications.breakEndedDesc', 'Hora de voltar ao foco! Inicie um novo ciclo.'),
+        icon: '/favicon.png',
+        tag: 'pomodoro-break-ended',
+      })
+    }
+    return
+  }
+  
+  // Focus cycle ended - show challenge modal
   const index = getRandomNumber(0, challenges.challengesLength)
   challenges.setCurrentChallengeIndex(index)
   isChallengeModalOpen.value = true
