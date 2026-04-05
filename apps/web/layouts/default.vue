@@ -1,134 +1,61 @@
 <template>
   <div class="min-h-screen bg-base-200 flex flex-col">
-    <!-- Navbar -->
+    <!-- Navbar - Modernized -->
     <nav
-      class="navbar bg-base-100/85 backdrop-blur-xl shadow-lg px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/40"
+      class="navbar bg-gradient-to-r from-base-100/95 via-base-100/90 to-base-200/85 backdrop-blur-xl shadow-lg px-3 sm:px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/30"
     >
       <div class="flex-1">
         <NuxtLink
           to="/"
-          class="flex items-center gap-3 group"
+          class="flex items-center gap-2 sm:gap-3 group"
         >
           <div
-            class="w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:from-primary/30 transition-all duration-300 shadow-md"
+            class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:from-primary/30 group-hover:scale-110 transition-all duration-300 shadow-lg"
           >
-            <svg
-              class="w-5 h-5 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <Icon name="lucide:timer" class="w-5 h-5 sm:w-5 sm:h-5 text-primary drop-shadow-sm" />
           </div>
-          <span class="text-xl font-bold font-rajdhani tracking-wide drop-shadow-sm">Pomodoro</span>
+          <span class="text-lg sm:text-xl font-bold font-rajdhani tracking-wide bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Pomodoro</span>
         </NuxtLink>
       </div>
       <div class="flex-none">
-        <div class="flex items-center gap-2">
-          <!-- History link -->
+        <div class="flex items-center gap-1 sm:gap-2">
+          <!-- History link - Mobile optimized -->
           <NuxtLink
             to="/history"
-            class="btn btn-ghost btn-sm gap-2 hover:bg-base-200/60 transition-all"
+            class="btn btn-ghost btn-sm btn-circle hover:bg-base-200/60 transition-all"
             :title="$t('history.navLink')"
           >
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span class="hidden sm:inline text-xs font-medium">{{ $t('history.navLink') }}</span>
+            <Icon name="lucide:history" class="w-4 h-4" />
           </NuxtLink>
 
-          <!-- Sound toggle -->
+          <!-- Sound toggle - Mobile optimized -->
           <button
             class="btn btn-ghost btn-sm btn-circle hover:bg-base-200/60 transition-all"
             :title="soundEnabled ? $t('sound.enabled') : $t('sound.disabled')"
             @click="toggleSound"
           >
-            <svg
-              v-if="soundEnabled"
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-              />
-            </svg>
-            <svg
-              v-else
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
-              />
-            </svg>
+            <Icon v-if="soundEnabled" name="lucide:volume-2" class="w-4 h-4" />
+            <Icon v-else name="lucide:volume-x" class="w-4 h-4" />
           </button>
 
-          <!-- Shortcuts help button -->
+          <!-- Shortcuts help button - Mobile optimized -->
           <button
             class="btn btn-ghost btn-sm btn-circle hover:bg-base-200/60 transition-all"
             :title="$t('shortcuts.title')"
             @click="openShortcuts"
           >
-            <span class="text-sm font-bold">?</span>
+            <Icon name="lucide:keyboard" class="w-4 h-4" />
           </button>
 
-          <!-- Language selector -->
+          <!-- Language selector - Mobile optimized -->
           <div class="dropdown dropdown-end">
             <div
               tabindex="0"
               role="button"
-              class="btn btn-ghost btn-sm gap-2 items-baseline"
+              class="btn btn-ghost btn-sm btn-circle"
               :title="$t('nav.language')"
             >
-              <span class="text-lg">{{ currentLocale === 'pt-BR' ? '\u{1F1E7}\u{1F1F7}' : '\u{1F1FA}\u{1F1F8}' }}</span>
-              <span class="hidden sm:inline text-xs font-medium">{{
-                currentLocale === 'pt-BR' ? 'PT' : 'EN'
-              }}</span>
-              <svg
-                class="w-3 h-3 opacity-60"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              <span class="text-lg">{{ currentLocale === 'pt-BR' ? '🇧🇷' : '🇺🇸' }}</span>
             </div>
             <div
               tabindex="0"
@@ -138,34 +65,18 @@
             </div>
           </div>
 
-          <!-- Theme toggle -->
+          <!-- Theme toggle - Mobile optimized -->
           <div class="dropdown dropdown-end">
             <div
               tabindex="0"
               role="button"
-              class="btn btn-ghost btn-sm gap-2"
+              class="btn btn-ghost btn-sm btn-circle"
               :title="$t('nav.theme')"
             >
               <span
-                class="w-5 h-5 rounded-full shadow-sm ring-1 ring-base-300"
+                class="w-5 h-5 rounded-full shadow-md ring-2 ring-base-300/50"
                 :class="themePreviewColor"
               />
-              <span class="hidden sm:inline text-xs font-medium capitalize">{{
-                theme.currentTheme
-              }}</span>
-              <svg
-                class="w-3 h-3 opacity-60"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
             </div>
             <div
               tabindex="0"
@@ -175,8 +86,8 @@
             </div>
           </div>
 
-          <!-- Divider -->
-          <div class="divider divider-horizontal mx-1 h-6 my-auto" />
+          <!-- Divider - Hidden on mobile -->
+          <div class="divider divider-horizontal mx-1 h-6 my-auto hidden sm:block" />
 
           <!-- User profile dropdown -->
           <div class="dropdown dropdown-end">
@@ -247,20 +158,16 @@
 
               <div class="divider my-1" />
 
-              <!-- Menu items -->
+              <!-- Edit Profile -->
               <li>
                 <button @click="openEditProfile">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  <Icon name="lucide:user" class="w-4 h-4" />
                   {{ $t('profile.editProfile') }}
                 </button>
               </li>
               <li>
                 <button @click="openShare">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  </svg>
+                  <Icon name="lucide:share-2" class="w-4 h-4" />
                   {{ $t('share.button') }}
                 </button>
               </li>
@@ -268,18 +175,14 @@
               <!-- PWA Install (conditional) -->
               <li v-if="canInstall">
                 <button @click="installPwa">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
+                  <Icon name="lucide:download" class="w-4 h-4" />
                   {{ $t('pwa.install', 'Instalar App') }}
                 </button>
               </li>
 
               <li>
                 <button @click="openShortcuts">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <Icon name="lucide:keyboard" class="w-4 h-4" />
                   {{ $t('shortcuts.title') }}
                 </button>
               </li>
@@ -289,17 +192,13 @@
               <!-- Login/Logout -->
               <li v-if="!isAuthenticated">
                 <NuxtLink to="/login">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
+                  <Icon name="lucide:log-in" class="w-4 h-4" />
                   {{ $t('sync.login') }}
                 </NuxtLink>
               </li>
               <li v-else>
                 <button class="text-error" @click="handleLogout">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
+                  <Icon name="lucide:log-out" class="w-4 h-4" />
                   {{ $t('sync.logout') }}
                 </button>
               </li>
@@ -319,43 +218,38 @@
       <slot />
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-base-100/50 border-t border-base-300/50 mt-auto">
-      <div class="max-w-[100rem] mx-auto px-4 lg:px-8 py-6">
+    <!-- Footer - Modernized -->
+    <footer class="bg-gradient-to-br from-base-100/80 via-base-100/70 to-base-200/60 backdrop-blur-xl border-t border-base-300/30 mt-auto">
+      <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-          <div class="flex items-center gap-2 text-base-content/50">
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{{ $t('app.title') }}</span>
+          <!-- Logo & Title -->
+          <div class="flex items-center gap-2 text-base-content/60">
+            <div class="p-1.5 bg-gradient-to-br from-primary/15 to-primary/5 rounded-lg">
+              <Icon name="lucide:timer" class="w-4 h-4 text-primary" />
+            </div>
+            <span class="font-medium">{{ $t('app.title') }}</span>
           </div>
-          <div class="flex items-center gap-4 text-base-content/40">
-            <span>{{ $t('footer.madeBy') }}</span>
+          
+          <!-- Credits -->
+          <div class="flex items-center gap-3 sm:gap-4 text-base-content/50 text-xs sm:text-sm">
+            <span class="hidden sm:inline">{{ $t('footer.madeBy') }}</span>
             <a
               href="https://github.com/Azincourt-tech"
               target="_blank"
               rel="noopener"
-              class="link link-hover text-primary font-medium"
+              class="flex items-center gap-1.5 link link-hover text-primary hover:text-primary/80 font-medium transition-colors"
             >
+              <Icon name="lucide:user" class="w-3.5 h-3.5" />
               Willian
             </a>
-            <span>{{ $t('footer.and') }}</span>
+            <span class="hidden sm:inline">{{ $t('footer.and') }}</span>
             <a
               href="https://github.com/Morgana-Claw"
               target="_blank"
               rel="noopener"
-              class="link link-hover text-primary font-medium"
+              class="flex items-center gap-1.5 link link-hover text-primary hover:text-primary/80 font-medium transition-colors"
             >
+              <Icon name="lucide:sparkles" class="w-3.5 h-3.5" />
               Morgana
             </a>
           </div>
