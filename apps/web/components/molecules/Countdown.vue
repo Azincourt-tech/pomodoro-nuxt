@@ -4,8 +4,8 @@
     <div class="relative inline-flex items-center justify-center group">
       <!-- Outer glow effect -->
       <div 
-        class="absolute inset-0 rounded-full blur-3xl opacity-20 transition-all duration-1000"
-        :class="countdown.isActive ? 'animate-pulse bg-primary/40' : 'bg-primary/10'"
+        class="absolute inset-0 rounded-full blur-3xl opacity-15 transition-all duration-1000"
+        :class="countdown.isActive ? 'animate-pulse bg-primary/30' : 'bg-primary/10'"
       />
       
       <!-- Second outer ring for depth -->
@@ -29,29 +29,34 @@
           cy="100"
           r="90"
           fill="none"
-          stroke-width="8"
-          class="stroke-base-300/20 backdrop-blur-sm"
+          stroke-width="10"
+          class="stroke-base-300/30 dark:stroke-base-300/15 backdrop-blur-sm"
         />
         
         <!-- Progress circle with gradient stroke effect -->
         <defs>
           <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" :stop-color="'hsl(var(--p))'" stop-opacity="1" />
-            <stop offset="100%" :stop-color="'hsl(var(--s))'" stop-opacity="0.8" />
+            <stop offset="100%" :stop-color="'hsl(var(--s))'" stop-opacity="1" />
           </linearGradient>
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
         </defs>
         <circle
           cx="100"
           cy="100"
           r="90"
           fill="none"
-          stroke-width="8"
+          stroke-width="10"
           stroke-linecap="round"
           :stroke-dasharray="circumference"
           :stroke-dashoffset="dashOffset"
           stroke="url(#timerGradient)"
-          class="transition-all duration-1000 ease-linear drop-shadow-lg"
-          :class="{ 'filter drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]': countdown.isActive }"
+          class="transition-all duration-1000 ease-linear"
+          :class="countdown.isActive ? 'filter drop-shadow-[0_0_10px_rgba(99,102,241,0.7)] dark:drop-shadow-[0_0_12px_rgba(99,102,241,1)]' : ''"
+          filter="url(#glow)"
         />
       </svg>
 
@@ -71,18 +76,15 @@
           <span class="text-xs font-bold text-primary uppercase tracking-wider">⏱️ {{ $t('countdown.focusTime', 'Foco') }}</span>
         </div>
         
-        <!-- Timer digits with glass effect -->
+        <!-- Timer digits - cleaned up -->
         <div
-          class="flex justify-center items-center font-rajdhani font-bold tabular-nums relative"
+          class="flex justify-center items-center font-rajdhani font-bold tabular-nums"
           :class="countdown.time >= 60000 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-6xl sm:text-7xl md:text-8xl'"
         >
-          <!-- Background glow for digits -->
-          <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl -z-10" />
-          
           <CountdownDigits :digits="countdown.minutes" />
           <span 
             class="px-1 md:px-2 animate-pulse"
-            :class="countdown.isActive ? 'text-primary drop-shadow-[0_0_10px_rgba(99,102,241,0.8)]' : 'text-base-content/50'"
+            :class="countdown.isActive ? 'text-primary' : 'text-base-content/50'"
           >:</span>
           <CountdownDigits :digits="countdown.seconds" />
         </div>
