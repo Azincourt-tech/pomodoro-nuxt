@@ -50,18 +50,18 @@
           <div class="flex gap-3 mt-4">
             <button
               v-if="canShare"
-              class="btn btn-primary flex-1 gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group whitespace-nowrap"
+              class="btn btn-primary flex-1 gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
               @click="shareNative"
             >
-              <Icon name="lucide:share" class="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span class="font-semibold">{{ $t('share.button', 'Compartilhar') }}</span>
+              <Icon name="lucide:share" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span class="font-semibold text-sm">{{ $t('share.button', 'Compartilhar') }}</span>
             </button>
             <button
-              class="btn btn-outline flex-1 gap-2 hover:bg-base-200/50 hover:border-primary/40 transition-all duration-300 hover:scale-105 group whitespace-nowrap"
+              class="btn btn-outline flex-1 gap-2 hover:bg-base-200/50 hover:border-primary/40 transition-all duration-300 hover:scale-105 group"
               @click="downloadImage"
             >
-              <Icon name="lucide:download" class="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span class="font-semibold">{{ $t('share.download', 'Baixar') }}</span>
+              <Icon name="lucide:download" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span class="font-semibold text-sm">{{ $t('share.download', 'Baixar') }}</span>
             </button>
           </div>
         </div>
