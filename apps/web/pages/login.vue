@@ -1,76 +1,60 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-base-300 via-base-200 to-base-100 flex items-center justify-center px-4 py-12 relative overflow-hidden">
-    <!-- Background decorative elements -->
+  <div class="min-h-screen bg-gradient-to-br from-base-300 via-base-200 to-base-100 flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <!-- Background decorative elements with animations -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl" />
+      <div class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary/15 to-secondary/10 rounded-full blur-3xl animate-pulse" />
+      <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-secondary/15 to-primary/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s" />
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-accent/5 to-primary/5 rounded-full blur-3xl" />
     </div>
 
-    <!-- Main Card -->
-    <div class="card bg-base-100/85 backdrop-blur-2xl w-full max-w-md shadow-2xl border-2 border-primary/20 relative z-10">
-      <div class="card-body p-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-            <svg
-              class="w-8 h-8 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+    <!-- Main Card - Modernized -->
+    <div class="card bg-base-100/90 backdrop-blur-2xl w-full max-w-md shadow-2xl border border-primary/25 relative z-10 rounded-3xl">
+      <div class="card-body p-8 sm:p-10">
+        <!-- Header - Enhanced -->
+        <div class="text-center mb-8 relative">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/15 mb-5 shadow-xl ring-4 ring-primary/10 group-hover:scale-105 transition-transform duration-500">
+            <Icon name="lucide:timer" class="w-10 h-10 text-primary drop-shadow-lg" />
           </div>
-          <h1 class="text-3xl font-bold font-rajdhani text-base-content">
+          <h1 class="text-3xl font-black font-rajdhani bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             {{ $t('auth.welcome', 'Bem-vindo') }}
           </h1>
-          <p class="text-sm text-base-content/60 mt-2">
+          <p class="text-sm text-base-content/60 mt-2 flex items-center justify-center gap-1.5">
+            <Icon name="lucide:lock" class="w-3.5 h-3.5" />
             {{ $t('auth.subtitle', 'Entre para sincronizar seu progresso') }}
           </p>
         </div>
 
-        <!-- GitHub OAuth - Primary CTA -->
+        <!-- GitHub OAuth - Primary CTA - Enhanced -->
         <button
-          class="btn btn-block gap-3 bg-gradient-to-br from-[#24292e] to-[#1a1e22] hover:from-[#2f363d] hover:to-[#252a30] text-white border-none h-12 text-base font-medium shadow-xl hover:shadow-2xl transition-all duration-300"
+          class="btn btn-block gap-3 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 hover:from-gray-800 hover:to-gray-700 text-white border-none h-14 text-base font-bold shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group rounded-xl"
           :disabled="isLoading || !githubEnabled"
           @click="handleGitHubLogin"
         >
-          <svg v-if="!isLoading" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
+          <Icon name="lucide:github" class="w-6 h-6 group-hover:scale-110 transition-transform" />
           <span v-if="isLoading" class="loading loading-spinner loading-sm" />
           <span v-else>{{ $t('auth.loginWithGitHub', 'Continuar com GitHub') }}</span>
         </button>
 
         <div class="divider text-xs text-base-content/40 my-6">{{ $t('auth.or', 'ou') }}</div>
 
-        <!-- Email/Password Form -->
-        <div class="space-y-4">
-          <!-- Tabs -->
-          <div class="tabs tabs-boxed bg-base-200/50">
+        <!-- Email/Password Form - Enhanced -->
+        <div class="space-y-5">
+          <!-- Tabs - Modernized -->
+          <div class="tabs tabs-boxed bg-base-200/50 rounded-xl p-1.5">
             <button
-              class="tab flex-1 transition-all duration-200"
-              :class="{ 'tab-active': mode === 'login' }"
+              class="tab flex-1 gap-2 transition-all duration-300 font-semibold rounded-lg"
+              :class="{ 'tab-active bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg': mode === 'login' }"
               @click="switchMode('login')"
             >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-              </svg>
+              <Icon name="lucide:log-in" class="w-4 h-4" />
               {{ $t('auth.signIn', 'Entrar') }}
             </button>
             <button
-              class="tab flex-1 transition-all duration-200"
-              :class="{ 'tab-active': mode === 'signup' }"
+              class="tab flex-1 gap-2 transition-all duration-300 font-semibold rounded-lg"
+              :class="{ 'tab-active bg-gradient-to-r from-success to-success/80 text-white shadow-lg': mode === 'signup' }"
               @click="switchMode('signup')"
             >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-              </svg>
+              <Icon name="lucide:user-plus" class="w-4 h-4" />
               {{ $t('auth.signUp', 'Criar Conta') }}
             </button>
           </div>
@@ -81,173 +65,193 @@
               enter-active-class="transition-all duration-300 ease-out"
               enter-from-class="opacity-0 -translate-y-2"
               enter-to-class="opacity-100 translate-y-0"
-              leave-active-class="transition-all duration-200 ease-in"
-              leave-from-class="opacity-100 translate-y-0"
-              leave-to-class="opacity-0 -translate-y-2"
             >
               <div v-if="mode === 'signup'" class="form-control">
-                <label class="label">
-                  <span class="label-text font-medium text-sm flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
+                <label class="label pb-1">
+                  <span class="label-text font-bold text-sm flex items-center gap-2">
+                    <Icon name="lucide:user" class="w-4 h-4 text-primary" />
                     {{ $t('auth.name', 'Nome') }}
                   </span>
                 </label>
-                <input
-                  v-model="name"
-                  type="text"
-                  :placeholder="$t('auth.namePlaceholder', 'Seu nome completo')"
-                  class="input input-bordered w-full focus:input-primary transition-all"
-                  :disabled="isLoading"
-                  :class="{ 'input-error': errors.name }"
-                  @input="validateName"
-                  required
-                >
-                <label v-if="errors.name" class="label">
-                  <span class="label-text-alt text-error">{{ errors.name }}</span>
+                <div class="relative">
+                  <input
+                    v-model="name"
+                    type="text"
+                    :placeholder="$t('auth.namePlaceholder', 'Seu nome completo')"
+                    class="input input-bordered w-full focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all duration-300 bg-base-100/80 backdrop-blur-sm pr-10"
+                    :disabled="isLoading"
+                    :class="{ 'input-error': errors.name }"
+                    @input="validateName"
+                    required
+                  >
+                  <Icon v-if="!errors.name && name.length >= 2" name="lucide:check-circle" class="w-5 h-5 text-success absolute right-3 top-1/2 -translate-y-1/2" />
+                  <Icon v-else-if="errors.name" name="lucide:x-circle" class="w-5 h-5 text-error absolute right-3 top-1/2 -translate-y-1/2" />
+                </div>
+                <label v-if="errors.name" class="label pt-1">
+                  <span class="label-text-alt text-error flex items-center gap-1">
+                    <Icon name="lucide:alert-circle" class="w-3 h-3" />
+                    {{ errors.name }}
+                  </span>
                 </label>
               </div>
             </Transition>
 
-            <!-- Email -->
+            <!-- Email - Enhanced -->
             <div class="form-control">
-              <label class="label">
-                <span class="label-text font-medium text-sm flex items-center gap-1">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
+              <label class="label pb-1">
+                <span class="label-text font-bold text-sm flex items-center gap-2">
+                  <Icon name="lucide:mail" class="w-4 h-4 text-primary" />
                   {{ $t('auth.email', 'E-mail') }}
                 </span>
               </label>
-              <input
-                v-model="email"
-                type="email"
-                placeholder="seu@email.com"
-                class="input input-bordered w-full focus:input-primary transition-all"
-                :disabled="isLoading"
-                :class="{ 'input-error': errors.email }"
-                @input="validateEmail"
-                required
-              >
-              <label v-if="errors.email" class="label">
-                <span class="label-text-alt text-error">{{ errors.email }}</span>
+              <div class="relative">
+                <input
+                  v-model="email"
+                  type="email"
+                  placeholder="seu@email.com"
+                  class="input input-bordered w-full focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all duration-300 bg-base-100/80 backdrop-blur-sm pr-10"
+                  :disabled="isLoading"
+                  :class="{ 'input-error': errors.email }"
+                  @input="validateEmail"
+                  required
+                >
+                <Icon v-if="!errors.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)" name="lucide:check-circle" class="w-5 h-5 text-success absolute right-3 top-1/2 -translate-y-1/2" />
+                <Icon v-else-if="errors.email" name="lucide:x-circle" class="w-5 h-5 text-error absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
+              <label v-if="errors.email" class="label pt-1">
+                <span class="label-text-alt text-error flex items-center gap-1">
+                  <Icon name="lucide:alert-circle" class="w-3 h-3" />
+                  {{ errors.email }}
+                </span>
               </label>
             </div>
 
-            <!-- Password -->
+            <!-- Password - Enhanced with Security Features -->
             <div class="form-control">
-              <label class="label">
-                <span class="label-text font-medium text-sm flex items-center gap-1">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+              <label class="label pb-1">
+                <span class="label-text font-bold text-sm flex items-center gap-2">
+                  <Icon name="lucide:shield" class="w-4 h-4 text-primary" />
                   {{ $t('auth.password', 'Senha') }}
+                </span>
+                <span v-if="mode === 'signup'" class="label-text-alt text-xs text-base-content/50">
+                  Mín. 8 caracteres
                 </span>
               </label>
               <div class="relative">
                 <input
                   v-model="password"
                   :type="showPassword ? 'text' : 'password'"
-                  :placeholder="$t('auth.passwordPlaceholder', 'Sua senha')"
-                  class="input input-bordered w-full pr-12 focus:input-primary transition-all"
+                  :placeholder="mode === 'signup' ? 'Mínimo 8 caracteres' : 'Sua senha'"
+                  class="input input-bordered w-full pr-24 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all duration-300 bg-base-100/80 backdrop-blur-sm"
                   :disabled="isLoading"
                   :class="{ 'input-error': errors.password }"
                   @input="validatePassword"
                   required
                 >
-                <button
-                  type="button"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 hover:text-base-content transition-colors"
-                  @click="showPassword = !showPassword"
-                  :disabled="isLoading"
-                  :aria-label="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
-                >
-                  <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                  </svg>
-                </button>
-              </div>
-              <label v-if="errors.password" class="label">
-                <span class="label-text-alt text-error">{{ errors.password }}</span>
-              </label>
-
-              <!-- Password Strength Indicator (signup only) -->
-              <Transition
-                enter-active-class="transition-all duration-300"
-                enter-from-class="opacity-0 h-0"
-                enter-to-class="opacity-100 h-auto"
-                leave-active-class="transition-all duration-200"
-                leave-from-class="opacity-100 h-auto"
-                leave-to-class="opacity-0 h-0"
-              >
-                <div v-if="mode === 'signup' && password" class="mt-2 space-y-2">
-                  <div class="flex gap-1">
+                <!-- Toggle visibility + strength indicator -->
+                <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  <div v-if="mode === 'signup' && password" class="flex gap-0.5 mr-2">
                     <div
                       v-for="i in 4"
                       :key="i"
-                      class="h-1 flex-1 rounded-full transition-all duration-300"
-                      :class="{
-                        'bg-error': passwordStrength <= 1 && i <= passwordStrength,
-                        'bg-warning': passwordStrength === 2 && i <= passwordStrength,
-                        'bg-info': passwordStrength === 3 && i <= passwordStrength,
-                        'bg-success': passwordStrength === 4 && i <= passwordStrength,
-                        'bg-base-300': i > passwordStrength,
-                      }"
+                      class="w-1.5 h-6 rounded-full transition-all duration-300"
+                      :class="getStrengthBarClass(i)"
                     />
                   </div>
-                  <p class="text-xs" :class="passwordStrengthColor">
-                    {{ passwordStrengthText }}
-                  </p>
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs btn-circle hover:bg-base-200 transition-colors"
+                    @click="showPassword = !showPassword"
+                    :disabled="isLoading"
+                    :aria-label="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                  >
+                    <Icon v-if="!showPassword" name="lucide:eye" class="w-4 h-4" />
+                    <Icon v-else name="lucide:eye-off" class="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Password Strength Feedback (signup only) -->
+              <Transition
+                enter-active-class="transition-all duration-300"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+              >
+                <div v-if="mode === 'signup' && password" class="mt-2 space-y-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="font-medium" :class="passwordStrengthColor">
+                      {{ passwordStrengthText }}
+                    </span>
+                    <span class="text-base-content/50">{{ passwordStrength }}/4</span>
+                  </div>
+                  
+                  <!-- Security Tips -->
+                  <div class="bg-base-200/60 rounded-lg p-3 space-y-1.5">
+                    <p class="text-xs font-semibold text-base-content/70 mb-2 flex items-center gap-1">
+                      <Icon name="lucide:shield-check" class="w-3.5 h-3.5" />
+                      Dicas de segurança:
+                    </p>
+                    <div class="space-y-1">
+                      <div class="flex items-center gap-2 text-xs" :class="passwordChecks.length ? 'text-success' : 'text-base-content/40'">
+                        <Icon :name="passwordChecks.length ? 'lucide:check-circle' : 'lucide:circle'" class="w-3 h-3" />
+                        <span>Pelo menos 8 caracteres</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-xs" :class="passwordChecks.upper ? 'text-success' : 'text-base-content/40'">
+                        <Icon :name="passwordChecks.upper ? 'lucide:check-circle' : 'lucide:circle'" class="w-3 h-3" />
+                        <span>Letra maiúscula</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-xs" :class="passwordChecks.number ? 'text-success' : 'text-base-content/40'">
+                        <Icon :name="passwordChecks.number ? 'lucide:check-circle' : 'lucide:circle'" class="w-3 h-3" />
+                        <span>Número</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-xs" :class="passwordChecks.special ? 'text-success' : 'text-base-content/40'">
+                        <Icon :name="passwordChecks.special ? 'lucide:check-circle' : 'lucide:circle'" class="w-3 h-3" />
+                        <span>Caractere especial (!@#$%)</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Transition>
+              
+              <label v-if="errors.password" class="label pt-1">
+                <span class="label-text-alt text-error flex items-center gap-1">
+                  <Icon name="lucide:alert-circle" class="w-3 h-3" />
+                  {{ errors.password }}
+                </span>
+              </label>
             </div>
 
-            <!-- Submit Button -->
+            <!-- Submit Button - Enhanced -->
             <button
               type="submit"
-              class="btn btn-primary w-full h-12 text-base font-medium shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 mt-6"
+              class="btn w-full h-14 text-base font-bold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 mt-6 rounded-xl group"
+              :class="[mode === 'login' ? 'btn-primary' : 'btn-success', { 'animate-pulse': isLoading }]"
               :disabled="isLoading || !isValid"
-              :class="{ 'animate-pulse': isLoading }"
             >
               <span v-if="isLoading" class="loading loading-spinner" />
               <span v-else class="flex items-center gap-2">
-                <svg v-if="mode === 'login'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
-                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
+                <Icon v-if="mode === 'login'" name="lucide:log-in" class="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <Icon v-else name="lucide:user-plus" class="w-5 h-5 group-hover:scale-110 transition-transform" />
                 {{ mode === 'login' ? $t('auth.signIn', 'Entrar') : $t('auth.signUp', 'Criar Conta') }}
               </span>
             </button>
           </form>
         </div>
 
-        <!-- Footer -->
+        <!-- Footer - Modernized -->
         <div class="mt-6 space-y-3">
           <div class="divider text-xs text-base-content/40">{{ $t('auth.orContinue', 'ou continue sem conta') }}</div>
 
           <NuxtLink
             to="/"
-            class="btn btn-ghost w-full h-11 text-sm group"
+            class="btn btn-ghost w-full h-12 text-sm group rounded-xl hover:bg-base-200/50 transition-all"
           >
             <span>{{ $t('auth.skip', 'Continuar sem login') }}</span>
-            <svg
-              class="w-4 h-4 transition-transform group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+            <Icon name="lucide:arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </NuxtLink>
 
-          <p class="text-center text-xs text-base-content/40">
+          <p class="text-center text-xs text-base-content/40 flex items-center justify-center gap-1.5">
+            <Icon name="lucide:info" class="w-3.5 h-3.5" />
             {{ $t('auth.optional', 'Login é opcional. O app funciona sem conta.') }}
           </p>
         </div>
@@ -257,7 +261,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
@@ -331,23 +335,26 @@ function validatePassword() {
   }
 }
 
-// Password strength
-const passwordStrength = computed(() => {
-  if (!password.value) return 0
-  
-  let strength = 0
+// Password strength calculation
+const passwordChecks = computed(() => {
   const hasLength = password.value.length >= 8
   const hasLower = /[a-z]/.test(password.value)
   const hasUpper = /[A-Z]/.test(password.value)
   const hasNumber = /[0-9]/.test(password.value)
   const hasSpecial = /[^a-zA-Z0-9]/.test(password.value)
   
-  if (hasLength) strength++
-  if (hasLower && hasUpper) strength++
-  if (hasNumber) strength++
-  if (hasSpecial) strength++
-  
-  return strength
+  return {
+    length: hasLength,
+    upper: hasUpper,
+    number: hasNumber,
+    special: hasSpecial,
+    count: [hasLength, hasUpper, hasNumber, hasSpecial].filter(Boolean).length,
+  }
+})
+
+const passwordStrength = computed(() => {
+  if (!password.value) return 0
+  return passwordChecks.value.count
 })
 
 const passwordStrengthText = computed(() => {
@@ -363,7 +370,7 @@ const passwordStrengthText = computed(() => {
 
 const passwordStrengthColor = computed(() => {
   const colors = [
-    'text-error',
+    'text-base-content/40',
     'text-error',
     'text-warning',
     'text-info',
@@ -371,6 +378,18 @@ const passwordStrengthColor = computed(() => {
   ]
   return colors[passwordStrength.value] || colors[0]
 })
+
+function getStrengthBarClass(i: number) {
+  if (i > passwordStrength.value) return 'bg-base-300'
+  
+  const colors = [
+    'bg-error',
+    'bg-warning',
+    'bg-info',
+    'bg-success',
+  ]
+  return colors[passwordStrength.value - 1] || 'bg-error'
+}
 
 const isValid = computed(() => {
   if (mode.value === 'signup') {
