@@ -1,194 +1,243 @@
 <template>
-  <div class="card bg-base-100 shadow-sm overflow-hidden">
-    <div class="card-body p-4 min-w-0">
-      <!-- Display Mode -->
-      <div
-        v-if="!profile.isEditing"
-        class="flex items-center gap-4"
-      >
-        <div class="avatar">
-          <div class="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-            <img
-              :src="profile.avatarUrl"
-              :alt="profile.displayName"
-            >
-          </div>
-        </div>
-        <div class="flex-1">
-          <h3 class="font-bold text-lg text-base-content">
-            {{ profile.displayName }}
-          </h3>
-          <div class="flex items-center gap-2 mt-1">
-            <svg
-              class="w-4 h-4 text-warning"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-              />
-            </svg>
-            <span class="badge badge-warning badge-sm font-semibold">{{
-              $t('nav.level', { level: challenges.level })
-            }}</span>
-          </div>
-        </div>
-        <button
-          class="btn btn-ghost btn-sm btn-circle"
-          :title="$t('profile.edit')"
-          @click="profile.setEditing(true)"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Edit Mode -->
-      <div
-        v-else
-        class="space-y-3"
-      >
-        <h3 class="font-bold text-lg">
-          {{ $t('profile.editProfile') }}
-        </h3>
-
-        <!-- Manual Name -->
-        <div class="form-control">
-          <label class="label py-1 items-baseline">
-            <span class="label-text font-medium">{{ $t('profile.name') }}</span>
-          </label>
-          <input
-            v-model="nameInput"
-            type="text"
-            :placeholder="$t('profile.namePlaceholder')"
-            class="input input-bordered input-sm w-full"
-          >
-        </div>
-
-        <!-- Manual Avatar URL -->
-        <div class="form-control">
-          <label class="label py-1 items-baseline">
-            <span class="label-text font-medium">{{ $t('profile.photoUrl') }}</span>
-          </label>
-          <input
-            v-model="avatarInput"
-            type="url"
-            placeholder="https://..."
-            class="input input-bordered input-sm w-full"
-          >
-          <label class="label py-1 items-baseline">
-            <span class="label-text-alt">{{ $t('profile.pasteLink') }}</span>
-          </label>
-        </div>
-
-        <!-- Preview -->
-        <div class="flex items-baseline gap-3 p-3 bg-base-200 rounded-lg overflow-hidden">
-          <div class="avatar shrink-0 self-center">
-            <div class="w-12 rounded-full">
+  <div class="card bg-base-100 shadow-lg border border-base-300/50 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <!-- Header gradient background -->
+    <div class="h-20 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 relative">
+      <div class="absolute -bottom-8 left-1/2 -translate-x-1/2">
+        <div class="relative">
+          <div class="avatar">
+            <div class="w-20 rounded-full ring-4 ring-base-100 shadow-xl">
               <img
-                :src="previewAvatar"
-                :alt="nameInput"
+                :src="profile.avatarUrl"
+                :alt="profile.displayName"
+                class="transition-transform duration-300 hover:scale-105"
               >
             </div>
           </div>
-          <div class="min-w-0">
-            <p class="font-medium text-sm truncate">
-              {{ nameInput || $t('profile.defaultName') }}
-            </p>
-            <p class="text-xs text-base-content/60">
-              {{ $t('profile.preview') }}
-            </p>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex gap-2">
+          <!-- Edit badge -->
           <button
-            class="btn btn-primary btn-sm flex-1"
-            @click="save"
+            v-if="!profile.isEditing"
+            class="absolute -bottom-1 -right-1 btn btn-circle btn-primary btn-xs shadow-lg"
+            :title="$t('profile.edit')"
+            @click="profile.setEditing(true)"
           >
-            {{ $t('profile.save') }}
-          </button>
-          <button
-            class="btn btn-ghost btn-sm"
-            @click="profile.setEditing(false)"
-          >
-            {{ $t('profile.cancel') }}
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Notifications Section -->
-    <div class="px-4 pb-4">
-      <div class="divider my-2">{{ $t('profile.notifications', 'Notificações') }}</div>
-      
-      <div class="flex items-center justify-between mb-2">
-        <div class="flex items-center gap-2">
+    <div class="card-body p-5 pt-10 min-w-0">
+      <!-- Display Mode -->
+      <div
+        v-if="!profile.isEditing"
+        class="text-center"
+      >
+        <h3 class="font-bold text-xl text-base-content mb-1">
+          {{ profile.displayName }}
+        </h3>
+        
+        <!-- Level badge -->
+        <div class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 bg-warning/10 rounded-full">
           <svg
-            class="w-4 h-4 text-base-content/70"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            class="w-4 h-4 text-warning"
+            fill="currentColor"
+            viewBox="0 0 20 20"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
             />
           </svg>
-          <span class="text-sm">{{ $t('profile.browserNotifications', 'Notificações do navegador') }}</span>
+          <span class="text-sm font-bold text-warning">{{ $t('nav.level', { level: challenges.level }) }}</span>
         </div>
-        <button
-          class="btn btn-sm"
-          :class="notificationPermission === 'granted' ? 'btn-success' : 'btn-ghost'"
-          @click="toggleNotifications"
-        >
-          {{ notificationPermission === 'granted' ? $t('profile.enabled', 'Ativado') : $t('profile.enable', 'Ativar') }}
-        </button>
+
+        <!-- Quick stats -->
+        <div class="grid grid-cols-3 gap-2 mt-4">
+          <div class="text-center p-2 bg-base-200/50 rounded-lg">
+            <p class="text-xs text-base-content/50">{{ $t('profile.xp', 'XP') }}</p>
+            <p class="text-lg font-bold text-primary">{{ challenges.xp.current }}</p>
+          </div>
+          <div class="text-center p-2 bg-base-200/50 rounded-lg">
+            <p class="text-xs text-base-content/50">{{ $t('profile.completed', 'Completos') }}</p>
+            <p class="text-lg font-bold text-success">{{ challenges.completedChallenges }}</p>
+          </div>
+          <div class="text-center p-2 bg-base-200/50 rounded-lg">
+            <p class="text-xs text-base-content/50">{{ $t('profile.streak', 'Sequência') }}</p>
+            <p class="text-lg font-bold text-error">🔥 {{ profile.streakCurrent }}</p>
+          </div>
+        </div>
       </div>
 
-      <div v-if="pushNotificationsSupported" class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <svg
-            class="w-4 h-4 text-base-content/70"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+      <!-- Edit Mode -->
+      <div
+        v-else
+        class="space-y-4 animate-fadeIn"
+      >
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-lg">{{ $t('profile.editProfile') }}</h3>
+          <button
+            class="btn btn-ghost btn-circle btn-sm"
+            @click="profile.setEditing(false)"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-            />
-          </svg>
-          <span class="text-sm">{{ $t('profile.pushNotifications', 'Notificações push') }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
+
+        <!-- Name Input -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium text-sm flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              {{ $t('profile.name') }}
+            </span>
+          </label>
+          <input
+            v-model="nameInput"
+            type="text"
+            :placeholder="$t('profile.namePlaceholder')"
+            class="input input-bordered w-full focus:input-primary transition-all"
+          >
+        </div>
+
+        <!-- Avatar URL Input -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium text-sm flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {{ $t('profile.photoUrl') }}
+            </span>
+          </label>
+          <input
+            v-model="avatarInput"
+            type="url"
+            placeholder="https://..."
+            class="input input-bordered w-full focus:input-primary transition-all"
+          >
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">{{ $t('profile.pasteLink') }}</span>
+          </label>
+        </div>
+
+        <!-- Preview Card -->
+        <div class="p-4 bg-base-200/50 rounded-xl border border-base-300/50">
+          <p class="text-xs font-medium text-base-content/50 mb-2">{{ $t('profile.preview') }}</p>
+          <div class="flex items-center gap-3">
+            <div class="avatar">
+              <div class="w-12 rounded-full ring-2 ring-primary/20">
+                <img :src="previewAvatar" :alt="nameInput">
+              </div>
+            </div>
+            <div>
+              <p class="font-bold text-sm">{{ nameInput || $t('profile.defaultName') }}</p>
+              <p class="text-xs text-base-content/50">Level {{ challenges.level }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
         <button
-          class="btn btn-sm"
-          :class="pushSubscribed ? 'btn-success' : 'btn-ghost'"
-          :disabled="!pushPermissionGranted"
-          @click="togglePushNotifications"
+          class="btn btn-primary w-full"
+          @click="save"
         >
-          {{ pushSubscribed ? $t('profile.enabled', 'Ativado') : $t('profile.enable', 'Ativar') }}
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          {{ $t('profile.save') }}
         </button>
       </div>
-      <p v-else class="text-xs text-base-content/50 mt-1">
-        {{ $t('profile.pushNotSupported', 'Notificações push não suportadas neste navegador') }}
-      </p>
+    </div>
+
+    <!-- Notifications Section -->
+    <div class="px-5 pb-5">
+      <div class="divider my-3">{{ $t('profile.notifications', 'Notificações') }}</div>
+      
+      <div class="space-y-2">
+        <!-- Browser Notifications -->
+        <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg hover:bg-base-200 transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="p-1.5 bg-base-300/50 rounded-md">
+              <svg
+                class="w-4 h-4 text-base-content/70"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </div>
+            <div>
+              <span class="text-sm font-medium">{{ $t('profile.browserNotifications', 'Notificações do navegador') }}</span>
+            </div>
+          </div>
+          <button
+            class="btn btn-sm"
+            :class="notificationPermission === 'granted' ? 'btn-success btn-outline' : 'btn-ghost'"
+            @click="toggleNotifications"
+          >
+            {{ notificationPermission === 'granted' ? $t('profile.enabled', 'Ativado') : $t('profile.enable', 'Ativar') }}
+          </button>
+        </div>
+
+        <!-- Push Notifications -->
+        <div
+          v-if="pushNotificationsSupported"
+          class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg hover:bg-base-200 transition-colors"
+        >
+          <div class="flex items-center gap-3">
+            <div class="p-1.5 bg-base-300/50 rounded-md">
+              <svg
+                class="w-4 h-4 text-base-content/70"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div>
+              <span class="text-sm font-medium">{{ $t('profile.pushNotifications', 'Notificações push') }}</span>
+            </div>
+          </div>
+          <button
+            class="btn btn-sm"
+            :class="pushSubscribed ? 'btn-success btn-outline' : 'btn-ghost'"
+            :disabled="!pushPermissionGranted"
+            @click="togglePushNotifications"
+          >
+            {{ pushSubscribed ? $t('profile.enabled', 'Ativado') : $t('profile.enable', 'Ativar') }}
+          </button>
+        </div>
+        <p v-else class="text-xs text-base-content/50 text-center">
+          {{ $t('profile.pushNotSupported', 'Notificações push não suportadas') }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -224,7 +273,6 @@ onMounted(() => {
   nameInput.value = profile.profile.name
   avatarInput.value = profile.profile.avatar
   
-  // Check notification permission
   if ('Notification' in window) {
     notificationPermission.value = Notification.permission
   }
@@ -249,14 +297,14 @@ function save() {
 
 async function toggleNotifications() {
   if (!('Notification' in window)) {
-    error(t('profile.notificationsNotSupported', 'Notificações não suportadas neste navegador'))
+    error(t('profile.notificationsNotSupported', 'Notificações não suportadas'))
     return
   }
 
   if (notificationPermission.value === 'granted') {
-    info(t('profile.notificationsGranted', 'Notificações já estão ativadas. Para desativar, altere nas configurações do navegador.'))
+    info(t('profile.notificationsGranted', 'Já ativadas. Para desativar, use as configurações do navegador.'))
   } else if (notificationPermission.value === 'denied') {
-    error(t('profile.notificationsDenied', 'Notificações foram bloqueadas. Para ativá-las, altere nas configurações do navegador.'))
+    error(t('profile.notificationsDenied', 'Bloqueadas. Altere nas configurações do navegador.'))
   } else {
     const result = await Notification.requestPermission()
     notificationPermission.value = result
@@ -268,25 +316,35 @@ async function toggleNotifications() {
 
 async function togglePushNotifications() {
   if (!pushNotificationsSupported.value) {
-    error(t('profile.pushNotSupported', 'Notificações push não suportadas neste navegador'))
+    error(t('profile.pushNotSupported', 'Push não suportado'))
     return
   }
 
   if (pushSubscribed.value) {
     const unsubscribed = await unsubscribeFromPush()
     if (unsubscribed) {
-      success(t('profile.pushUnsubscribed', 'Notificações push desativadas'))
+      success(t('profile.pushUnsubscribed', 'Push desativado'))
     }
   } else {
     const granted = await requestPushPermission()
     if (granted) {
       const subscription = await subscribeToPush()
       if (subscription) {
-        success(t('profile.pushSubscribed', 'Notificações push ativadas com sucesso!'))
+        success(t('profile.pushSubscribed', 'Push ativado com sucesso!'))
       } else {
-        error(t('profile.pushSubscriptionFailed', 'Falha ao ativar notificações push'))
+        error(t('profile.pushSubscriptionFailed', 'Falha ao ativar push'))
       }
     }
   }
 }
 </script>
+
+<style scoped>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+</style>

@@ -85,17 +85,20 @@
 		"enabled": "Ativado",
 		"enable": "Ativar",
 		"pushNotifications": "Notificações push",
-		"pushNotSupported": "Notificações push não suportadas neste navegador",
-		"notificationsNotSupported": "Notificações não suportadas neste navegador",
-		"notificationsGranted": "Notificações já estão ativadas. Para desativar, altere nas configurações do navegador.",
-		"notificationsDenied": "Notificações foram bloqueadas. Para ativá-las, altere nas configurações do browser.",
-		"pushSubscribed": "Notificações push ativadas com sucesso!",
-		"pushUnsubscribed": "Notificações push desativadas",
+		"pushNotSupported": "Notificações push não suportadas",
+		"notificationsNotSupported": "Notificações não suportadas",
+		"notificationsGranted": "Já ativadas. Para desativar, use as configurações do navegador.",
+		"notificationsDenied": "Bloqueadas. Altere nas configurações do navegador.",
+		"pushSubscribed": "Push ativado com sucesso!",
+		"pushUnsubscribed": "Push desativado",
 		"githubSaved": "GitHub conectado: {username}",
 		"githubRemoved": "GitHub desconectado",
 		"profileSaved": "Perfil salvo com sucesso!",
 		"notificationsEnabled": "Notificações ativadas!",
-		"pushSubscriptionFailed": "Falha ao ativar notificações push"
+		"pushSubscriptionFailed": "Falha ao ativar push",
+		"xp": "XP",
+		"completed": "Completos",
+		"streak": "Sequência"
 	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
@@ -147,7 +150,11 @@
 	},
 	"theme": {
 		"autoDarkMode": "Modo escuro automático",
-		"themeChanged": "Tema alterado para: {theme}"
+		"autoDarkModeDesc": "Segue preferencia do sistema",
+		"themeChanged": "Tema alterado para: {theme}",
+		"autoDarkEnabled": "ativado",
+		"autoDarkDisabled": "desativado",
+		"autoDarkToggled": "Modo automatico {status}"
 	},
 	"footer": {
 		"madeBy": "Feito por"

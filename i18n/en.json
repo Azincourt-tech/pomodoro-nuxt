@@ -85,17 +85,20 @@
 		"enabled": "Enabled",
 		"enable": "Enable",
 		"pushNotifications": "Push notifications",
-		"pushNotSupported": "Push notifications not supported in this browser",
-		"notificationsNotSupported": "Notifications not supported in this browser",
-		"notificationsGranted": "Notifications are already enabled. To disable, change in browser settings.",
-		"notificationsDenied": "Notifications were blocked. To enable, change in browser settings.",
-		"pushSubscribed": "Push notifications enabled successfully!",
-		"pushUnsubscribed": "Push notifications disabled",
+		"pushNotSupported": "Push notifications not supported",
+		"notificationsNotSupported": "Notifications not supported",
+		"notificationsGranted": "Already enabled. To disable, use browser settings.",
+		"notificationsDenied": "Blocked. Change in browser settings.",
+		"pushSubscribed": "Push enabled successfully!",
+		"pushUnsubscribed": "Push disabled",
 		"githubSaved": "GitHub connected: {username}",
 		"githubRemoved": "GitHub disconnected",
 		"profileSaved": "Profile saved successfully!",
 		"notificationsEnabled": "Notifications enabled!",
-		"pushSubscriptionFailed": "Failed to enable push notifications"
+		"pushSubscriptionFailed": "Failed to enable push",
+		"xp": "XP",
+		"completed": "Completed",
+		"streak": "Streak"
 	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",
@@ -158,6 +161,10 @@
 	},
 	"theme": {
 		"autoDarkMode": "Automatic dark mode",
-		"themeChanged": "Theme changed to: {theme}"
+		"autoDarkModeDesc": "Follows system preference",
+		"themeChanged": "Theme changed to: {theme}",
+		"autoDarkEnabled": "enabled",
+		"autoDarkDisabled": "disabled",
+		"autoDarkToggled": "Auto mode {status}"
 	}
 }
