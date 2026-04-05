@@ -46,12 +46,8 @@
             class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm"
             :class="item.completed ? 'bg-gradient-to-br from-success to-success/80 text-white' : 'bg-gradient-to-br from-error to-error/80 text-white'"
           >
-            <svg v-if="item.completed" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-            </svg>
-            <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <Icon v-if="item.completed" name="lucide:check" class="w-5 h-5" />
+            <Icon v-else name="lucide:x" class="w-5 h-5" />
           </div>
           
           <!-- Description -->
