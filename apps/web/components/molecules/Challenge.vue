@@ -3,7 +3,6 @@
     <div class="card-body items-center text-center p-6">
       <div class="badge badge-primary badge-lg gap-1 mb-2">
         <Icon name="lucide:star" class="w-3 h-3" />
-        </svg>
         {{ amount }} xp
       </div>
 
@@ -12,7 +11,7 @@
           class="w-20 h-20 rounded-full flex items-center justify-center"
           :class="typeBg"
         >
-          <span v-html="typeSvg" />
+          <Icon :name="typeIcon" class="w-10 h-10" />
         </div>
       </div>
 
@@ -70,19 +69,15 @@ const typeBg = computed(() => {
   return map[props.type] || 'bg-gray-500/20 text-gray-600'
 })
 
-const typeSvg = computed(() => {
+const typeIcon = computed(() => {
   const icons: Record<string, string> = {
-    body: '<Icon name="lucide:activity" class="w-10 h-10" /></svg>',
-    eye: '<Icon name="lucide:eye" class="w-10 h-10" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>',
-    drink:
-      '<Icon name="lucide:droplets" class="w-10 h-10" /></svg>',
-    breathe:
-      '<Icon name="lucide:wind" class="w-10 h-10" /></svg>',
-    posture:
-      '<Icon name="lucide:user" class="w-10 h-10" /></svg>',
-    meditate:
-      '<Icon name="lucide:sparkles" class="w-10 h-10" /></svg>',
-    walk: '<Icon name="lucide:trending-up" class="w-10 h-10" /></svg>',
+    body: 'lucide:activity',
+    eye: 'lucide:eye',
+    drink: 'lucide:droplets',
+    breathe: 'lucide:wind',
+    posture: 'lucide:user-check',
+    meditate: 'lucide:sparkles',
+    walk: 'lucide:trending-up',
   }
   return icons[props.type] || icons.body
 })
