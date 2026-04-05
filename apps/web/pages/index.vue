@@ -43,14 +43,16 @@
       <!-- CENTER -->
       <div class="flex flex-col items-center gap-6">
         <div class="w-full flex flex-col items-center">
-          <Countdown @completed="getNewChallenge" />
+          <div class="p-4">
+            <Countdown @completed="getNewChallenge" />
+          </div>
 
           <!-- Controls -->
           <div class="flex items-center gap-3 mt-4">
             <!-- During break - show "Start Next Cycle" button -->
             <template v-if="countdown.isBreak">
               <button
-                class="btn btn-success btn-md gap-2 px-8 shadow-lg shadow-success/20 hover:shadow-success/40 transition-shadow duration-300"
+                class="btn btn-success btn-md gap-2 px-10 py-3.5 shadow-lg shadow-success/20 hover:shadow-success/40 hover:-translate-y-0.5 transition-all duration-300 text-lg"
                 @click="startNextCycle"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -70,7 +72,7 @@
             <!-- Not active - show start button -->
             <template v-else-if="!countdown.isActive">
               <button
-                class="btn btn-primary btn-md gap-2 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+                class="btn btn-primary btn-md gap-2 px-10 py-3.5 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 text-lg"
                 @click="setCountdownState(true)"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -82,7 +84,7 @@
             <!-- Active - show pause button -->
             <template v-else>
               <button
-                class="btn btn-error btn-outline btn-md gap-2 px-8"
+                class="btn btn-error btn-outline btn-md gap-2 px-10 py-3.5 hover:shadow-md transition-all duration-200"
                 @click="setCountdownState(false)"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +180,7 @@ const countdown = useCountdownStore()
 const theme = useThemeStore()
 const profile = useProfileStore()
 const history = useHistoryStore()
-const { playStart, playPause, playComplete } = useSound()
+const { playStart, playPause, playComplete, playBreakEnd } = useSound()
 const { success, info } = useToast()
 
 const shareCardRef = ref<InstanceType<typeof ShareCard> | null>(null)
@@ -226,55 +228,42 @@ function setCountdownState(flag: boolean) {
 }
 
 function getNewChallenge() {
-  // Increment completed cycles for long break tracking
-  countdown.incrementCompletedCycles()
-
-  // Check if it's time for a long break
-  const shouldLongBreak = countdown.completedCycles > 0 && countdown.completedCycles % countdown.longBreakAfterCycles === 0
-  
-  if (shouldLongBreak) {
-    // Start long break
-    countdown.setHasCompleted(true)
-    countdown.setBreakMode(true, true)
-    countdown.setIsActive(false)
-    
-    playComplete()
+  // Check if we're ending a break
+  if (countdown.isBreak) {
+    // Break ended - play specific sound and return to focus mode
+    playBreakEnd()
     
     if (navigator.vibrate) {
-      navigator.vibrate([200, 100, 200])
+      navigator.vibrate([300, 100, 300])
     }
     
     if ('Notification' in window && Notification.permission === 'granted') {
-      sendNotification(t('notifications.longBreak', 'Hora da Pausa Longa!'), {
-        body: t('notifications.longBreakDesc', 'Você completou {cycles} ciclos. Descanse {minutes} minutos.', {
-          cycles: countdown.longBreakAfterCycles,
-          minutes: countdown.longBreakMinutes
-        }),
+      sendNotification(t('notifications.breakEnded', 'Pausa terminada!'), {
+        body: t('notifications.breakEndedDesc', 'Hora de voltar ao foco! Inicie um novo ciclo.'),
         icon: '/favicon.png',
-        tag: 'pomodoro-long-break',
+        tag: 'pomodoro-break-ended',
       })
     }
     return
   }
-
-  // Start short break
-  countdown.setHasCompleted(true)
-  countdown.setBreakMode(true, false)
-  countdown.setIsActive(false)
   
+  // Focus cycle ended - show challenge modal
+  const index = getRandomNumber(0, challenges.challengesLength)
+  challenges.setCurrentChallengeIndex(index)
+  isChallengeModalOpen.value = true
+  
+  // Vibration and sound
   playComplete()
-  
   if (navigator.vibrate) {
     navigator.vibrate([200])
   }
   
+  // Notification
   if ('Notification' in window && Notification.permission === 'granted') {
-    sendNotification(t('notifications.shortBreak', 'Hora da Pausa!'), {
-      body: t('notifications.shortBreakDesc', 'Descanse {minutes} minutos antes do próximo ciclo.', {
-        minutes: countdown.breakMinutes
-      }),
+    sendNotification(t('notifications.challenge', 'Novo Desafio!'), {
+      body: t('notifications.challengeDesc', 'Complete o desafio para ganhar XP!'),
       icon: '/favicon.png',
-      tag: 'pomodoro-short-break',
+      tag: 'pomodoro-challenge',
     })
   }
 }
@@ -284,33 +273,9 @@ function startNextCycle() {
   countdown.setBreakMode(false, false)
   countdown.setHasCompleted(false)
   
-  const index = getRandomNumber(0, challenges.challengesLength)
-  challenges.setCurrentChallengeIndex(index)
-
-  const challenge = challenges.currentChallenge
-  const xpGained = challenge?.amount ?? 0
-
-  // Complete challenge for XP
-  if (challenge) {
-    challenges.completeChallenge(xpGained)
-  }
-
-  // Save session to history
-  const session: SessionRecord = {
-    id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-    startedAt: sessionStartTime.value ?? Date.now(),
-    duration: countdown.customMinutes,
-    challengeCompleted: challenge?.description ?? null,
-    xpGained,
-  }
-  history.addSession(session)
-
-  // Update streak
-  profile.updateStreak()
-
-  // Save progress
-  profile.saveProgressToStorage(challenges.level, challenges.xp, challenges.completedChallenges)
-
+  // NAO mostrar modal de desafio - ele já foi mostrado quando o ciclo anterior terminou
+  // NAO dar XP novamente - XP já foi dado ao completar o desafio anterior
+  
   playStart()
   countdown.setIsActive(true)
   

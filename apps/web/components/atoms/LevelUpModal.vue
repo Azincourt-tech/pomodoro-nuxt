@@ -12,7 +12,7 @@
         v-if="challenges.isLevelUpModalOpen"
         class="modal modal-open"
       >
-        <div class="modal-box bg-gradient-to-br from-base-100 via-base-200 to-base-100 border-2 border-primary/30 shadow-2xl max-w-md relative overflow-hidden">
+        <div class="modal-box bg-gradient-to-br from-base-100/95 via-base-200/80 to-base-100/95 border-2 border-primary/40 shadow-2xl backdrop-blur-sm max-w-md relative overflow-hidden">
           <!-- Background decoration -->
           <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl animate-pulse" />
@@ -80,6 +80,7 @@
                 viewBox="0 0 24 24"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+</svg>
             </button>
           </div>
         </div>

@@ -1,11 +1,11 @@
 <template>
-  <div class="card bg-base-100 shadow-lg border border-base-300/50 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+  <div class="card bg-base-100/80 backdrop-blur-sm shadow-xl border border-base-300/40 hover:shadow-2xl transition-all duration-300">
     <!-- Header gradient background -->
-    <div class="h-20 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 relative">
+    <div class="h-24 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/30 relative">
       <div class="absolute -bottom-8 left-1/2 -translate-x-1/2">
         <div class="relative">
           <div class="avatar">
-            <div class="w-20 rounded-full ring-4 ring-base-100 shadow-xl">
+            <div class="w-20 rounded-full ring-4 ring-base-100 shadow-2xl">
               <img
                 :src="profile.avatarUrl"
                 :alt="profile.displayName"
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="card-body p-5 pt-10 min-w-0">
+    <div class="card-body p-5 pt-12 min-w-0">
       <!-- Display Mode -->
       <div
         v-if="!profile.isEditing"
@@ -43,8 +43,8 @@
         </div>
 
         <!-- Quick stats -->
-        <div class="grid grid-cols-3 gap-2 mt-4">
-          <div class="text-center p-2 bg-base-200/50 rounded-lg">
+        <div class="grid grid-cols-3 gap-4 mt-4">
+          <div class="text-center p-3 bg-base-200/60 rounded-xl hover:bg-base-200/80 transition-colors">
             <p class="text-xs text-base-content/50">{{ $t('profile.xp', 'XP') }}</p>
             <p class="text-lg font-bold text-primary">{{ challenges.xp.current }}</p>
           </div>
@@ -96,6 +96,7 @@
             <span class="label-text font-medium text-sm flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+</svg>
               {{ $t('profile.photoUrl') }}
             </span>
           </label>
@@ -111,11 +112,11 @@
         </div>
 
         <!-- Preview Card -->
-        <div class="p-4 bg-base-200/50 rounded-xl border border-base-300/50">
+        <div class="p-4 bg-base-200/60 rounded-xl border border-base-300/40 hover:border-primary/30 transition-colors">
           <p class="text-xs font-medium text-base-content/50 mb-2">{{ $t('profile.preview') }}</p>
           <div class="flex items-center gap-3">
             <div class="avatar">
-              <div class="w-12 rounded-full ring-2 ring-primary/20">
+            <div class="w-12 rounded-full ring-2 ring-primary/20 shadow-md">
                 <img :src="previewAvatar" :alt="nameInput">
               </div>
             </div>
@@ -143,7 +144,7 @@
       
       <div class="space-y-2">
         <!-- Browser Notifications -->
-        <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg hover:bg-base-200 transition-colors">
+        <div class="flex items-center justify-between p-3 bg-base-200/60 rounded-lg hover:bg-base-200/80 transition-colors">
           <div class="flex items-center gap-3">
             <div class="p-1.5 bg-base-300/50 rounded-md">
               <Icon name="lucide:bell" class="w-4 h-4 text-base-content/70" />

@@ -127,6 +127,51 @@ html {
 	}
 }
 
+/* Enhanced shimmer for progress bars */
+@keyframes shimmer {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+.animate-shimmer {
+	animation: shimmer 3s infinite linear;
+}
+
+/* Elevation classes */
+.shadow-2xl {
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Smooth elevation transitions */
+.transition-elevation {
+	transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Backdrop blur with better support */
+.backdrop-blur-sm {
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+.backdrop-blur-md {
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+.backdrop-blur-lg {
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+.backdrop-blur-xl {
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+}
+.backdrop-blur-2xl {
+	backdrop-filter: blur(24px);
+	-webkit-backdrop-filter: blur(24px);
+}
+
 /* Glass effect for navbar */
 .navbar {
 	backdrop-filter: blur(12px);

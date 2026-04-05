@@ -3,7 +3,7 @@
     <span
       v-for="(digit, index) in splittedDigits"
       :key="index"
-      class="w-1/2 bg-gradient-to-br from-base-200 to-base-300 rounded-2xl flex items-center justify-center py-4 text-5xl md:text-7xl lg:text-8xl font-rajdhani font-black text-base-content shadow-lg border border-base-300/50 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+      class="w-1/2 flex items-center justify-center py-4 text-5xl md:text-7xl lg:text-8xl font-rajdhani font-black text-base-content"
     >
       {{ digit }}
     </span>

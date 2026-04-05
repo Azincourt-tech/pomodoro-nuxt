@@ -1,43 +1,110 @@
 <template>
   <div class="flex flex-col items-center">
-    <!-- Circular Timer -->
-    <div class="relative inline-flex items-center justify-center">
+    <!-- Circular Timer with Enhanced Visual Effects -->
+    <div class="relative inline-flex items-center justify-center group">
+      <!-- Outer glow effect -->
+      <div 
+        class="absolute inset-0 rounded-full blur-3xl opacity-15 transition-all duration-1000"
+        :class="countdown.isActive ? 'animate-pulse bg-primary/30' : 'bg-primary/10'"
+      />
+      
+      <!-- Second outer ring for depth -->
       <svg
-        class="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 transform -rotate-90"
+        class="w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 transform -rotate-90 drop-shadow-2xl relative z-10"
         viewBox="0 0 200 200"
       >
+        <!-- Outer ring background -->
+        <circle
+          cx="100"
+          cy="100"
+          r="95"
+          fill="none"
+          stroke-width="3"
+          class="stroke-primary/10"
+        />
+        
         <!-- Background circle -->
         <circle
           cx="100"
           cy="100"
           r="90"
           fill="none"
-          stroke-width="6"
-          class="stroke-base-300/30"
+          stroke-width="10"
+          class="stroke-base-300/30 dark:stroke-base-300/15 backdrop-blur-sm"
         />
-        <!-- Progress circle -->
+        
+        <!-- Progress circle with theme gradient + brightness boost -->
+        <defs>
+          <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" :stop-color="'hsl(var(--p))'" stop-opacity="1" />
+            <stop offset="100%" :stop-color="'hsl(var(--s))'" stop-opacity="1" />
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          <filter id="brighten" x="0%" y="0%" width="100%" height="100%">
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="1.3" intercept="0.1" />
+              <feFuncG type="linear" slope="1.3" intercept="0.1" />
+              <feFuncB type="linear" slope="1.3" intercept="0.1" />
+            </feComponentTransfer>
+          </filter>
+        </defs>
         <circle
           cx="100"
           cy="100"
           r="90"
           fill="none"
-          stroke-width="6"
+          stroke-width="10"
           stroke-linecap="round"
           :stroke-dasharray="circumference"
           :stroke-dashoffset="dashOffset"
-          class="stroke-primary transition-all duration-1000 ease-linear"
+          stroke="url(#timerGradient)"
+          class="transition-all duration-1000 ease-linear"
+          filter="url(#brighten) url(#glow)"
+          :class="countdown.isActive ? 'drop-shadow-[0_0_10px_hsl(var(--p)/0.8)]' : ''"
         />
       </svg>
 
       <!-- Timer digits inside circle -->
-      <div class="absolute inset-0 flex flex-col items-center justify-center">
+      <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
+        <!-- Phase indicator -->
+        <div 
+          v-if="countdown.isBreak"
+          class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/5 backdrop-blur-md border border-secondary/40 shadow-lg"
+        >
+          <span class="text-xs font-bold text-secondary uppercase tracking-wider">🌴 {{ $t('countdown.breakTime', 'Pausa') }}</span>
+        </div>
+        <div 
+          v-else
+          class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 to-primary/5 backdrop-blur-md border border-primary/40 shadow-lg"
+        >
+          <span class="text-xs font-bold text-primary uppercase tracking-wider">⏱️ {{ $t('countdown.focusTime', 'Foco') }}</span>
+        </div>
+        
+        <!-- Timer digits - cleaned up -->
         <div
-          class="flex justify-center items-center font-rajdhani font-bold text-base-content tabular-nums"
-          :class="countdown.time >= 6000 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-6xl sm:text-7xl md:text-8xl'"
+          class="flex justify-center items-center font-rajdhani font-bold tabular-nums"
+          :class="countdown.time >= 60000 ? 'text-5xl sm:text-6xl md:text-7xl' : 'text-6xl sm:text-7xl md:text-8xl'"
         >
           <CountdownDigits :digits="countdown.minutes" />
-          <span class="px-1 md:px-2 text-primary animate-pulse">:</span>
+          <span 
+            class="px-1 md:px-2 animate-pulse"
+            :class="countdown.isActive ? 'text-primary' : 'text-base-content/50'"
+          >:</span>
           <CountdownDigits :digits="countdown.seconds" />
+        </div>
+        
+        <!-- Status indicator -->
+        <div class="mt-3 flex items-center gap-2">
+          <div 
+            class="w-2 h-2 rounded-full transition-all duration-300"
+            :class="countdown.isActive ? 'bg-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-base-content/30'"
+          />
+          <span class="text-xs font-medium text-base-content/60">
+            {{ countdown.isActive ? $t('countdown.running', 'Em execução') : $t('countdown.paused', 'Pausado') }}
+          </span>
         </div>
       </div>
     </div>

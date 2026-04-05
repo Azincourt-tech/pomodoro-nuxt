@@ -76,6 +76,15 @@ function playCompleteSound() {
   ], 'triangle')
 }
 
+/** "Break Over!" - energizing alert sound (A4 -> C5 -> E5) to signal return to work */
+function playBreakEndSound() {
+  playSequence([
+    { freq: 440.00, start: 0, duration: 0.15 },
+    { freq: 523.25, start: 0.12, duration: 0.15 },
+    { freq: 659.25, start: 0.24, duration: 0.3 },
+  ], 'square')
+}
+
 export function useSound() {
   function initFromStorage() {
     if (import.meta.client) {
@@ -111,6 +120,12 @@ export function useSound() {
     playCompleteSound()
   }
 
+  function playBreakEnd() {
+    if (!soundEnabled.value) return
+    if (typeof window === 'undefined') return
+    playBreakEndSound()
+  }
+
   function vibrate(pattern: number[] = [200]) {
     if (navigator.vibrate) {
       navigator.vibrate(pattern)
@@ -124,6 +139,7 @@ export function useSound() {
     playStart,
     playPause,
     playComplete,
+    playBreakEnd,
     vibrate,
   }
 }

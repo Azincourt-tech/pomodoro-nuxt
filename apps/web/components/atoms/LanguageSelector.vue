@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-base-100 shadow-lg border border-base-300/50 hover:shadow-xl transition-shadow duration-300">
+  <div class="card bg-base-100/80 backdrop-blur-sm shadow-xl border border-base-300/40 hover:shadow-2xl transition-all duration-300">
     <div class="card-body p-5">
       <!-- Header -->
       <div class="flex items-center gap-3 mb-4">
@@ -17,16 +17,16 @@
         <button
           v-for="loc in availableLocales"
           :key="loc.code"
-          class="w-full flex items-center gap-4 p-4 rounded-xl transition-all duration-200 group hover:scale-[1.02]"
+          class="w-full flex items-center gap-4 p-4 rounded-xl transition-all duration-300 group hover:scale-[1.02] hover:-translate-y-0.5"
           :class="
             currentLocale === loc.code
-              ? 'bg-gradient-to-r from-primary/10 to-secondary/10 ring-2 ring-primary shadow-md'
-              : 'bg-base-200/50 hover:bg-base-200 hover:shadow-md'
+              ? 'bg-gradient-to-r from-primary/15 to-secondary/15 ring-2 ring-primary shadow-lg'
+              : 'bg-base-200/50 hover:bg-base-200/70 hover:shadow-lg'
           "
           @click="setLocale(loc.code)"
         >
           <!-- Flag -->
-          <div class="text-4xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-200">
+          <div class="text-4xl filter drop-shadow-lg group-hover:scale-125 transition-transform duration-300">
             {{ loc.code === 'pt-BR' ? '🇧🇷' : '🇺🇸' }}
           </div>
           
@@ -56,6 +56,7 @@
                   d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                   clip-rule="evenodd"
                 />
+              </svg>
             </div>
           </Transition>
         </button>

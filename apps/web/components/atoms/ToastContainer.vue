@@ -1,19 +1,19 @@
 <template>
-  <div class="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm">
+  <div class="fixed top-4 right-4 z-[100] flex flex-col gap-3 max-w-sm">
     <TransitionGroup
       name="toast"
       tag="div"
-      class="flex flex-col gap-2"
+      class="flex flex-col gap-3"
     >
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="alert shadow-lg"
+        class="alert shadow-lg border"
         :class="{
-          'alert-success': toast.type === 'success',
-          'alert-info': toast.type === 'info',
-          'alert-warning': toast.type === 'warning',
-          'alert-error': toast.type === 'error',
+          'alert-success border-success/30': toast.type === 'success',
+          'alert-info border-info/30': toast.type === 'info',
+          'alert-warning border-warning/30': toast.type === 'warning',
+          'alert-error border-error/30': toast.type === 'error',
         }"
       >
         <Icon name="lucide:info" class="stroke-current shrink-0 w-6 h-6" />
@@ -30,6 +30,7 @@
             stroke-width="2"
             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
           />
+        </svg>
         <svg
           v-else
           xmlns="http://www.w3.org/2000/svg"
@@ -43,9 +44,11 @@
             stroke-width="2"
             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
           />
+        </svg>
+          />
         <span class="text-sm">{{ toast.message }}</span>
         <button
-          class="btn btn-ghost btn-xs"
+          class="btn btn-ghost btn-xs hover:bg-current hover:text-current transition-colors"
           @click="removeToast(toast.id)"
         >
           ✕

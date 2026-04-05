@@ -5,18 +5,30 @@
     :class="{ 'modal-open': isOpen }"
     @close="$emit('close')"
   >
-    <div class="modal-box p-0 overflow-hidden border border-base-300 shadow-2xl animate-in zoom-in-95 duration-200">
-      <header class="bg-primary p-4 flex justify-between items-center text-primary-content">
-        <h3 class="font-bold text-lg flex items-center gap-2">
-          <Icon name="lucide:zap" class="w-6 h-6" />
-          {{ $t('challenges.modalTitle', 'Novo Desafio!') }}
-        </h3>
+    <div class="modal-box p-0 overflow-hidden border-2 border-primary/30 shadow-2xl max-w-md relative">
+      <!-- Decorative background with theme colors -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-secondary/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s" />
+      </div>
+
+      <!-- Header with theme gradient -->
+      <header class="relative z-10 bg-gradient-to-r from-primary to-secondary p-6 flex justify-between items-center shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+            <Icon name="lucide:zap" class="w-6 h-6 drop-shadow-lg text-white" />
+          </div>
+          <h3 class="font-bold text-xl text-white">{{ $t('challenges.modalTitle', 'Novo Desafio!') }}</h3>
+        </div>
         <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost">✕</button>
+          <button class="btn btn-sm btn-circle btn-ghost text-white hover:bg-white/20 transition-all">
+            <Icon name="lucide:x" class="w-5 h-5" />
+          </button>
         </form>
       </header>
 
-      <div class="p-6">
+      <!-- Challenge Component -->
+      <div class="relative z-10 p-6">
         <Challenge
           v-if="challenge"
           v-bind="challenge"
@@ -25,8 +37,13 @@
         />
       </div>
 
-      <div class="modal-action p-4 bg-base-200/50 mt-0">
-        <button class="btn btn-ghost btn-block" @click="onSkipChallenge">
+      <!-- Footer Actions -->
+      <div class="relative z-10 modal-action p-5 bg-gradient-to-r from-base-200/60 via-base-200/40 to-base-300/30 mt-0 border-t border-base-300/30">
+        <button 
+          class="btn btn-ghost btn-block gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-300" 
+          @click="onSkipChallenge"
+        >
+          <Icon name="lucide:skip-forward" class="w-5 h-5" />
           {{ $t('challenges.modalSkip', 'Pular Desafio') }}
         </button>
       </div>
@@ -42,6 +59,8 @@ import { ref, onMounted, watch } from 'vue'
 import Challenge from '~/components/molecules/Challenge.vue'
 import { useChallengesStore } from '~/stores/challenges'
 import { useCountdownStore } from '~/stores/countdown'
+import { useToast } from '~/composables/useToast'
+import { useSound } from '~/composables/useSound'
 
 const props = defineProps<{
   challenge: any
@@ -52,6 +71,10 @@ const emit = defineEmits(['close', 'complete'])
 const modalRef = ref<HTMLDialogElement | null>(null)
 const challenges = useChallengesStore()
 const countdown = useCountdownStore()
+const { success } = useToast()
+const { playComplete } = useSound()
+
+const { t } = useI18n()
 
 watch(() => props.isOpen, (value) => {
   if (value) {
@@ -71,17 +94,33 @@ onMounted(() => {
   }
 })
 
-function resetCycle() {
-  countdown.resetTime()
-  countdown.setIsActive(false)
-  countdown.setHasCompleted(false)
-}
-
 function onChallengeSucceeded() {
   if (props.challenge) {
-    resetCycle()
-    challenges.setCurrentChallengeIndex(null)
+    // DAR XP ao usuario
     challenges.completeChallenge(props.challenge.amount)
+    
+    // Increment completed cycles
+    countdown.incrementCompletedCycles()
+    
+    // Check if long break
+    const shouldLongBreak = countdown.completedCycles > 0 && countdown.completedCycles % countdown.longBreakAfterCycles === 0
+    
+    // Start break timer automatically
+    countdown.setHasCompleted(true)
+    countdown.setBreakMode(true, shouldLongBreak)
+    countdown.setIsActive(true) // START the break timer!
+    
+    // Play completion sound
+    playComplete()
+    
+    // Show success message
+    if (shouldLongBreak) {
+      success(t('challenges.longBreakStarted', 'Pausa longa iniciada: {min}min', { min: countdown.longBreakMinutes }))
+    } else {
+      success(t('challenges.shortBreakStarted', 'Pausa curta iniciada: {min}min', { min: countdown.breakMinutes }))
+    }
+    
+    challenges.setCurrentChallengeIndex(null)
     challenges.saveToStorage()
     emit('complete')
   }
@@ -89,9 +128,9 @@ function onChallengeSucceeded() {
 }
 
 function onChallengeFailed() {
-  // Não perde XP nem reseta level - apenas não ganha XP
-  // O desafio continua disponível para tentar novamente
-  resetCycle()
+  // NAO perde XP, NAO penaliza usuario
+  // Apenas fecha o modal sem iniciar pausa
+  // Usuario pode tentar novamente no proximo ciclo
   emit('close')
 }
 

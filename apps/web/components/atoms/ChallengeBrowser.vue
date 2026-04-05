@@ -1,69 +1,77 @@
 <template>
-  <div class="card bg-base-100 shadow-lg border border-base-300/50 hover:shadow-xl transition-shadow duration-300">
-    <div class="card-body p-5">
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-4">
+  <div class="card bg-gradient-to-br from-base-100/90 via-base-100/85 to-base-200/70 backdrop-blur-xl shadow-2xl border border-warning/20 hover:shadow-[0_25px_60px_rgba(234,179,8,0.2)] hover:border-warning/40 transition-all duration-500 hover:-translate-y-1 group relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-40 h-40 bg-warning/10 rounded-full blur-3xl group-hover:bg-warning/15 transition-all duration-700" />
+      <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-warning/5 rounded-full blur-3xl group-hover:bg-warning/10 transition-all duration-700" />
+    </div>
+    
+    <div class="card-body p-6 relative z-10">
+      <!-- Header with animated icon -->
+      <div class="flex items-center justify-between mb-5">
         <div class="flex items-center gap-3">
-          <div class="p-2 bg-warning/10 rounded-lg">
-            <svg
-              class="w-5 h-5 text-warning"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-              />
-            </svg>
+          <div class="p-3 bg-gradient-to-br from-warning/20 to-warning/5 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <Icon name="lucide:trophy" class="w-6 h-6 text-warning drop-shadow-[0_0_8px_rgba(234,179,8,0.6)]" />
           </div>
           <div>
-            <h3 class="font-bold text-base">{{ $t('challenges.allChallenges') }}</h3>
-            <p class="text-xs text-base-content/50">{{ challenges.allChallenges.length }} desafios disponíveis</p>
+            <h3 class="font-bold text-lg bg-gradient-to-r from-warning to-warning/70 bg-clip-text text-transparent">{{ $t('challenges.allChallenges') }}</h3>
+            <p class="text-xs text-base-content/50 flex items-center gap-1.5">
+              <Icon name="lucide:sparkles" class="w-3 h-3" />
+              {{ challenges.allChallenges.length }} desafios disponíveis
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- Challenge Categories -->
-      <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+      <!-- Challenge Categories with enhanced design -->
+      <div class="space-y-2.5 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar p-1">
         <div
           v-for="(group, index) in groupedChallenges"
           :key="index"
-          class="collapse collapse-arrow bg-base-200/50 rounded-xl border border-base-300/30 hover:bg-base-200 transition-all duration-200"
+          class="collapse collapse-arrow bg-base-200/30 backdrop-blur-sm rounded-xl border border-base-300/20 hover:bg-base-200/50 hover:border-warning/30 transition-all duration-300 group/collapse"
+          :style="{ animationDelay: `${index * 50}ms` }"
         >
           <input type="checkbox" />
           
-          <div class="collapse-title flex items-center gap-3 py-3 min-h-0">
-            <!-- Category Icon -->
+          <div class="collapse-title flex items-center gap-3 py-3.5 min-h-0 group-hover/collapse:scale-[1.01] transition-transform duration-200">
+            <!-- Category Icon with glow -->
             <div
-              class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
+              class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg hover:shadow-xl transition-all duration-300 group-hover/collapse:scale-105"
               :class="typeColor(group.type)"
             >
-              <Icon :name="typeIcon(group.type)" class="w-6 h-6" />
+              <Icon :name="typeIcon(group.type)" class="w-6 h-6 drop-shadow-md" />
             </div>
             
             <!-- Category Info -->
             <div class="flex-1">
-              <span class="font-semibold text-sm capitalize">{{ group.label }}</span>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-xs text-base-content/50">{{ group.items.length }} desafios</span>
-                <span class="badge badge-xs badge-primary">{{ group.items[0].amount }}xp</span>
+              <span class="font-bold text-sm capitalize">{{ group.label }}</span>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="text-xs text-base-content/50 flex items-center gap-1">
+                  <Icon name="lucide:list" class="w-3 h-3" />
+                  {{ group.items.length }} desafios
+                </span>
+                <span v-if="group.items.length > 0" class="text-xs text-base-content/50">
+                  • {{ getAvgXP(group.items) }}xp médio
+                </span>
               </div>
             </div>
           </div>
           
           <div class="collapse-content">
-            <div class="space-y-2 pt-2">
+            <div class="space-y-2 pt-3">
               <div
                 v-for="(item, i) in group.items"
                 :key="i"
-                class="group flex items-start gap-3 p-3 bg-base-100 rounded-lg border border-base-300/30 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                class="group/item flex items-start gap-3 p-3.5 bg-gradient-to-r from-base-100/80 to-base-100/60 backdrop-blur-sm rounded-xl border border-base-300/20 hover:border-warning/40 hover:shadow-lg hover:shadow-warning/10 transition-all duration-300 hover:-translate-y-0.5"
+                :style="{ animationDelay: `${i * 30}ms` }"
               >
-                <!-- XP Badge -->
+                <!-- XP Badge with gradient -->
                 <div class="flex flex-col items-center gap-1">
-                  <span class="badge badge-primary badge-sm font-bold">{{ item.amount }}xp</span>
+                  <span class="badge badge-warning badge-sm font-bold shadow-md bg-gradient-to-br from-warning to-warning/80 border-0">{{ item.amount }}xp</span>
                 </div>
                 
                 <!-- Description -->
-                <p class="text-sm text-base-content/80 leading-relaxed flex-1">
+                <p class="text-sm text-base-content/80 leading-relaxed flex-1 group-hover/item:text-base-content transition-colors">
                   {{ item.description }}
                 </p>
               </div>
@@ -134,6 +142,12 @@ function typeIcon(type: string) {
   }
   return icons[type] || icons.body
 }
+
+function getAvgXP(items: Challenge[]): number {
+  if (items.length === 0) return 0
+  const total = items.reduce((sum, item) => sum + item.amount, 0)
+  return Math.round(total / items.length)
+}
 </script>
 
 <style scoped>
@@ -141,14 +155,15 @@ function typeIcon(type: string) {
   width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: hsl(var(--b2));
+  background: hsl(var(--b2) / 0.3);
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(var(--p) / 0.3);
+  background: linear-gradient(to bottom, hsl(var(--wa) / 0.4), hsl(var(--wa) / 0.6));
   border-radius: 10px;
+  transition: all 0.3s;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--p) / 0.5);
+  background: linear-gradient(to bottom, hsl(var(--wa) / 0.6), hsl(var(--wa) / 0.8));
 }
 </style>
