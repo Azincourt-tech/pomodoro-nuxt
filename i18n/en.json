@@ -103,6 +103,10 @@
 		"completed": "Completed",
 		"streak": "Streak"
 	},
+	"streak": {
+		"current": "{days}d",
+		"best": "Best: {days} days"
+	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",
 		"allChallenges": "All Challenges",

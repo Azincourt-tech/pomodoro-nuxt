@@ -103,6 +103,10 @@
 		"completed": "Completos",
 		"streak": "Sequência"
 	},
+	"streak": {
+		"current": "{days}d",
+		"best": "Melhor: {days} dias"
+	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
 		"allChallenges": "Todos os Challenges",
