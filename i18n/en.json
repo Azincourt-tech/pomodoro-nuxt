@@ -124,13 +124,19 @@
 	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",
+		"totalCompleted": "Total completed",
 		"allChallenges": "All Challenges",
 		"available": "{count} available",
 		"challenges": "challenges",
 		"failed": "Failed",
 		"completed": "Completed",
 		"startCycle": "Start a new cycle to receive new challenges",
-		"levelUp": "Increase your level by completing challenges"
+		"levelUp": "Increase your level by completing challenges",
+		"recentTitle": "Recent Challenges",
+		"noRecent": "No challenges yet",
+		"skipped": "skipped",
+		"modalTitle": "New Challenge!",
+		"modalSkip": "Skip Challenge"
 	},
 	"challengeTypes": {
 		"body": "Stretching",

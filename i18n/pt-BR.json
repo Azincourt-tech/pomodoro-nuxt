@@ -124,13 +124,19 @@
 	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
+		"totalCompleted": "Total completado",
 		"allChallenges": "Todos os Challenges",
 		"available": "{count} disponiveis",
 		"challenges": "challenges",
 		"failed": "Falhou",
 		"completed": "Completou",
 		"startCycle": "Inicie um ciclo para receber novos desafios",
-		"levelUp": "Aumente seu nivel completando os desafios"
+		"levelUp": "Aumente seu nivel completando os desafios",
+		"recentTitle": "Desafios Recentes",
+		"noRecent": "Nenhum desafio ainda",
+		"skipped": "pulou",
+		"modalTitle": "Novo Desafio!",
+		"modalSkip": "Pular Desafio"
 	},
 	"challengeTypes": {
 		"body": "Alongamento",
