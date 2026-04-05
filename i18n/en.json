@@ -1,4 +1,54 @@
 {
+	"auth": {
+		"welcome": "Welcome",
+		"subtitle": "Sign in to sync your progress",
+		"loginWithGitHub": "Continue with GitHub",
+		"emailPassword": "Sign in with Email and Password",
+		"signIn": "Sign In",
+		"signUp": "Sign Up",
+		"name": "Name",
+		"namePlaceholder": "Your full name",
+		"email": "Email",
+		"password": "Password",
+		"passwordPlaceholder": "Your password",
+		"optional": "Login is optional. The app works without an account.",
+		"orContinue": "or continue without an account",
+		"skip": "Continue without login",
+		"or": "or",
+		"nameRequired": "Name is required",
+		"nameTooShort": "Name must be at least 2 characters",
+		"emailRequired": "Email is required",
+		"emailInvalid": "Invalid email",
+		"passwordRequired": "Password is required",
+		"passwordTooShort": "Password must be at least 8 characters",
+		"passwordWeak": "Very weak",
+		"passwordFair": "Weak",
+		"passwordGood": "Good",
+		"passwordStrong": "Strong",
+		"passwordVeryStrong": "Very strong",
+		"githubUnavailable": "GitHub OAuth unavailable",
+		"fixErrors": "Fix the errors above",
+		"loginSuccess": "Logged in successfully!",
+		"signupSuccess": "Account created successfully!",
+		"invalidCredentials": "Invalid email or password",
+		"signupError": "Error creating account",
+		"connectionError": "Connection error. Please try again."
+	},
+	"language": {
+		"info": "Language saved automatically",
+		"changed": "Language changed to: {name}"
+	},
+	"shortcuts": {
+		"title": "Keyboard Shortcuts",
+		"subtitle": "Quickly access main functions",
+		"togglePlay": "Start/Pause",
+		"reset": "Reset Timer",
+		"nextChallenge": "Next Challenge",
+		"focusMode": "Focus Mode",
+		"showHelp": "Show Help",
+		"close": "Close",
+		"note": "Shortcuts disabled when an input is focused"
+	},
 	"app": {
 		"title": "Pomodoro Move.it",
 		"description": "Pomodoro timer with health and wellness challenges"
@@ -10,13 +60,27 @@
 	},
 	"timer": {
 		"startCycle": "Start cycle",
+		"startAfterBreak": "Start Next Cycle",
+		"startAfterLongBreak": "Start Next Cycle",
 		"abandonCycle": "Abandon cycle",
 		"cycleCompleted": "Cycle completed",
 		"pomodoroTime": "Pomodoro Time",
 		"customTime": "Custom time (minutes)",
 		"apply": "Apply",
 		"resetTimer": "Reset Timer",
-		"minutes": "{minutes}min"
+		"minutes": "{minutes}min",
+		"breakSettings": "Break Settings",
+		"shortBreak": "Short break",
+		"longBreak": "Long break",
+		"cyclesBeforeLong": "Cycles before long break",
+		"applyBreakSettings": "Apply Break Settings",
+		"presetApplied": "Time applied: {minutes}min",
+		"customTimeApplied": "Custom time applied: {minutes}min",
+		"breakSettingsApplied": "Break settings applied: {settings}",
+		"timerReset": "Timer reset",
+		"cycleStarted": "Cycle started! Full focus! 🎯",
+		"cyclePaused": "Cycle paused",
+		"nextCycleStarted": "Next cycle started! Let's go! 💪"
 	},
 	"profile": {
 		"editProfile": "Edit Profile",
@@ -33,17 +97,46 @@
 		"save": "Save",
 		"cancel": "Cancel",
 		"edit": "Edit profile",
-		"defaultName": "User"
+		"defaultName": "User",
+		"notifications": "Notifications",
+		"browserNotifications": "Browser notifications",
+		"enabled": "Enabled",
+		"enable": "Enable",
+		"pushNotifications": "Push notifications",
+		"pushNotSupported": "Push notifications not supported",
+		"notificationsNotSupported": "Notifications not supported",
+		"notificationsGranted": "Already enabled. To disable, use browser settings.",
+		"notificationsDenied": "Blocked. Change in browser settings.",
+		"pushSubscribed": "Push enabled successfully!",
+		"pushUnsubscribed": "Push disabled",
+		"githubSaved": "GitHub connected: {username}",
+		"githubRemoved": "GitHub disconnected",
+		"profileSaved": "Profile saved successfully!",
+		"notificationsEnabled": "Notifications enabled!",
+		"pushSubscriptionFailed": "Failed to enable push",
+		"xp": "XP",
+		"completed": "Completed",
+		"streak": "Streak"
+	},
+	"streak": {
+		"current": "{days}d",
+		"best": "Best: {days} days"
 	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",
+		"totalCompleted": "Total completed",
 		"allChallenges": "All Challenges",
 		"available": "{count} available",
 		"challenges": "challenges",
 		"failed": "Failed",
 		"completed": "Completed",
 		"startCycle": "Start a new cycle to receive new challenges",
-		"levelUp": "Increase your level by completing challenges"
+		"levelUp": "Increase your level by completing challenges",
+		"recentTitle": "Recent Challenges",
+		"noRecent": "No challenges yet",
+		"skipped": "skipped",
+		"modalTitle": "New Challenge!",
+		"modalSkip": "Skip Challenge"
 	},
 	"challengeTypes": {
 		"body": "Stretching",
@@ -71,6 +164,20 @@
 		"startForChallenges": "Start a cycle to receive challenges",
 		"allowPopups": "Allow popups to use the floating window"
 	},
+	"focusMode": {
+		"exit": "Exit focus mode",
+		"entered": "Focus mode activated! Full focus! 🎯",
+		"exited": "Focus mode deactivated"
+	},
+	"share": {
+		"button": "Share",
+		"opened": "Share card opened"
+	},
+	"shortcuts": {
+		"timerReseted": "Timer reset (shortcut R)",
+		"newChallenge": "New challenge: {desc}",
+		"help": "Shortcuts: Space (play/pause), R (reset), N (next challenge), F (focus), ? (help)"
+	},
 	"spotify": {
 		"player": "Spotify Player",
 		"playlistLink": "Playlist link...",
@@ -78,7 +185,10 @@
 		"activePlaylist": "Active playlist",
 		"remove": "Remove",
 		"loginInfo": "To listen to full songs, log in to your Spotify account in the browser",
-		"pasteLink": "Paste a Spotify link"
+		"pasteLink": "Paste a Spotify link",
+		"invalidUrl": "Invalid Spotify URL",
+		"playlistSaved": "Playlist saved! 🎵",
+		"playlistRemoved": "Playlist removed"
 	},
 	"experience": {
 		"xp": "xp"
@@ -88,6 +198,18 @@
 	},
 	"notifications": {
 		"cycleCompleted": "Cycle completed!",
-		"newChallenge": "New challenge available!"
+		"newChallenge": "New challenge available!",
+		"longBreak": "Long Break Time!",
+		"longBreakDesc": "You completed {cycles} cycles. Rest for {minutes} minutes.",
+		"shortBreak": "Break Time!",
+		"shortBreakDesc": "Rest for {minutes} minutes before the next cycle."
+	},
+	"theme": {
+		"autoDarkMode": "Automatic dark mode",
+		"autoDarkModeDesc": "Follows system preference",
+		"themeChanged": "Theme changed to: {theme}",
+		"autoDarkEnabled": "enabled",
+		"autoDarkDisabled": "disabled",
+		"autoDarkToggled": "Auto mode {status}"
 	}
 }

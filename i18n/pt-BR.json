@@ -1,4 +1,54 @@
 {
+	"auth": {
+		"welcome": "Bem-vindo",
+		"subtitle": "Entre para sincronizar seu progresso",
+		"loginWithGitHub": "Continuar com GitHub",
+		"emailPassword": "Entrar com E-mail e Senha",
+		"signIn": "Entrar",
+		"signUp": "Criar Conta",
+		"name": "Nome",
+		"namePlaceholder": "Seu nome completo",
+		"email": "E-mail",
+		"password": "Senha",
+		"passwordPlaceholder": "Sua senha",
+		"optional": "Login é opcional. O app funciona sem conta.",
+		"orContinue": "ou continue sem conta",
+		"skip": "Continuar sem login",
+		"or": "ou",
+		"nameRequired": "Nome é obrigatório",
+		"nameTooShort": "Nome deve ter pelo menos 2 caracteres",
+		"emailRequired": "E-mail é obrigatório",
+		"emailInvalid": "E-mail inválido",
+		"passwordRequired": "Senha é obrigatória",
+		"passwordTooShort": "Senha deve ter pelo menos 8 caracteres",
+		"passwordWeak": "Muito fraca",
+		"passwordFair": "Fraca",
+		"passwordGood": "Boa",
+		"passwordStrong": "Forte",
+		"passwordVeryStrong": "Muito forte",
+		"githubUnavailable": "GitHub OAuth não disponível",
+		"fixErrors": "Corrija os erros acima",
+		"loginSuccess": "Login realizado com sucesso!",
+		"signupSuccess": "Conta criada com sucesso!",
+		"invalidCredentials": "E-mail ou senha inválidos",
+		"signupError": "Erro ao criar conta",
+		"connectionError": "Erro de conexão. Tente novamente."
+	},
+	"language": {
+		"info": "Idioma salvo automaticamente",
+		"changed": "Idioma alterado para: {name}"
+	},
+	"shortcuts": {
+		"title": "Atalhos de Teclado",
+		"subtitle": "Acesse rapidamente as principais funções",
+		"togglePlay": "Iniciar/Pausar",
+		"reset": "Resetar Timer",
+		"nextChallenge": "Próximo Desafio",
+		"focusMode": "Modo Foco",
+		"showHelp": "Mostrar Ajuda",
+		"close": "Fechar",
+		"note": "Atalhos desabilitados quando um input está focado"
+	},
 	"app": {
 		"title": "Pomodoro Move.it",
 		"description": "Pomodoro timer com desafios de saude e bem-estar"
@@ -10,13 +60,27 @@
 	},
 	"timer": {
 		"startCycle": "Iniciar ciclo",
+		"startAfterBreak": "Iniciar Próximo Ciclo",
+		"startAfterLongBreak": "Iniciar Próximo Ciclo",
 		"abandonCycle": "Abandonar ciclo",
 		"cycleCompleted": "Ciclo completado",
 		"pomodoroTime": "Tempo do Pomodoro",
 		"customTime": "Tempo personalizado (minutos)",
 		"apply": "Aplicar",
 		"resetTimer": "Resetar Timer",
-		"minutes": "{minutes}min"
+		"minutes": "{minutes}min",
+		"breakSettings": "Configurações de Pausa",
+		"shortBreak": "Pausa curta",
+		"longBreak": "Pausa longa",
+		"cyclesBeforeLong": "Ciclos antes da pausa longa",
+		"applyBreakSettings": "Aplicar Configurações de Pausa",
+		"presetApplied": "Tempo aplicado: {minutes}min",
+		"customTimeApplied": "Tempo personalizado aplicado: {minutes}min",
+		"breakSettingsApplied": "Configurações de pausa aplicadas: {settings}",
+		"timerReset": "Timer resetado",
+		"cycleStarted": "Ciclo iniciado! Foco total! 🎯",
+		"cyclePaused": "Ciclo pausado",
+		"nextCycleStarted": "Próximo ciclo iniciado! Vamos lá! 💪"
 	},
 	"profile": {
 		"editProfile": "Editar Perfil",
@@ -33,17 +97,46 @@
 		"save": "Salvar",
 		"cancel": "Cancelar",
 		"edit": "Editar perfil",
-		"defaultName": "Usuario"
+		"defaultName": "Usuario",
+		"notifications": "Notificações",
+		"browserNotifications": "Notificações do navegador",
+		"enabled": "Ativado",
+		"enable": "Ativar",
+		"pushNotifications": "Notificações push",
+		"pushNotSupported": "Notificações push não suportadas",
+		"notificationsNotSupported": "Notificações não suportadas",
+		"notificationsGranted": "Já ativadas. Para desativar, use as configurações do navegador.",
+		"notificationsDenied": "Bloqueadas. Altere nas configurações do navegador.",
+		"pushSubscribed": "Push ativado com sucesso!",
+		"pushUnsubscribed": "Push desativado",
+		"githubSaved": "GitHub conectado: {username}",
+		"githubRemoved": "GitHub desconectado",
+		"profileSaved": "Perfil salvo com sucesso!",
+		"notificationsEnabled": "Notificações ativadas!",
+		"pushSubscriptionFailed": "Falha ao ativar push",
+		"xp": "XP",
+		"completed": "Completos",
+		"streak": "Sequência"
+	},
+	"streak": {
+		"current": "{days}d",
+		"best": "Melhor: {days} dias"
 	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
+		"totalCompleted": "Total completado",
 		"allChallenges": "Todos os Challenges",
 		"available": "{count} disponiveis",
 		"challenges": "challenges",
 		"failed": "Falhou",
 		"completed": "Completou",
 		"startCycle": "Inicie um ciclo para receber novos desafios",
-		"levelUp": "Aumente seu nivel completando os desafios"
+		"levelUp": "Aumente seu nivel completando os desafios",
+		"recentTitle": "Desafios Recentes",
+		"noRecent": "Nenhum desafio ainda",
+		"skipped": "pulou",
+		"modalTitle": "Novo Desafio!",
+		"modalSkip": "Pular Desafio"
 	},
 	"challengeTypes": {
 		"body": "Alongamento",
@@ -71,6 +164,20 @@
 		"startForChallenges": "Inicie um ciclo para receber desafios",
 		"allowPopups": "Permita popups para usar a janela flutuante"
 	},
+	"focusMode": {
+		"exit": "Sair do modo foco",
+		"entered": "Modo foco ativado! Foco total! 🎯",
+		"exited": "Modo foco desativado"
+	},
+	"share": {
+		"button": "Compartilhar",
+		"opened": "Card de compartilhamento aberto"
+	},
+	"shortcuts": {
+		"timerReseted": "Timer resetado (atalho R)",
+		"newChallenge": "Novo desafio: {desc}",
+		"help": "Atalhos: Espaco (play/pause), R (reset), N (proximo desafio), F (foco), ? (ajuda)"
+	},
 	"spotify": {
 		"player": "Spotify Player",
 		"playlistLink": "Link da playlist...",
@@ -78,16 +185,31 @@
 		"activePlaylist": "Playlist ativa",
 		"remove": "Remover",
 		"loginInfo": "Para ouvir as musicas completas, faca login na sua conta do Spotify no navegador",
-		"pasteLink": "Cole um link do Spotify"
+		"pasteLink": "Cole um link do Spotify",
+		"invalidUrl": "URL do Spotify inválida",
+		"playlistSaved": "Playlist salva! 🎵",
+		"playlistRemoved": "Playlist removida"
 	},
 	"experience": {
 		"xp": "xp"
+	},
+	"theme": {
+		"autoDarkMode": "Modo escuro automático",
+		"autoDarkModeDesc": "Segue preferencia do sistema",
+		"themeChanged": "Tema alterado para: {theme}",
+		"autoDarkEnabled": "ativado",
+		"autoDarkDisabled": "desativado",
+		"autoDarkToggled": "Modo automatico {status}"
 	},
 	"footer": {
 		"madeBy": "Feito por"
 	},
 	"notifications": {
 		"cycleCompleted": "Ciclo completado!",
-		"newChallenge": "Novo desafio disponivel!"
+		"newChallenge": "Novo desafio disponivel!",
+		"longBreak": "Hora da Pausa Longa!",
+		"longBreakDesc": "Você completou {cycles} ciclos. Descanse {minutes} minutos.",
+		"shortBreak": "Hora da Pausa!",
+		"shortBreakDesc": "Descanse {minutes} minutos antes do próximo ciclo."
 	}
 }

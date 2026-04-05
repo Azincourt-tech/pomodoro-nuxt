@@ -4,46 +4,69 @@
     class="modal"
     :class="{ 'modal-open': isOpen }"
   >
-    <div class="modal-box max-w-md">
-      <h3 class="text-lg font-bold font-rajdhani mb-4">
-        {{ $t('share.title') }}
-      </h3>
+    <Transition
+      enter-active-class="transition-all duration-300 ease-out"
+      enter-from-class="opacity-0 scale-95"
+      enter-to-class="opacity-100 scale-100"
+      leave-active-class="transition-all duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100"
+      leave-to-class="opacity-0 scale-95"
+    >
+      <div v-if="isOpen" class="modal-box max-w-md p-0 overflow-hidden relative bg-gradient-to-br from-base-100 via-base-100/95 to-base-200/80 backdrop-blur-xl border border-primary/25 shadow-2xl rounded-2xl">
+        <!-- Decorative background -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div class="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-primary/15 to-secondary/10 rounded-full blur-3xl animate-pulse" />
+          <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-secondary/15 to-primary/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s" />
+        </div>
 
-      <!-- Canvas for share card -->
-      <div class="flex justify-center mb-4">
-        <canvas
-          ref="canvasRef"
-          width="600"
-          height="400"
-          class="rounded-xl max-w-full"
-        />
-      </div>
+        <!-- Header -->
+        <div class="relative z-10 bg-gradient-to-r from-primary to-secondary p-5 flex items-center justify-between shadow-lg">
+          <div class="flex items-center gap-3">
+            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+              <Icon name="lucide:share-2" class="w-6 h-6 text-white drop-shadow-md" />
+            </div>
+            <h3 class="text-xl font-black text-white">{{ $t('share.title') }}</h3>
+          </div>
+          <button
+            class="btn btn-sm btn-circle btn-ghost text-white hover:bg-white/20 transition-all"
+            @click="close"
+          >
+            <Icon name="lucide:x" class="w-5 h-5" />
+          </button>
+        </div>
 
-      <div class="flex gap-3">
-        <button
-          v-if="canShare"
-          class="btn btn-primary flex-1"
-          @click="shareNative"
-        >
-          {{ $t('share.button') }}
-        </button>
-        <button
-          class="btn btn-outline flex-1"
-          @click="downloadImage"
-        >
-          {{ $t('share.download') }}
-        </button>
-      </div>
+        <!-- Canvas for share card -->
+        <div class="relative z-10 p-5">
+          <div class="bg-gradient-to-br from-base-200/60 to-base-300/40 rounded-2xl border border-base-300/30 p-4 shadow-inner">
+            <canvas
+              ref="canvasRef"
+              width="600"
+              height="400"
+              class="rounded-xl max-w-full shadow-lg"
+            />
+          </div>
 
-      <div class="modal-action">
-        <button
-          class="btn btn-sm"
-          @click="close"
-        >
-          {{ $t('shortcuts.close') }}
-        </button>
+          <!-- Action buttons -->
+          <div class="flex gap-3 mt-4">
+            <button
+              v-if="canShare"
+              class="btn btn-primary btn-sm flex-nowrap gap-1.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+              @click="shareNative"
+            >
+              <Icon name="lucide:share" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span class="font-semibold text-xs whitespace-nowrap">{{ $t('share.button', 'Compartilhar') }}</span>
+            </button>
+            <button
+              class="btn btn-outline btn-sm flex-nowrap gap-1.5 hover:bg-base-200/50 hover:border-primary/40 transition-all duration-300 hover:scale-105 group"
+              @click="downloadImage"
+            >
+              <Icon name="lucide:download" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span class="font-semibold text-xs whitespace-nowrap">{{ $t('share.download', 'Baixar') }}</span>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </Transition>
     <form
       method="dialog"
       class="modal-backdrop"
@@ -93,80 +116,153 @@ function drawCard() {
   const w = canvas.width
   const h = canvas.height
 
-  // Background gradient
-  const gradient = ctx.createLinearGradient(0, 0, w, h)
+  // Background gradient - vibrant purple/indigo
+  const gradient = ctx.createLinearGradient(0, 0, 0, h)
   gradient.addColorStop(0, '#1e1b4b')
-  gradient.addColorStop(1, '#312e81')
+  gradient.addColorStop(0.5, '#312e81')
+  gradient.addColorStop(1, '#3730a3')
   ctx.fillStyle = gradient
   ctx.beginPath()
-  ctx.roundRect(0, 0, w, h, 16)
+  
+  // Rounded corners
+  const radius = 20
+  ctx.moveTo(radius, 0)
+  ctx.lineTo(w - radius, 0)
+  ctx.quadraticCurveTo(w, 0, w, radius)
+  ctx.lineTo(w, h - radius)
+  ctx.quadraticCurveTo(w, h, w - radius, h)
+  ctx.lineTo(radius, h)
+  ctx.quadraticCurveTo(0, h, 0, h - radius)
+  ctx.lineTo(0, radius)
+  ctx.quadraticCurveTo(0, 0, radius, 0)
+  ctx.closePath()
   ctx.fill()
 
-  // App title
+  // Decorative circles
+  ctx.fillStyle = 'rgba(99, 102, 241, 0.1)'
+  ctx.beginPath()
+  ctx.arc(w - 50, 50, 40, 0, Math.PI * 2)
+  ctx.fill()
+  
+  ctx.fillStyle = 'rgba(139, 92, 246, 0.08)'
+  ctx.beginPath()
+  ctx.arc(50, h - 50, 60, 0, Math.PI * 2)
+  ctx.fill()
+
+  // App title with glow - increased top padding
+  ctx.shadowColor = 'rgba(99, 102, 241, 0.5)'
+  ctx.shadowBlur = 10
   ctx.fillStyle = '#e0e7ff'
-  ctx.font = 'bold 24px Inter, sans-serif'
-  ctx.fillText('Pomodoro Move.it', 30, 50)
+  ctx.font = 'bold 26px Inter, sans-serif'
+  ctx.textAlign = 'left'
+  ctx.fillText('Pomodoro Move.it', 40, 55)
+  ctx.shadowBlur = 0
 
   // User name
   ctx.fillStyle = '#a5b4fc'
-  ctx.font = '16px Inter, sans-serif'
-  ctx.fillText(props.stats.userName, 30, 78)
+  ctx.font = 'bold 15px Inter, sans-serif'
+  ctx.fillText(`@${props.stats.userName}`, 40, 82)
 
-  // Divider
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)'
+  // Divider with gradient
+  const divGradient = ctx.createLinearGradient(30, 0, w - 30, 0)
+  divGradient.addColorStop(0, 'rgba(99, 102, 241, 0)')
+  divGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.4)')
+  divGradient.addColorStop(1, 'rgba(99, 102, 241, 0)')
+  ctx.strokeStyle = divGradient
+  ctx.lineWidth = 2
   ctx.beginPath()
-  ctx.moveTo(30, 100)
-  ctx.lineTo(w - 30, 100)
+  ctx.moveTo(30, 95)
+  ctx.lineTo(w - 30, 95)
   ctx.stroke()
 
-  // Stats
+  // Stats in grid
   const statsItems = [
-    { label: t('share.level'), value: `${props.stats.level}`, color: '#fbbf24' },
-    { label: t('share.xp'), value: `${props.stats.xp}`, color: '#34d399' },
-    { label: t('share.challenges'), value: `${props.stats.completedChallenges}`, color: '#60a5fa' },
-    { label: t('share.streak'), value: `${props.stats.streakCurrent}d`, color: '#f87171' },
+    { label: t('share.level'), value: `${props.stats.level}`, color: '#fbbf24', icon: '⭐' },
+    { label: t('share.xp'), value: `${props.stats.xp}`, color: '#34d399', icon: '✨' },
+    { label: t('share.challenges'), value: `${props.stats.completedChallenges}`, color: '#60a5fa', icon: '🎯' },
+    { label: t('share.streak'), value: `${props.stats.streakCurrent}d`, color: '#f87171', icon: '🔥' },
   ]
 
   const colWidth = (w - 60) / 4
   statsItems.forEach((item, i) => {
     const x = 30 + i * colWidth + colWidth / 2
 
-    ctx.fillStyle = item.color
-    ctx.font = 'bold 32px Rajdhani, sans-serif'
+    // Icon
+    ctx.font = '20px sans-serif'
     ctx.textAlign = 'center'
-    ctx.fillText(item.value, x, 160)
+    ctx.fillText(item.icon, x, 145)
 
+    // Value
+    ctx.fillStyle = item.color
+    ctx.shadowColor = item.color
+    ctx.shadowBlur = 15
+    ctx.font = 'bold 36px Rajdhani, sans-serif'
+    ctx.fillText(item.value, x, 185)
+    ctx.shadowBlur = 0
+
+    // Label
     ctx.fillStyle = '#94a3b8'
-    ctx.font = '12px Inter, sans-serif'
-    ctx.fillText(item.label, x, 185)
+    ctx.font = '11px Inter, sans-serif'
+    ctx.fillText(item.label.toUpperCase(), x, 210)
   })
 
   ctx.textAlign = 'left'
 
-  // Bottom section
-  ctx.fillStyle = 'rgba(255,255,255,0.05)'
+  // Bottom section with glass effect
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
+  ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.roundRect(20, 220, w - 40, 150, 12)
+  const bottomRadius = 12
+  const bx = 20, by = 235, bw = w - 40, bh = 140
+  ctx.moveTo(bx + bottomRadius, by)
+  ctx.lineTo(bx + bw - bottomRadius, by)
+  ctx.quadraticCurveTo(bx + bw, by, bx + bw, by + bottomRadius)
+  ctx.lineTo(bx + bw, by + bh - bottomRadius)
+  ctx.quadraticCurveTo(bx + bw, by + bh, bx + bw - bottomRadius, by + bh)
+  ctx.lineTo(bx + bottomRadius, by + bh)
+  ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - bottomRadius)
+  ctx.lineTo(bx, by + bottomRadius)
+  ctx.quadraticCurveTo(bx, by, bx + bottomRadius, by)
+  ctx.closePath()
   ctx.fill()
+  ctx.stroke()
 
   // Summary text
-  ctx.fillStyle = '#e2e8f0'
-  ctx.font = '16px Inter, sans-serif'
-  ctx.fillText(`${t('share.totalSessions')}: ${props.stats.totalSessions}`, 40, 260)
-  ctx.fillText(`${t('share.focusedTime')}: ${props.stats.totalTime} ${t('share.minutes')}`, 40, 290)
-  ctx.fillText(`${t('share.bestStreak')}: ${props.stats.streakBest} ${t('share.days')}`, 40, 320)
+  const summaryItems = [
+    { label: t('share.totalSessions'), value: props.stats.totalSessions, icon: '📅' },
+    { label: t('share.focusedTime'), value: `${props.stats.totalTime} ${t('share.minutes')}`, icon: '⏱️' },
+    { label: t('share.bestStreak'), value: `${props.stats.streakBest} ${t('share.days')}`, icon: '🏆' },
+  ]
+
+  summaryItems.forEach((item, i) => {
+    const y = 275 + i * 35
+    
+    ctx.font = '18px sans-serif'
+    ctx.textAlign = 'left'
+    ctx.fillText(item.icon, 35, y)
+    
+    ctx.fillStyle = '#cbd5e1'
+    ctx.font = '14px Inter, sans-serif'
+    ctx.fillText(`${item.label}:`, 60, y)
+    
+    ctx.fillStyle = '#f1f5f9'
+    ctx.font = 'bold 16px Inter, sans-serif'
+    ctx.fillText(`${item.value}`, 180, y)
+  })
 
   // Fire emoji for streak
   if (props.stats.streakCurrent >= 3) {
-    ctx.font = '28px sans-serif'
+    ctx.font = '32px sans-serif'
     const fireCount = props.stats.streakCurrent >= 30 ? 3 : props.stats.streakCurrent >= 7 ? 2 : 1
-    ctx.fillText('\u{1F525}'.repeat(fireCount), w - 120, 265)
+    ctx.fillText('\u{1F525}'.repeat(fireCount), w - 100, 275)
   }
 
   // Bottom branding
   ctx.fillStyle = '#64748b'
   ctx.font = '11px Inter, sans-serif'
-  ctx.fillText('pomodoro-move.it', 40, h - 25)
+  ctx.textAlign = 'center'
+  ctx.fillText('pomodoro-move.it', w / 2, h - 20)
 }
 
 async function shareNative() {
@@ -196,7 +292,7 @@ function downloadImage() {
   if (!canvas) return
 
   const link = document.createElement('a')
-  link.download = 'pomodoro-stats.png'
+  link.download = `pomodoro-stats-${Date.now()}.png`
   link.href = canvas.toDataURL('image/png')
   link.click()
 }
