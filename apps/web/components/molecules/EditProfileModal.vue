@@ -100,20 +100,22 @@
 
         <!-- Footer Actions -->
         <div class="relative z-10 modal-action p-5 bg-gradient-to-r from-base-200/60 via-base-200/40 to-base-300/30 border-t border-base-300/30">
-          <button
-            class="btn btn-primary flex-1 gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-            @click="save"
-          >
-            <Icon name="lucide:check" class="w-5 h-5 group-hover:scale-110 transition-transform" />
-            <span class="font-semibold">{{ $t('profile.save') }}</span>
-          </button>
-          <button
-            class="btn btn-ghost gap-2 hover:bg-base-200/50 transition-all duration-300"
-            @click="close"
-          >
-            <Icon name="lucide:x" class="w-4 h-4" />
-            <span class="font-medium">{{ $t('profile.cancel') }}</span>
-          </button>
+          <div class="flex gap-3 w-full">
+            <button
+              class="btn btn-primary flex-[2] gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+              @click="save"
+            >
+              <Icon name="lucide:check" class="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span class="font-semibold">{{ $t('profile.save') }}</span>
+            </button>
+            <button
+              class="btn btn-ghost flex-1 gap-2 hover:bg-base-200/50 transition-all duration-300"
+              @click="close"
+            >
+              <Icon name="lucide:x" class="w-4 h-4" />
+              <span class="font-medium">{{ $t('profile.cancel') }}</span>
+            </button>
+          </div>
         </div>
       </div>
     </Transition>
