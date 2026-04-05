@@ -23,7 +23,11 @@
 		"shortBreak": "Short break",
 		"longBreak": "Long break",
 		"cyclesBeforeLong": "Cycles before long break",
-		"applyBreakSettings": "Apply Break Settings"
+		"applyBreakSettings": "Apply Break Settings",
+		"presetApplied": "Time applied: {minutes}min",
+		"customTimeApplied": "Custom time applied: {minutes}min",
+		"breakSettingsApplied": "Break settings applied: {settings}",
+		"timerReset": "Timer reset"
 	},
 	"profile": {
 		"editProfile": "Edit Profile",
@@ -51,7 +55,12 @@
 		"notificationsGranted": "Notifications are already enabled. To disable, change in browser settings.",
 		"notificationsDenied": "Notifications were blocked. To enable, change in browser settings.",
 		"pushSubscribed": "Push notifications enabled successfully!",
-		"pushUnsubscribed": "Push notifications disabled"
+		"pushUnsubscribed": "Push notifications disabled",
+		"githubSaved": "GitHub connected: {username}",
+		"githubRemoved": "GitHub disconnected",
+		"profileSaved": "Profile saved successfully!",
+		"notificationsEnabled": "Notifications enabled!",
+		"pushSubscriptionFailed": "Failed to enable push notifications"
 	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",
@@ -113,6 +122,7 @@
 		"shortBreakDesc": "Rest for {minutes} minutes before the next cycle."
 	},
 	"theme": {
-		"autoDarkMode": "Automatic dark mode"
+		"autoDarkMode": "Automatic dark mode",
+		"themeChanged": "Theme changed to: {theme}"
 	}
 }

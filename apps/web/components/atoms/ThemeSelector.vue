@@ -28,7 +28,7 @@
           :class="
             theme.currentTheme === t ? 'bg-primary/10 ring-1 ring-primary/30' : 'hover:bg-base-200'
           "
-          @click="theme.setTheme(t)"
+          @click="handleThemeChange(t)"
         >
           <span
             class="w-6 h-6 rounded-full shrink-0 self-center shadow-sm ring-1 ring-base-300 transition-transform duration-200"
@@ -82,8 +82,11 @@
 
 <script setup lang="ts">
 import { useThemeStore, AVAILABLE_THEMES } from '~/stores/theme'
+import { useToast } from '~/composables/useToast'
 
+const { t } = useI18n()
 const theme = useThemeStore()
+const { success } = useToast()
 const themes = AVAILABLE_THEMES
 
 function previewColor(t: string) {
@@ -100,5 +103,10 @@ function previewColor(t: string) {
     lofi: 'bg-gray-300',
   }
   return map[t] || 'bg-gray-400'
+}
+
+function handleThemeChange(t: string) {
+  theme.setTheme(t as any)
+  success(t('theme.themeChanged', 'Tema alterado para: {theme}', { theme: t }))
 }
 </script>

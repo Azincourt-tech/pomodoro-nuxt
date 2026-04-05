@@ -23,7 +23,11 @@
 		"shortBreak": "Pausa curta",
 		"longBreak": "Pausa longa",
 		"cyclesBeforeLong": "Ciclos antes da pausa longa",
-		"applyBreakSettings": "Aplicar Configurações de Pausa"
+		"applyBreakSettings": "Aplicar Configurações de Pausa",
+		"presetApplied": "Tempo aplicado: {minutes}min",
+		"customTimeApplied": "Tempo personalizado aplicado: {minutes}min",
+		"breakSettingsApplied": "Configurações de pausa aplicadas: {settings}",
+		"timerReset": "Timer resetado"
 	},
 	"profile": {
 		"editProfile": "Editar Perfil",
@@ -51,7 +55,12 @@
 		"notificationsGranted": "Notificações já estão ativadas. Para desativar, altere nas configurações do navegador.",
 		"notificationsDenied": "Notificações foram bloqueadas. Para ativá-las, altere nas configurações do browser.",
 		"pushSubscribed": "Notificações push ativadas com sucesso!",
-		"pushUnsubscribed": "Notificações push desativadas"
+		"pushUnsubscribed": "Notificações push desativadas",
+		"githubSaved": "GitHub conectado: {username}",
+		"githubRemoved": "GitHub desconectado",
+		"profileSaved": "Perfil salvo com sucesso!",
+		"notificationsEnabled": "Notificações ativadas!",
+		"pushSubscriptionFailed": "Falha ao ativar notificações push"
 	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
@@ -102,7 +111,8 @@
 		"xp": "xp"
 	},
 	"theme": {
-		"autoDarkMode": "Modo escuro automático"
+		"autoDarkMode": "Modo escuro automático",
+		"themeChanged": "Tema alterado para: {theme}"
 	},
 	"footer": {
 		"madeBy": "Feito por"

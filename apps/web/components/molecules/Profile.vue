@@ -248,10 +248,12 @@ import { ref, computed, onMounted } from 'vue'
 import { useProfileStore } from '~/stores/profile'
 import { useChallengesStore } from '~/stores/challenges'
 import { usePushNotification } from '~/composables/usePushNotification'
+import { useToast } from '~/composables/useToast'
 
 const { t } = useI18n()
 const profile = useProfileStore()
 const challenges = useChallengesStore()
+const { success, info, error } = useToast()
 const { 
   isSupported: pushNotificationsSupported,
   permission: pushPermission,
@@ -292,12 +294,14 @@ function saveGithub() {
   if (githubInput.value.trim()) {
     profile.setGithubUser(githubInput.value.trim())
     nameInput.value = githubInput.value.trim()
+    success(t('profile.githubSaved', 'GitHub conectado: {username}', { username: githubInput.value.trim() }))
   }
 }
 
 function clearGithub() {
   profile.clearGithubUser()
   githubInput.value = ''
+  info(t('profile.githubRemoved', 'GitHub desconectado'))
 }
 
 function save() {
@@ -306,45 +310,47 @@ function save() {
     avatar: profile.profile.githubUsername ? '' : avatarInput.value,
   })
   profile.setEditing(false)
+  success(t('profile.profileSaved', 'Perfil salvo com sucesso!'))
 }
 
 async function toggleNotifications() {
   if (!('Notification' in window)) {
-    alert(t('profile.notificationsNotSupported', 'Notificações não suportadas neste navegador'))
+    error(t('profile.notificationsNotSupported', 'Notificações não suportadas neste navegador'))
     return
   }
 
   if (notificationPermission.value === 'granted') {
-    // Already granted, can't revoke via API
-    alert(t('profile.notificationsGranted', 'Notificações já estão ativadas. Para desativar, altere nas configurações do navegador.'))
+    info(t('profile.notificationsGranted', 'Notificações já estão ativadas. Para desativar, altere nas configurações do navegador.'))
   } else if (notificationPermission.value === 'denied') {
-    alert(t('profile.notificationsDenied', 'Notificações foram bloqueadas. Para ativá-las, altere nas configurações do navegador.'))
+    error(t('profile.notificationsDenied', 'Notificações foram bloqueadas. Para ativá-las, altere nas configurações do navegador.'))
   } else {
-    // Request permission
     const result = await Notification.requestPermission()
     notificationPermission.value = result
+    if (result === 'granted') {
+      success(t('profile.notificationsEnabled', 'Notificações ativadas!'))
+    }
   }
 }
 
 async function togglePushNotifications() {
   if (!pushNotificationsSupported.value) {
-    alert(t('profile.pushNotSupported', 'Notificações push não suportadas neste navegador'))
+    error(t('profile.pushNotSupported', 'Notificações push não suportadas neste navegador'))
     return
   }
 
   if (pushSubscribed.value) {
-    // Unsubscribe
-    const success = await unsubscribeFromPush()
-    if (success) {
-      alert(t('profile.pushUnsubscribed', 'Notificações push desativadas'))
+    const unsubscribed = await unsubscribeFromPush()
+    if (unsubscribed) {
+      success(t('profile.pushUnsubscribed', 'Notificações push desativadas'))
     }
   } else {
-    // Subscribe
     const granted = await requestPushPermission()
     if (granted) {
       const subscription = await subscribeToPush()
       if (subscription) {
-        alert(t('profile.pushSubscribed', 'Notificações push ativadas com sucesso!'))
+        success(t('profile.pushSubscribed', 'Notificações push ativadas com sucesso!'))
+      } else {
+        error(t('profile.pushSubscriptionFailed', 'Falha ao ativar notificações push'))
       }
     }
   }

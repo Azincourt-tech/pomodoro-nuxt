@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, computed } from 'vue'
+import { watch, computed, onMounted, onUnmounted } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
 import CountdownDigits from '~/components/atoms/CountdownDigits.vue'
 
@@ -63,36 +63,55 @@ const progress = computed(() => {
 })
 const dashOffset = computed(() => circumference * (1 - progress.value))
 
-let TIMEOUT_REFERENCE: ReturnType<typeof setTimeout>
+let INTERVAL_REFERENCE: ReturnType<typeof setInterval> | null = null
 
-function runCountdown(flag: boolean) {
-  if (countdown.isActive && flag) {
-    TIMEOUT_REFERENCE = setTimeout(() => countdown.setTime(countdown.time - 1), 1000)
+function startInterval() {
+  if (INTERVAL_REFERENCE) {
+    clearInterval(INTERVAL_REFERENCE)
   }
-  else {
-    clearTimeout(TIMEOUT_REFERENCE)
+  
+  INTERVAL_REFERENCE = setInterval(() => {
+    if (countdown.isActive && countdown.time > 0) {
+      countdown.setTime(countdown.time - 1)
+    } else if (countdown.time <= 0 && countdown.isActive) {
+      stopInterval()
+      countdown.setIsActive(false)
+      emit('completed')
+    }
+  }, 1000)
+}
+
+function stopInterval() {
+  if (INTERVAL_REFERENCE) {
+    clearInterval(INTERVAL_REFERENCE)
+    INTERVAL_REFERENCE = null
   }
 }
 
+onMounted(() => {
+  // Restart interval if timer was active
+  if (countdown.isActive) {
+    startInterval()
+  }
+})
+
+onUnmounted(() => {
+  // Don't stop the interval, keep it running
+  // The timer state is in the store, not the component
+})
+
 watch(
   () => countdown.isActive,
-  (v) => {
-    if (v) {
-      runCountdown(true)
+  (isActive) => {
+    if (isActive) {
+      startInterval()
     } else {
-      clearTimeout(TIMEOUT_REFERENCE)
+      stopInterval()
     }
   },
 )
 
-watch(
-  () => countdown.time,
-  (v) => {
-    if (v > 0) runCountdown(true)
-    else if (v <= 0 && countdown.isActive) {
-      clearTimeout(TIMEOUT_REFERENCE)
-      emit('completed')
-    }
-  },
-)
+onUnmounted(() => {
+  stopInterval()
+})
 </script>

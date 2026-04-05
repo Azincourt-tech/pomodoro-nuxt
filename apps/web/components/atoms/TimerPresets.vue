@@ -149,8 +149,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
+import { useToast } from '~/composables/useToast'
 
+const { t } = useI18n()
 const countdown = useCountdownStore()
+const { success } = useToast()
 const customInput = ref<number | null>(null)
 const breakInput = ref(5)
 const longBreakInput = ref(15)
@@ -168,27 +171,41 @@ function selectPreset(minutes: number) {
   countdown.setCustomMinutes(minutes)
   countdown.setBreakMode(false)
   customInput.value = null
+  success(t('timer.presetApplied', 'Tempo aplicado: {minutes}min', { minutes }))
 }
 
 function applyCustom() {
   if (customInput.value && customInput.value > 0 && customInput.value <= 120) {
     countdown.setCustomMinutes(customInput.value)
     countdown.setBreakMode(false)
+    success(t('timer.customTimeApplied', 'Tempo personalizado aplicado: {minutes}min', { minutes: customInput.value }))
   }
 }
 
 function applyBreakSettings() {
+  let applied = []
+  
   if (breakInput.value > 0 && breakInput.value <= 30) {
     countdown.setBreakMinutes(breakInput.value)
+    applied.push(`${breakInput.value}min`)
   }
   if (longBreakInput.value > 0 && longBreakInput.value <= 60) {
     countdown.setLongBreakMinutes(longBreakInput.value)
+    applied.push(`${longBreakInput.value}min`)
   }
   if (cyclesInput.value > 0 && cyclesInput.value <= 10) {
     countdown.setLongBreakAfterCycles(cyclesInput.value)
+    applied.push(`${cyclesInput.value} ciclos`)
   }
+  
   if (!countdown.isActive) {
     countdown.setBreakMode(false)
+  }
+  
+  if (applied.length > 0) {
+    success(t('timer.breakSettingsApplied', 'Configurações de pausa aplicadas: {settings}', { 
+      settings: applied.join(', ') 
+    }))
   }
 }
 
@@ -197,5 +214,6 @@ function resetTimer() {
   countdown.setHasCompleted(false)
   countdown.resetCompletedCycles()
   countdown.resetTime()
+  success(t('timer.timerReset', 'Timer resetado'))
 }
 </script>
