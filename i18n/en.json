@@ -10,13 +10,20 @@
 	},
 	"timer": {
 		"startCycle": "Start cycle",
+		"startAfterBreak": "Start Next Cycle",
+		"startAfterLongBreak": "Start Next Cycle",
 		"abandonCycle": "Abandon cycle",
 		"cycleCompleted": "Cycle completed",
 		"pomodoroTime": "Pomodoro Time",
 		"customTime": "Custom time (minutes)",
 		"apply": "Apply",
 		"resetTimer": "Reset Timer",
-		"minutes": "{minutes}min"
+		"minutes": "{minutes}min",
+		"breakSettings": "Break Settings",
+		"shortBreak": "Short break",
+		"longBreak": "Long break",
+		"cyclesBeforeLong": "Cycles before long break",
+		"applyBreakSettings": "Apply Break Settings"
 	},
 	"profile": {
 		"editProfile": "Edit Profile",
@@ -33,7 +40,18 @@
 		"save": "Save",
 		"cancel": "Cancel",
 		"edit": "Edit profile",
-		"defaultName": "User"
+		"defaultName": "User",
+		"notifications": "Notifications",
+		"browserNotifications": "Browser notifications",
+		"enabled": "Enabled",
+		"enable": "Enable",
+		"pushNotifications": "Push notifications",
+		"pushNotSupported": "Push notifications not supported in this browser",
+		"notificationsNotSupported": "Notifications not supported in this browser",
+		"notificationsGranted": "Notifications are already enabled. To disable, change in browser settings.",
+		"notificationsDenied": "Notifications were blocked. To enable, change in browser settings.",
+		"pushSubscribed": "Push notifications enabled successfully!",
+		"pushUnsubscribed": "Push notifications disabled"
 	},
 	"challenges": {
 		"completedChallenges": "Completed challenges",
@@ -88,6 +106,13 @@
 	},
 	"notifications": {
 		"cycleCompleted": "Cycle completed!",
-		"newChallenge": "New challenge available!"
+		"newChallenge": "New challenge available!",
+		"longBreak": "Long Break Time!",
+		"longBreakDesc": "You completed {cycles} cycles. Rest for {minutes} minutes.",
+		"shortBreak": "Break Time!",
+		"shortBreakDesc": "Rest for {minutes} minutes before the next cycle."
+	},
+	"theme": {
+		"autoDarkMode": "Automatic dark mode"
 	}
 }

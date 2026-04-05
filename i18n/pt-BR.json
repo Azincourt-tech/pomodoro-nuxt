@@ -10,13 +10,20 @@
 	},
 	"timer": {
 		"startCycle": "Iniciar ciclo",
+		"startAfterBreak": "Iniciar Próximo Ciclo",
+		"startAfterLongBreak": "Iniciar Próximo Ciclo",
 		"abandonCycle": "Abandonar ciclo",
 		"cycleCompleted": "Ciclo completado",
 		"pomodoroTime": "Tempo do Pomodoro",
 		"customTime": "Tempo personalizado (minutos)",
 		"apply": "Aplicar",
 		"resetTimer": "Resetar Timer",
-		"minutes": "{minutes}min"
+		"minutes": "{minutes}min",
+		"breakSettings": "Configurações de Pausa",
+		"shortBreak": "Pausa curta",
+		"longBreak": "Pausa longa",
+		"cyclesBeforeLong": "Ciclos antes da pausa longa",
+		"applyBreakSettings": "Aplicar Configurações de Pausa"
 	},
 	"profile": {
 		"editProfile": "Editar Perfil",
@@ -33,7 +40,18 @@
 		"save": "Salvar",
 		"cancel": "Cancelar",
 		"edit": "Editar perfil",
-		"defaultName": "Usuario"
+		"defaultName": "Usuario",
+		"notifications": "Notificações",
+		"browserNotifications": "Notificações do navegador",
+		"enabled": "Ativado",
+		"enable": "Ativar",
+		"pushNotifications": "Notificações push",
+		"pushNotSupported": "Notificações push não suportadas neste navegador",
+		"notificationsNotSupported": "Notificações não suportadas neste navegador",
+		"notificationsGranted": "Notificações já estão ativadas. Para desativar, altere nas configurações do navegador.",
+		"notificationsDenied": "Notificações foram bloqueadas. Para ativá-las, altere nas configurações do browser.",
+		"pushSubscribed": "Notificações push ativadas com sucesso!",
+		"pushUnsubscribed": "Notificações push desativadas"
 	},
 	"challenges": {
 		"completedChallenges": "Desafios completados",
@@ -83,11 +101,18 @@
 	"experience": {
 		"xp": "xp"
 	},
+	"theme": {
+		"autoDarkMode": "Modo escuro automático"
+	},
 	"footer": {
 		"madeBy": "Feito por"
 	},
 	"notifications": {
 		"cycleCompleted": "Ciclo completado!",
-		"newChallenge": "Novo desafio disponivel!"
+		"newChallenge": "Novo desafio disponivel!",
+		"longBreak": "Hora da Pausa Longa!",
+		"longBreakDesc": "Você completou {cycles} ciclos. Descanse {minutes} minutos.",
+		"shortBreak": "Hora da Pausa!",
+		"shortBreakDesc": "Descanse {minutes} minutos antes do próximo ciclo."
 	}
 }

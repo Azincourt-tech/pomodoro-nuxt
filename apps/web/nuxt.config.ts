@@ -48,6 +48,9 @@ export default defineNuxtConfig({
       enabled: true,
       type: 'module',
     },
+    strategies: 'generateSW',
+    srcDir: 'public',
+    filename: 'sw-push.js',
   },
 
   app: {

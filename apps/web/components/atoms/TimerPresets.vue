@@ -3,7 +3,8 @@
     class="card bg-base-100 shadow-sm"
     v-bind="$attrs"
   >
-    <div class="card-body p-4 flex justify-between">
+    <div class="card-body p-4">
+      <!-- Pomodoro Timer Presets -->
       <div class="flex items-center gap-2 mb-3">
         <svg
           class="w-5 h-5 text-primary"
@@ -23,13 +24,13 @@
         </h3>
       </div>
 
-      <!-- Preset buttons - grid 3 cols with uniform gap -->
+      <!-- Preset buttons -->
       <div class="grid grid-cols-4 gap-2 mb-3">
         <button
           v-for="preset in presets"
           :key="preset"
           class="btn btn-sm"
-          :class="countdown.customMinutes === preset ? 'btn-primary' : 'btn-ghost'"
+          :class="countdown.customMinutes === preset && !countdown.isBreak ? 'btn-primary' : 'btn-ghost'"
           :disabled="countdown.isActive"
           @click="selectPreset(preset)"
         >
@@ -37,8 +38,8 @@
         </button>
       </div>
 
-      <!-- Custom input + Apply aligned -->
-      <div class="flex gap-2 items-end">
+      <!-- Custom input + Apply -->
+      <div class="flex gap-2 items-end mb-4">
         <div class="flex-1">
           <label class="label py-1">
             <span class="label-text text-xs">{{ $t('timer.customTime') }}</span>
@@ -63,11 +64,67 @@
         </button>
       </div>
 
-      <!-- Reset button aligned with grid -->
+      <!-- Break Settings -->
+      <div class="divider my-2">{{ $t('timer.breakSettings', 'Configurações de Pausa') }}</div>
+
+      <!-- Short break -->
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm">{{ $t('timer.shortBreak', 'Pausa curta') }}</span>
+        <div class="flex items-center gap-2">
+          <input
+            v-model.number="breakInput"
+            type="number"
+            min="1"
+            max="30"
+            class="input input-bordered input-sm w-20"
+          >
+          <span class="text-xs">{{ $t('timer.minutes', { minutes: '' }) }}</span>
+        </div>
+      </div>
+
+      <!-- Long break -->
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm">{{ $t('timer.longBreak', 'Pausa longa') }}</span>
+        <div class="flex items-center gap-2">
+          <input
+            v-model.number="longBreakInput"
+            type="number"
+            min="1"
+            max="60"
+            class="input input-bordered input-sm w-20"
+          >
+          <span class="text-xs">{{ $t('timer.minutes', { minutes: '' }) }}</span>
+        </div>
+      </div>
+
+      <!-- Cycles before long break -->
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm">{{ $t('timer.cyclesBeforeLong', 'Ciclos antes da pausa longa') }}</span>
+        <select
+          v-model.number="cyclesInput"
+          class="select select-bordered select-sm w-20"
+        >
+          <option :value="2">2</option>
+          <option :value="3">3</option>
+          <option :value="4">4</option>
+          <option :value="5">5</option>
+          <option :value="6">6</option>
+        </select>
+      </div>
+
+      <!-- Apply break settings -->
       <button
-        class="btn btn-sm mt-3 gap-1 w-full"
+        class="btn btn-sm btn-secondary w-full mb-4"
+        @click="applyBreakSettings"
+      >
+        {{ $t('timer.applyBreakSettings', 'Aplicar Configurações de Pausa') }}
+      </button>
+
+      <!-- Reset button -->
+      <button
+        class="btn btn-sm gap-1 w-full"
         :class="countdown.isActive ? 'btn-error' : 'btn-ghost btn-outline'"
-        :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60"
+        :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60 && !countdown.isBreak"
         @click="resetTimer"
       >
         <svg
@@ -90,28 +147,55 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useCountdownStore } from '~/stores/countdown'
 
 const countdown = useCountdownStore()
 const customInput = ref<number | null>(null)
+const breakInput = ref(5)
+const longBreakInput = ref(15)
+const cyclesInput = ref(4)
 
 const presets = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
 
+onMounted(() => {
+  breakInput.value = countdown.breakMinutes
+  longBreakInput.value = countdown.longBreakMinutes
+  cyclesInput.value = countdown.longBreakAfterCycles
+})
+
 function selectPreset(minutes: number) {
   countdown.setCustomMinutes(minutes)
+  countdown.setBreakMode(false)
   customInput.value = null
 }
 
 function applyCustom() {
   if (customInput.value && customInput.value > 0 && customInput.value <= 120) {
     countdown.setCustomMinutes(customInput.value)
+    countdown.setBreakMode(false)
+  }
+}
+
+function applyBreakSettings() {
+  if (breakInput.value > 0 && breakInput.value <= 30) {
+    countdown.setBreakMinutes(breakInput.value)
+  }
+  if (longBreakInput.value > 0 && longBreakInput.value <= 60) {
+    countdown.setLongBreakMinutes(longBreakInput.value)
+  }
+  if (cyclesInput.value > 0 && cyclesInput.value <= 10) {
+    countdown.setLongBreakAfterCycles(cyclesInput.value)
+  }
+  if (!countdown.isActive) {
+    countdown.setBreakMode(false)
   }
 }
 
 function resetTimer() {
   countdown.setIsActive(false)
   countdown.setHasCompleted(false)
+  countdown.resetCompletedCycles()
   countdown.resetTime()
 }
 </script>

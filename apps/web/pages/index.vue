@@ -47,13 +47,27 @@
 
           <!-- Controls -->
           <div class="flex items-center gap-3 mt-4">
+            <!-- During break - show "Start Next Cycle" button -->
+            <template v-if="countdown.isBreak">
+              <button
+                class="btn btn-success btn-md gap-2 px-8 shadow-lg shadow-success/20 hover:shadow-success/40 transition-shadow duration-300"
+                @click="startNextCycle"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                </svg>
+                {{ countdown.isLongBreak ? $t('timer.startAfterLongBreak', 'Iniciar Próximo Ciclo') : $t('timer.startAfterBreak', 'Iniciar Próximo Ciclo') }}
+              </button>
+            </template>
+            <!-- Cycle completed - show disabled message -->
             <button
-              v-if="countdown.hasCompleted"
+              v-else-if="countdown.hasCompleted"
               disabled
               class="btn btn-disabled btn-md px-8"
             >
               {{ $t('timer.cycleCompleted') }}
             </button>
+            <!-- Not active - show start button -->
             <template v-else-if="!countdown.isActive">
               <button
                 class="btn btn-primary btn-md gap-2 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
@@ -65,6 +79,7 @@
                 {{ $t('timer.startCycle') }}
               </button>
             </template>
+            <!-- Active - show pause button -->
             <template v-else>
               <button
                 class="btn btn-error btn-outline btn-md gap-2 px-8"
@@ -207,8 +222,65 @@ function setCountdownState(flag: boolean) {
 }
 
 function getNewChallenge() {
-  const index = getRandomNumber(0, challenges.challengesLength)
+  // Increment completed cycles for long break tracking
+  countdown.incrementCompletedCycles()
+
+  // Check if it's time for a long break
+  const shouldLongBreak = countdown.completedCycles > 0 && countdown.completedCycles % countdown.longBreakAfterCycles === 0
+  
+  if (shouldLongBreak) {
+    // Start long break
+    countdown.setHasCompleted(true)
+    countdown.setBreakMode(true, true)
+    countdown.setIsActive(false)
+    
+    playComplete()
+    
+    if (navigator.vibrate) {
+      navigator.vibrate([200, 100, 200])
+    }
+    
+    if ('Notification' in window && Notification.permission === 'granted') {
+      sendNotification(t('notifications.longBreak', 'Hora da Pausa Longa!'), {
+        body: t('notifications.longBreakDesc', 'Você completou {cycles} ciclos. Descanse {minutes} minutos.', {
+          cycles: countdown.longBreakAfterCycles,
+          minutes: countdown.longBreakMinutes
+        }),
+        icon: '/favicon.png',
+        tag: 'pomodoro-long-break',
+      })
+    }
+    return
+  }
+
+  // Start short break
   countdown.setHasCompleted(true)
+  countdown.setBreakMode(true, false)
+  countdown.setIsActive(false)
+  
+  playComplete()
+  
+  if (navigator.vibrate) {
+    navigator.vibrate([200])
+  }
+  
+  if ('Notification' in window && Notification.permission === 'granted') {
+    sendNotification(t('notifications.shortBreak', 'Hora da Pausa!'), {
+      body: t('notifications.shortBreakDesc', 'Descanse {minutes} minutos antes do próximo ciclo.', {
+        minutes: countdown.breakMinutes
+      }),
+      icon: '/favicon.png',
+      tag: 'pomodoro-short-break',
+    })
+  }
+}
+
+function startNextCycle() {
+  // Exit break mode and start next pomodoro
+  countdown.setBreakMode(false, false)
+  countdown.setHasCompleted(false)
+  
+  const index = getRandomNumber(0, challenges.challengesLength)
   challenges.setCurrentChallengeIndex(index)
 
   const challenge = challenges.currentChallenge
@@ -235,21 +307,10 @@ function getNewChallenge() {
   // Save progress
   profile.saveProgressToStorage(challenges.level, challenges.xp, challenges.completedChallenges)
 
-  playComplete()
-
-  // Vibrate on mobile
-  if (navigator.vibrate) {
-    navigator.vibrate([200])
-  }
-
-  // Notification
-  if ('Notification' in window && Notification.permission === 'granted') {
-    sendNotification(t('notifications.cycleCompleted'), {
-      body: challenge ? challenge.description : t('notifications.newChallenge'),
-      icon: '/favicon.png',
-      tag: 'pomodoro-challenge',
-    })
-  }
+  playStart()
+  countdown.setIsActive(true)
+  
+  sessionStartTime.value = Date.now()
 }
 
 function showShareCard() {

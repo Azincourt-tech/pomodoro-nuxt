@@ -49,6 +49,33 @@
           </svg>
         </button>
       </div>
+
+      <!-- Auto Dark Mode Toggle -->
+      <div class="divider my-2" />
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <svg
+            class="w-4 h-4 text-base-content/70"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+          <span class="text-sm">{{ $t('theme.autoDarkMode', 'Modo escuro automático') }}</span>
+        </div>
+        <input
+          type="checkbox"
+          class="toggle toggle-primary toggle-sm"
+          :checked="theme.autoDarkMode"
+          @change="theme.toggleAutoDarkMode"
+        />
+      </div>
     </div>
   </div>
 </template>
