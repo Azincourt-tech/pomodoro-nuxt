@@ -71,13 +71,11 @@
         </div>
       </div>
       
-      <!-- Percentage Label - Enhanced -->
+      <!-- Percentage Label - Transparente -->
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div class="px-2.5 py-0.5 bg-base-100/95 backdrop-blur-md rounded-full shadow-lg border border-base-300/40">
-          <span class="text-xs font-black text-base-content">
-            {{ challenges.currentXpPercentage }}%
-          </span>
-        </div>
+        <span class="text-xs font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          {{ challenges.currentXpPercentage }}%
+        </span>
       </div>
       
       <!-- XP to next level hint -->
