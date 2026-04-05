@@ -33,12 +33,11 @@
           class="stroke-base-300/30 dark:stroke-base-300/15 backdrop-blur-sm"
         />
         
-        <!-- Progress circle with gradient stroke effect -->
+        <!-- Progress circle with theme gradient -->
         <defs>
           <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#06b6d4" stop-opacity="1" />
-            <stop offset="50%" stop-color="#8b5cf6" stop-opacity="1" />
-            <stop offset="100%" stop-color="#ec4899" stop-opacity="1" />
+            <stop offset="0%" :stop-color="'hsl(var(--p))'" stop-opacity="1" />
+            <stop offset="100%" :stop-color="'hsl(var(--s))'" stop-opacity="1" />
           </linearGradient>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4" result="blur" />
@@ -57,7 +56,7 @@
           stroke="url(#timerGradient)"
           class="transition-all duration-1000 ease-linear"
           filter="url(#glow)"
-          :class="countdown.isActive ? 'drop-shadow-[0_0_12px_rgba(6,182,212,0.8)]' : ''"
+          :class="countdown.isActive ? 'drop-shadow-[0_0_10px_hsl(var(--p)/0.8)]' : ''"
         />
       </svg>
 
@@ -66,15 +65,15 @@
         <!-- Phase indicator -->
         <div 
           v-if="countdown.isBreak"
-          class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 to-pink-500/20 backdrop-blur-md border border-cyan-400/40 shadow-lg"
+          class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/5 backdrop-blur-md border border-secondary/40 shadow-lg"
         >
-          <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">🌴 {{ $t('countdown.breakTime', 'Pausa') }}</span>
+          <span class="text-xs font-bold text-secondary uppercase tracking-wider">🌴 {{ $t('countdown.breakTime', 'Pausa') }}</span>
         </div>
         <div 
           v-else
-          class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 backdrop-blur-md border border-violet-400/40 shadow-lg"
+          class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 to-primary/5 backdrop-blur-md border border-primary/40 shadow-lg"
         >
-          <span class="text-xs font-bold text-violet-400 uppercase tracking-wider">⏱️ {{ $t('countdown.focusTime', 'Foco') }}</span>
+          <span class="text-xs font-bold text-primary uppercase tracking-wider">⏱️ {{ $t('countdown.focusTime', 'Foco') }}</span>
         </div>
         
         <!-- Timer digits - cleaned up -->
@@ -85,7 +84,7 @@
           <CountdownDigits :digits="countdown.minutes" />
           <span 
             class="px-1 md:px-2 animate-pulse"
-            :class="countdown.isActive ? 'text-cyan-400' : 'text-base-content/50'"
+            :class="countdown.isActive ? 'text-primary' : 'text-base-content/50'"
           >:</span>
           <CountdownDigits :digits="countdown.seconds" />
         </div>
