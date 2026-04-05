@@ -5,18 +5,30 @@
     :class="{ 'modal-open': isOpen }"
     @close="$emit('close')"
   >
-    <div class="modal-box p-0 overflow-hidden border-2 border-primary/30 shadow-2xl animate-in zoom-in-95 fade-in-0 duration-300">
-      <header class="bg-gradient-to-r from-primary to-secondary p-5 flex justify-between items-center text-primary-content shadow-lg">
-        <h3 class="font-bold text-lg flex items-center gap-2">
-          <Icon name="lucide:zap" class="w-6 h-6" />
-          {{ $t('challenges.modalTitle', 'Novo Desafio!') }}
-        </h3>
+    <div class="modal-box p-0 overflow-hidden border-2 border-warning/30 shadow-2xl animate-in zoom-in-95 fade-in-0 duration-300 max-w-md">
+      <!-- Decorative background -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-warning/10 rounded-full blur-3xl animate-pulse" />
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-warning/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s" />
+      </div>
+
+      <!-- Header with gradient -->
+      <header class="relative z-10 bg-gradient-to-r from-warning via-warning/90 to-orange-500 p-6 flex justify-between items-center text-warning-content shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+            <Icon name="lucide:zap" class="w-6 h-6 drop-shadow-lg" />
+          </div>
+          <h3 class="font-bold text-xl">{{ $t('challenges.modalTitle', 'Novo Desafio!') }}</h3>
+        </div>
         <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost">✕</button>
+          <button class="btn btn-sm btn-circle btn-ghost btn-ghost text-warning-content hover:bg-white/20 transition-all">
+            <Icon name="lucide:x" class="w-5 h-5" />
+          </button>
         </form>
       </header>
 
-      <div class="p-6">
+      <!-- Challenge Component -->
+      <div class="relative z-10 p-6">
         <Challenge
           v-if="challenge"
           v-bind="challenge"
@@ -25,8 +37,13 @@
         />
       </div>
 
-      <div class="modal-action p-4 bg-base-200/50 mt-0">
-        <button class="btn btn-ghost btn-block" @click="onSkipChallenge">
+      <!-- Footer Actions -->
+      <div class="relative z-10 modal-action p-5 bg-gradient-to-r from-base-200/60 via-base-200/40 to-base-300/30 mt-0 border-t border-base-300/30">
+        <button 
+          class="btn btn-ghost btn-block gap-2 hover:bg-warning/10 hover:text-warning hover:border-warning/30 transition-all duration-300" 
+          @click="onSkipChallenge"
+        >
+          <Icon name="lucide:skip-forward" class="w-5 h-5" />
           {{ $t('challenges.modalSkip', 'Pular Desafio') }}
         </button>
       </div>
