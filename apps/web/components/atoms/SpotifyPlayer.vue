@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card bg-base-100 shadow-sm h-full"
+    class="card bg-base-100/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 h-full"
     v-bind="$attrs"
   >
     <div class="card-body p-3 flex flex-col gap-2 [&>p]:flex-none">
@@ -26,7 +26,7 @@
           v-model="inputUrl"
           type="url"
           :placeholder="$t('spotify.playlistLink')"
-          class="input input-bordered input-sm flex-1"
+          class="input input-bordered input-sm flex-1 focus:ring-2 focus:ring-primary/30 transition-all"
           @keyup.enter="saveUrl"
         >
         <button

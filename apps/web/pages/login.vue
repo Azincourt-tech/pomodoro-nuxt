@@ -7,7 +7,7 @@
     </div>
 
     <!-- Main Card -->
-    <div class="card bg-base-100/80 backdrop-blur-xl w-full max-w-md shadow-2xl border border-base-300/50 relative z-10">
+    <div class="card bg-base-100/85 backdrop-blur-2xl w-full max-w-md shadow-2xl border-2 border-primary/20 relative z-10">
       <div class="card-body p-8">
         <!-- Header -->
         <div class="text-center mb-8">
@@ -36,7 +36,7 @@
 
         <!-- GitHub OAuth - Primary CTA -->
         <button
-          class="btn btn-block gap-3 bg-[#24292e] hover:bg-[#2f363d] text-white border-none h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+          class="btn btn-block gap-3 bg-gradient-to-br from-[#24292e] to-[#1a1e22] hover:from-[#2f363d] hover:to-[#252a30] text-white border-none h-12 text-base font-medium shadow-xl hover:shadow-2xl transition-all duration-300"
           :disabled="isLoading || !githubEnabled"
           @click="handleGitHubLogin"
         >
@@ -210,7 +210,7 @@
             <!-- Submit Button -->
             <button
               type="submit"
-              class="btn btn-primary w-full h-12 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200 mt-6"
+              class="btn btn-primary w-full h-12 text-base font-medium shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 mt-6"
               :disabled="isLoading || !isValid"
               :class="{ 'animate-pulse': isLoading }"
             >

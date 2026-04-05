@@ -1,14 +1,14 @@
 <template>
-  <div class="card bg-base-100 shadow-sm">
+  <div class="card bg-base-100/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
     <div class="card-body items-center text-center p-6">
-      <div class="badge badge-primary badge-lg gap-1 mb-2">
+      <div class="badge badge-primary badge-lg gap-1 mb-2 shadow-md">
         <Icon name="lucide:star" class="w-3 h-3" />
         {{ amount }} xp
       </div>
 
       <div class="my-4">
         <div
-          class="w-20 h-20 rounded-full flex items-center justify-center"
+          class="w-24 h-24 rounded-full flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105"
           :class="typeBg"
         >
           <Icon :name="typeIcon" class="w-10 h-10" />
@@ -22,15 +22,15 @@
         {{ description }}
       </p>
 
-      <div class="card-actions w-full mt-4 grid grid-cols-2 gap-2">
+      <div class="card-actions w-full mt-4 grid grid-cols-2 gap-3">
         <button
-          class="btn btn-error btn-outline btn-sm h-10"
+          class="btn btn-error btn-outline btn-sm h-10 hover:shadow-md transition-all"
           @click="resetChallenges"
         >
           {{ $t('challenges.failed') }}
         </button>
         <button
-          class="btn btn-success btn-sm h-10"
+          class="btn btn-success btn-sm h-10 shadow-md hover:shadow-lg transition-all"
           @click="challengeSucceeded"
         >
           {{ $t('challenges.completed') }}

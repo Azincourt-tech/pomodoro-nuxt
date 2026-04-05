@@ -1,19 +1,19 @@
 <template>
-  <div class="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm">
+  <div class="fixed top-4 right-4 z-[100] flex flex-col gap-3 max-w-sm">
     <TransitionGroup
       name="toast"
       tag="div"
-      class="flex flex-col gap-2"
+      class="flex flex-col gap-3"
     >
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="alert shadow-lg"
+        class="alert shadow-lg border"
         :class="{
-          'alert-success': toast.type === 'success',
-          'alert-info': toast.type === 'info',
-          'alert-warning': toast.type === 'warning',
-          'alert-error': toast.type === 'error',
+          'alert-success border-success/30': toast.type === 'success',
+          'alert-info border-info/30': toast.type === 'info',
+          'alert-warning border-warning/30': toast.type === 'warning',
+          'alert-error border-error/30': toast.type === 'error',
         }"
       >
         <Icon name="lucide:info" class="stroke-current shrink-0 w-6 h-6" />
@@ -45,7 +45,7 @@
           />
         <span class="text-sm">{{ toast.message }}</span>
         <button
-          class="btn btn-ghost btn-xs"
+          class="btn btn-ghost btn-xs hover:bg-current hover:text-current transition-colors"
           @click="removeToast(toast.id)"
         >
           ✕

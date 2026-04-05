@@ -1,10 +1,10 @@
 <template>
-  <div class="card bg-base-100 shadow-lg border border-base-300/50 hover:shadow-xl transition-shadow duration-300">
+  <div class="card bg-base-100/80 backdrop-blur-sm shadow-xl border border-base-300/40 hover:shadow-2xl transition-all duration-300">
     <div class="card-body p-5">
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
-          <div class="p-2 bg-success/10 rounded-lg">
+          <div class="p-2.5 bg-gradient-to-br from-success/15 to-success/5 rounded-xl shadow-sm">
             <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </div>
@@ -35,13 +35,13 @@
         <div
           v-for="(item, i) in recentChallenges"
           :key="i"
-          class="group flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 hover:shadow-md"
-          :class="item.completed ? 'bg-success/5 border-success/20 hover:border-success/40' : 'bg-error/5 border-error/20 hover:border-error/40'"
+          class="group flex items-center gap-3 p-3.5 rounded-xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+          :class="item.completed ? 'bg-success/10 border-success/25 hover:border-success/50' : 'bg-error/10 border-error/25 hover:border-error/50'"
         >
           <!-- Status Icon -->
           <div
-            class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm"
-            :class="item.completed ? 'bg-gradient-to-br from-success to-success/80 text-white' : 'bg-gradient-to-br from-error to-error/80 text-white'"
+            class="w-11 h-11 rounded-full flex items-center justify-center shrink-0 shadow-md transition-transform duration-300 group-hover:scale-105"
+            :class="item.completed ? 'bg-gradient-to-br from-success to-success/85 text-white' : 'bg-gradient-to-br from-error to-error/85 text-white'"
           >
             <Icon v-if="item.completed" name="lucide:check" class="w-5 h-5" />
             <Icon v-else name="lucide:x" class="w-5 h-5" />

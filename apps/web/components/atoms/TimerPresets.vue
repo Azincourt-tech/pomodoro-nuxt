@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card bg-base-100 shadow-sm"
+    class="card bg-base-100/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
     v-bind="$attrs"
   >
     <div class="card-body p-4">
@@ -17,8 +17,8 @@
         <button
           v-for="preset in presets"
           :key="preset"
-          class="btn btn-sm"
-          :class="countdown.customMinutes === preset && !countdown.isBreak ? 'btn-primary' : 'btn-ghost'"
+          class="btn btn-sm transition-all duration-200"
+          :class="countdown.customMinutes === preset && !countdown.isBreak ? 'btn-primary shadow-md hover:shadow-lg' : 'btn-ghost hover:bg-base-200/60'"
           :disabled="countdown.isActive"
           @click="selectPreset(preset)"
         >
@@ -38,13 +38,13 @@
             min="1"
             max="120"
             placeholder="25"
-            class="input input-bordered input-sm w-full"
+            class="input input-bordered input-sm w-full focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all"
             :disabled="countdown.isActive"
             @keyup.enter="applyCustom"
           >
         </div>
         <button
-          class="btn btn-sm btn-primary shrink-0 h-9"
+          class="btn btn-sm btn-primary shrink-0 h-9 shadow-md hover:shadow-lg transition-all duration-200"
           :disabled="countdown.isActive || !customInput || customInput < 1"
           @click="applyCustom"
         >
@@ -64,7 +64,7 @@
             type="number"
             min="1"
             max="30"
-            class="input input-bordered input-sm w-20"
+            class="input input-bordered input-sm w-20 focus:border-secondary focus:ring-2 focus:ring-secondary/30 transition-all"
           >
           <span class="text-xs">{{ $t('timer.minutes', { minutes: '' }) }}</span>
         </div>
@@ -79,7 +79,7 @@
             type="number"
             min="1"
             max="60"
-            class="input input-bordered input-sm w-20"
+            class="input input-bordered input-sm w-20 focus:border-secondary focus:ring-2 focus:ring-secondary/30 transition-all"
           >
           <span class="text-xs">{{ $t('timer.minutes', { minutes: '' }) }}</span>
         </div>
@@ -89,8 +89,8 @@
       <div class="flex items-center justify-between mb-3">
         <span class="text-sm">{{ $t('timer.cyclesBeforeLong', 'Ciclos antes da pausa longa') }}</span>
         <select
-          v-model.number="cyclesInput"
-          class="select select-bordered select-sm w-20"
+        v-model.number="cyclesInput"
+        class="select select-bordered select-sm w-20 focus:border-secondary focus:ring-2 focus:ring-secondary/30 transition-all"
         >
           <option :value="2">2</option>
           <option :value="3">3</option>
@@ -102,19 +102,19 @@
 
       <!-- Apply break settings -->
       <button
-        class="btn btn-sm btn-secondary w-full mb-4"
-        @click="applyBreakSettings"
+      class="btn btn-sm btn-secondary w-full mb-4 shadow-md hover:shadow-lg transition-all duration-200"
+      @click="applyBreakSettings"
       >
         {{ $t('timer.applyBreakSettings', 'Aplicar Configurações de Pausa') }}
       </button>
 
       <!-- Reset button -->
       <button
-        class="btn btn-sm gap-1 w-full"
-        :class="countdown.isActive ? 'btn-error' : 'btn-ghost btn-outline'"
+        class="btn btn-sm gap-1 w-full transition-all duration-200"
+        :class="countdown.isActive ? 'btn-error hover:shadow-lg' : 'btn-ghost btn-outline hover:bg-base-200/60 hover:shadow-md'"
         :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60 && !countdown.isBreak"
         @click="resetTimer"
-      >
+        >
         <Icon name="lucide:rotate-ccw" class="w-4 h-4" />
         {{ $t('timer.resetTimer') }}
       </button>

@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-base-200 flex flex-col">
     <!-- Navbar -->
     <nav
-      class="navbar bg-base-100/80 backdrop-blur-md shadow-sm px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/50"
+      class="navbar bg-base-100/85 backdrop-blur-xl shadow-lg px-4 lg:px-8 sticky top-0 z-50 border-b border-base-300/40"
     >
       <div class="flex-1">
         <NuxtLink
@@ -10,7 +10,7 @@
           class="flex items-center gap-3 group"
         >
           <div
-            class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors"
+            class="w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:from-primary/30 transition-all duration-300 shadow-md"
           >
             <svg
               class="w-5 h-5 text-primary"
@@ -26,7 +26,7 @@
               />
             </svg>
           </div>
-          <span class="text-xl font-bold font-rajdhani tracking-wide">Pomodoro</span>
+          <span class="text-xl font-bold font-rajdhani tracking-wide drop-shadow-sm">Pomodoro</span>
         </NuxtLink>
       </div>
       <div class="flex-none">
@@ -34,7 +34,7 @@
           <!-- History link -->
           <NuxtLink
             to="/history"
-            class="btn btn-ghost btn-sm gap-2"
+            class="btn btn-ghost btn-sm gap-2 hover:bg-base-200/60 transition-all"
             :title="$t('history.navLink')"
           >
             <svg
@@ -55,7 +55,7 @@
 
           <!-- Sound toggle -->
           <button
-            class="btn btn-ghost btn-sm btn-circle"
+            class="btn btn-ghost btn-sm btn-circle hover:bg-base-200/60 transition-all"
             :title="soundEnabled ? $t('sound.enabled') : $t('sound.disabled')"
             @click="toggleSound"
           >
@@ -97,7 +97,7 @@
 
           <!-- Shortcuts help button -->
           <button
-            class="btn btn-ghost btn-sm btn-circle"
+            class="btn btn-ghost btn-sm btn-circle hover:bg-base-200/60 transition-all"
             :title="$t('shortcuts.title')"
             @click="openShortcuts"
           >
@@ -132,7 +132,7 @@
             </div>
             <div
               tabindex="0"
-              class="dropdown-content z-[10] mt-3 p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-300/50"
+              class="dropdown-content z-[10] mt-3 p-2 shadow-2xl bg-base-100/95 backdrop-blur-sm rounded-box w-64 border border-base-300/40"
             >
               <LanguageSelector />
             </div>
@@ -169,7 +169,7 @@
             </div>
             <div
               tabindex="0"
-              class="dropdown-content z-[10] mt-3 p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-300/50"
+              class="dropdown-content z-[10] mt-3 p-2 shadow-2xl bg-base-100/95 backdrop-blur-sm rounded-box w-64 border border-base-300/40"
             >
               <ThemeSelector />
             </div>

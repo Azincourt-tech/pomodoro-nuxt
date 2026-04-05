@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-base-100 shadow-lg border border-base-300/50 hover:shadow-xl transition-shadow duration-300">
+  <div class="card bg-base-100/80 backdrop-blur-sm shadow-xl border border-base-300/40 hover:shadow-2xl transition-all duration-300">
     <div class="card-body p-5">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
@@ -28,7 +28,7 @@
           <!-- Theme preview circle -->
           <div class="relative">
             <span
-              class="w-10 h-10 rounded-full block shadow-md ring-2 ring-base-300/50 transition-all duration-300 group-hover:scale-110"
+              class="w-11 h-11 rounded-full block shadow-lg ring-2 ring-base-300/50 transition-all duration-300 group-hover:scale-110 group-hover:ring-primary/50"
               :class="previewColor(t)"
             />
             <!-- Checkmark for active theme -->

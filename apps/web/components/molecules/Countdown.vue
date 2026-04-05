@@ -3,7 +3,7 @@
     <!-- Circular Timer -->
     <div class="relative inline-flex items-center justify-center">
       <svg
-        class="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 transform -rotate-90"
+        class="w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 transform -rotate-90 drop-shadow-2xl"
         viewBox="0 0 200 200"
       >
         <!-- Background circle -->
@@ -12,8 +12,8 @@
           cy="100"
           r="90"
           fill="none"
-          stroke-width="6"
-          class="stroke-base-300/30"
+          stroke-width="8"
+          class="stroke-base-300/25"
         />
         <!-- Progress circle -->
         <circle
@@ -21,7 +21,7 @@
           cy="100"
           r="90"
           fill="none"
-          stroke-width="6"
+          stroke-width="8"
           stroke-linecap="round"
           :stroke-dasharray="circumference"
           :stroke-dashoffset="dashOffset"

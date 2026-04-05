@@ -43,14 +43,16 @@
       <!-- CENTER -->
       <div class="flex flex-col items-center gap-6">
         <div class="w-full flex flex-col items-center">
-          <Countdown @completed="getNewChallenge" />
+          <div class="p-4">
+            <Countdown @completed="getNewChallenge" />
+          </div>
 
           <!-- Controls -->
           <div class="flex items-center gap-3 mt-4">
             <!-- During break - show "Start Next Cycle" button -->
             <template v-if="countdown.isBreak">
               <button
-                class="btn btn-success btn-md gap-2 px-8 shadow-lg shadow-success/20 hover:shadow-success/40 transition-shadow duration-300"
+                class="btn btn-success btn-md gap-2 px-10 py-3.5 shadow-lg shadow-success/20 hover:shadow-success/40 hover:-translate-y-0.5 transition-all duration-300 text-lg"
                 @click="startNextCycle"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -70,7 +72,7 @@
             <!-- Not active - show start button -->
             <template v-else-if="!countdown.isActive">
               <button
-                class="btn btn-primary btn-md gap-2 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-300"
+                class="btn btn-primary btn-md gap-2 px-10 py-3.5 shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 text-lg"
                 @click="setCountdownState(true)"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -82,7 +84,7 @@
             <!-- Active - show pause button -->
             <template v-else>
               <button
-                class="btn btn-error btn-outline btn-md gap-2 px-8"
+                class="btn btn-error btn-outline btn-md gap-2 px-10 py-3.5 hover:shadow-md transition-all duration-200"
                 @click="setCountdownState(false)"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

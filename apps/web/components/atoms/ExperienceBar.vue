@@ -1,9 +1,9 @@
 <template>
   <div class="mb-6">
     <!-- Level and XP Info -->
-    <div class="flex items-center justify-between mb-2">
+    <div class="flex items-center justify-between mb-2.5">
       <div class="flex items-center gap-2">
-        <div class="badge badge-primary badge-md font-bold shadow-md">
+        <div class="badge badge-primary badge-md font-bold shadow-lg hover:shadow-xl transition-shadow">
           <Icon name="lucide:star" class="w-3 h-3 mr-1" />
           {{ $t('nav.level', { level: challenges.level }) }}
         </div>
@@ -11,7 +11,7 @@
         <!-- Streak Badge -->
         <span
           v-if="profile.streakCurrent > 0"
-          class="badge badge-error badge-md font-bold gap-1 shadow-md animate-pulse"
+          class="badge badge-error badge-md font-bold gap-1 shadow-lg animate-pulse"
           :title="$t('streak.best', { days: profile.streakBest })"
         >
           {{ fireEmoji }} {{ profile.streakCurrent }}d
@@ -27,13 +27,13 @@
 
     <!-- Progress Bar -->
     <div class="relative">
-      <div class="h-4 bg-base-200 rounded-full overflow-hidden shadow-inner">
+      <div class="h-5 bg-base-200/80 rounded-full overflow-hidden shadow-inner">
         <div
-          class="h-full bg-gradient-to-r from-success via-success to-success/80 rounded-full transition-all duration-1000 ease-out relative"
+          class="h-full bg-gradient-to-r from-success/90 via-success to-success/80 rounded-full transition-all duration-1000 ease-out relative"
           :style="{ width: `${challenges.currentXpPercentage}%` }"
         >
           <!-- Shimmer effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
         </div>
       </div>
       

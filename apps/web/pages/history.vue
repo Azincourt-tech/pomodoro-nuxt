@@ -30,9 +30,9 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
       <!-- Level -->
-      <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
+      <div class="stat bg-base-100/80 backdrop-blur-sm rounded-xl shadow-lg border border-base-300/40 hover:shadow-xl transition-all duration-300">
         <div class="stat-figure text-info">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-9 h-9 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
           </svg>
         </div>
@@ -43,7 +43,7 @@
       <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
         <div class="stat-figure text-primary">
           <svg
-            class="w-8 h-8"
+            class="w-9 h-9 drop-shadow-sm"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -63,7 +63,7 @@
       <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
         <div class="stat-figure text-success">
           <svg
-            class="w-8 h-8"
+            class="w-9 h-9 drop-shadow-sm"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -84,7 +84,7 @@
       <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
         <div class="stat-figure text-warning">
           <svg
-            class="w-8 h-8"
+            class="w-9 h-9 drop-shadow-sm"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -104,7 +104,7 @@
 
       <div class="stat bg-base-100 rounded-xl shadow-sm border border-base-300/50">
         <div class="stat-figure text-error">
-          <span class="text-3xl">{{ fireEmoji }}</span>
+          <span class="text-3xl drop-shadow-sm">{{ fireEmoji }}</span>
         </div>
         <div class="stat-title text-sm">{{ $t('streak.title') }}</div>
         <div class="stat-value text-2xl text-error">{{ profile.streakCurrent }}</div>
@@ -142,10 +142,10 @@
           <div
             v-for="session in getSessionsForDay(dayKey)"
             :key="session.id"
-            class="flex items-center justify-between p-4 bg-base-100 rounded-xl border border-base-300/50"
+            class="flex items-center justify-between p-4 bg-base-100/80 backdrop-blur-sm rounded-xl border border-base-300/40 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
           >
             <div class="flex items-center gap-4">
-              <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+              <div class="w-11 h-11 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center shadow-md">
                 <svg
                   class="w-5 h-5 text-primary"
                   fill="none"

@@ -1,10 +1,10 @@
 <template>
-  <div class="card bg-base-100 shadow-lg border border-base-300/50 hover:shadow-xl transition-shadow duration-300">
+  <div class="card bg-base-100/80 backdrop-blur-sm shadow-xl border border-base-300/40 hover:shadow-2xl hover:border-primary/30 transition-all duration-300 hover:-translate-y-0.5">
     <div class="card-body p-5">
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
-          <div class="p-2 bg-warning/10 rounded-lg">
+          <div class="p-2.5 bg-gradient-to-br from-warning/15 to-warning/5 rounded-xl shadow-sm">
             <svg
               class="w-5 h-5 text-warning"
               fill="currentColor"
@@ -23,18 +23,18 @@
       </div>
 
       <!-- Challenge Categories -->
-      <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+      <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar p-1">
         <div
           v-for="(group, index) in groupedChallenges"
           :key="index"
-          class="collapse collapse-arrow bg-base-200/50 rounded-xl border border-base-300/30 hover:bg-base-200 transition-all duration-200"
+          class="collapse collapse-arrow bg-base-200/40 rounded-xl border border-base-300/25 hover:bg-base-200/60 hover:border-primary/20 transition-all duration-300"
         >
           <input type="checkbox" />
           
-          <div class="collapse-title flex items-center gap-3 py-3 min-h-0">
+          <div class="collapse-title flex items-center gap-3 py-3.5 min-h-0">
             <!-- Category Icon -->
             <div
-              class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
+              class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-md hover:shadow-lg transition-shadow duration-300"
               :class="typeColor(group.type)"
             >
               <Icon :name="typeIcon(group.type)" class="w-6 h-6" />
@@ -45,7 +45,7 @@
               <span class="font-semibold text-sm capitalize">{{ group.label }}</span>
               <div class="flex items-center gap-2 mt-0.5">
                 <span class="text-xs text-base-content/50">{{ group.items.length }} desafios</span>
-                <span class="badge badge-xs badge-primary">{{ group.items[0].amount }}xp</span>
+                <span class="badge badge-xs badge-primary shadow-sm">{{ group.items[0].amount }}xp</span>
               </div>
             </div>
           </div>
@@ -55,11 +55,11 @@
               <div
                 v-for="(item, i) in group.items"
                 :key="i"
-                class="group flex items-start gap-3 p-3 bg-base-100 rounded-lg border border-base-300/30 hover:border-primary/30 hover:shadow-md transition-all duration-200"
+                class="group flex items-start gap-3 p-3.5 bg-base-100 rounded-lg border border-base-300/25 hover:border-primary/40 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
               >
                 <!-- XP Badge -->
                 <div class="flex flex-col items-center gap-1">
-                  <span class="badge badge-primary badge-sm font-bold">{{ item.amount }}xp</span>
+                  <span class="badge badge-primary badge-sm font-bold shadow-sm">{{ item.amount }}xp</span>
                 </div>
                 
                 <!-- Description -->

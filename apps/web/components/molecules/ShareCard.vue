@@ -4,13 +4,13 @@
     class="modal"
     :class="{ 'modal-open': isOpen }"
   >
-    <div class="modal-box max-w-md">
-      <h3 class="text-lg font-bold font-rajdhani mb-4">
+    <div class="modal-box max-w-md p-6">
+      <h3 class="text-xl font-bold font-rajdhani mb-5 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         {{ $t('share.title') }}
       </h3>
 
       <!-- Canvas for share card -->
-      <div class="flex justify-center mb-4">
+      <div class="flex justify-center mb-5 p-3 bg-gradient-to-br from-base-200/50 to-base-300/50 rounded-xl border border-base-300/30">
         <canvas
           ref="canvasRef"
           width="600"
@@ -22,13 +22,13 @@
       <div class="flex gap-3">
         <button
           v-if="canShare"
-          class="btn btn-primary flex-1"
+          class="btn btn-primary flex-1 shadow-md hover:shadow-lg transition-all"
           @click="shareNative"
         >
           {{ $t('share.button') }}
         </button>
         <button
-          class="btn btn-outline flex-1"
+          class="btn btn-outline flex-1 hover:bg-base-200/50 transition-all"
           @click="downloadImage"
         >
           {{ $t('share.download') }}
