@@ -28,9 +28,8 @@
           v-for="(group, index) in groupedChallenges"
           :key="index"
           class="collapse collapse-arrow bg-base-200/50 rounded-xl border border-base-300/30 hover:bg-base-200 transition-all duration-200"
-          :class="{ 'collapse-open': index === 0 }"
         >
-          <input type="checkbox" :checked="index === 0" />
+          <input type="checkbox" />
           
           <div class="collapse-title flex items-center gap-3 py-3 min-h-0">
             <!-- Category Icon -->
