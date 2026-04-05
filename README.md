@@ -24,13 +24,27 @@
   <img src="https://img.shields.io/badge/Pinia-2-FBE334?style=flat-square" />
   <img src="https://img.shields.io/badge/Cloudflare%20Workers-F6821F?style=flat-square&logo=cloudflare" />
   <img src="https://img.shields.io/badge/Vercel-Deployed-000?style=flat-square&logo=vercel" />
+  <img src="https://img.shields.io/badge/Lucide-Icons-orange?style=flat-square" />
 </p>
 
 ---
 
 ## Sobre
 
-Pomodoro Move.it e uma aplicacao que combina a tecnica Pomodoro com desafios de saude e bem-estar. A cada ciclo completado, voce recebe um desafio para alongar, descansar os olhos, se hidratar ou praticar respiracao. Agora com PWA, sync na nuvem, historico de sessoes e muito mais.
+Pomodoro Move.it e uma aplicacao que combina a tecnica Pomodoro com desafios de saude e bem-estar. A cada ciclo completado, voce recebe um desafio para alongar, descansar os olhos, se hidratar ou praticar respiracao. Agora com PWA, sync na nuvem, historico de sessoes, interface moderna com glassmorphism e muito mais.
+
+---
+
+## Versao 2.0 - Novidades
+
+- **Design Moderno**: Glassmorphism, gradientes vibrantes e animacoes suaves em todos componentes
+- **Icones Lucide**: Integracao completa com biblioteca Lucide Icons para iconografia consistente
+- **Timer Aprimorado**: Barra de progresso com gradientes dinamicos, brilho adaptativo por tema e animacoes
+- **Modais Modernizados**: Challenge, Shortcuts, Share, Edit Profile com design premium
+- **Login Seguro**: Sistema de autenticao com feedback visual de forca de senha e dicas de seguranca
+- **Historico Visual**: Tela de historio com cards estatisticos e glassmorphism
+- **Responsivo**: Navbar e footer otimizados para mobile e desktop
+- **UX Aprimorada**: Toasts de feedback, hover effects avancados e transicoes fluidas
 
 ---
 
@@ -41,189 +55,190 @@ pomodoro-nuxt/
 ├── apps/
 │   ├── web/                   # Nuxt 3 Frontend
 │   │   ├── components/        # Vue components (atoms/molecules/organisms)
-│   │   ├── composables/       # useKeyboardShortcuts, useSound, etc.
+│   │   │   ├── atoms/         # Atomic components (Icon, TimerPresets, etc)
+│   │   │   ├── molecules/     # Composite components (Countdown, Profile, etc)
+│   │   │   └── organisms/     # Complex components
+│   │   ├── composables/       # useSound, useToast, usePwaInstall
 │   │   ├── stores/            # Pinia stores (countdown, challenges, profile, history, theme)
-│   │   ├── pages/             # index, history
-│   │   ├── layouts/           # default
-│   │   ├── public/icons/      # PWA icons (192x192, 512x512)
+│   │   ├── pages/             # index, history, login
+│   │   ├── layouts/           # default layout com navbar e footer
+│   │   ├── public/icons/      # PWA icons
 │   │   └── tests/             # Vitest unit tests
 │   └── api/                   # Hono API (Cloudflare Workers)
-│       ├── src/routes/        # profile, sessions, stats
-│       ├── src/db/            # D1 schema
-│       └── tests/             # Vitest API tests
-├── composables/
-│   └── useSync.ts             # Cloud sync composable
-├── packages/
-│   └── types/                 # Tipos compartilhados
+├── package.json               # Workspace root
 └── turbo.json                 # Turborepo config
 ```
 
 ---
 
-## Funcionalidades
+## Tech Stack
+
+### Frontend
+- **Framework**: Nuxt 3.15+ (Vue 3.5)
+- **UI**: TailwindCSS 3.4 + DaisyUI 4.12
+- **Icons**: Lucide Icons via @iconify/vue
+- **State**: Pinia 2.3
+- **i18n**: Vue I18n 9.5
+- **PWA**: @vite-pwa/nuxt 1.1
+- **Testing**: Vitest 4.1
+
+### Backend
+- **API**: Hono 4.0 (Cloudflare Workers)
+- **Database**: D1 (SQLite)
+- **Auth**: GitHub OAuth 2.0 + Email/Password
+
+### DevOps
+- **Hosting**: Vercel (frontend) + Cloudflare (API)
+- **Monorepo**: Turborepo
+- **Package Manager**: npm
+
+---
+
+## Features
 
 ### Core
-- **Timer Pomodoro** com presets (15, 25, 35, 45, 60 min) e tempo personalizado
-- **27 desafios** em 7 categorias diferentes (alongamento, exercicio ocular, hidratacao, respiracao, postura, meditacao, caminhada)
-- **Sistema de XP e niveis** gamificado para manter a motivacao
-- **10 temas** do DaisyUI (dark, light, cupcake, dracula, etc.)
-- **Spotify integrado** para ouvir musica enquanto trabalha
-- **Perfil editavel** com suporte a GitHub avatar
-- **Persistencia** via localStorage (progresso salvo automaticamente)
-- **Notificacoes** browser quando o ciclo termina
-- **Design responsivo** (desktop e mobile)
+- **Timer Pomodoro**: Configuravel com presets (5-60min) e tempo customizado
+- **Desafios de Saude**: 50+ desafios categorizados (alongamento, olhos, hidratacao, respiracao, postura, meditacao, caminhada)
+- **Sistema de XP e Level**: Gamificacao com progressao por niveis
+- **Streaks**: Acompanhamento de sequencia diaria
+- **PWA**: Instalavel como app nativo (mobile/desktop)
+- **Offline**: Service worker para funcionamento offline
 
-### Novas Features (v2.0)
+### Moderno
+- **Glassmorphism**: Efeitos de blur e transparencia em cards e modais
+- **Gradientes Vibrantes**: Cores dinamicas que se adaptam ao tema
+- **Animacoes Suaves**: Transicoes fluidas em toda interface
+- **Responsivo**: Layout otimizado para mobile, tablet e desktop
+- **Temas**: 10+ temas DaisyUI (light, dark, cyberpunk, dracula, etc)
 
-- **PWA** — App instalavel com manifest, service worker (Workbox), e icons (192/512). Funciona offline
-- **Atalhos de Teclado** — `Espaco` play/pause, `R` reset, `N` novo desafio, `F` modo foco, `?` ajuda
-- **Historico de Sessoes** — Timeline completa com estatisticas (total sessoes, tempo, XP, media diaria)
-- **Streak** — Contador de dias consecutivos com melhor recorde
-- **Cloud Sync** — API Hono no Cloudflare Workers com D1. Sync de profile, sessoes e progresso entre dispositivos
-- **Compartilhar** — ShareCard com Canvas API para gerar imagem de estatisticas e compartilhar via Web Share API
-- **Sons** — Efeitos sonoros para start, pause e complete (MP3)
-- **Modo Foco** — Fullscreen browser com elementos ocultos, saida via ESC
+### Seguranca
+- **Autenticacao**: GitHub OAuth ou Email/Password
+- **Password Strength**: Feedback visual de forca de senha com dicas
+- **Validacao em Tempo Real**: Icons de check/x para validacao instantanea
 
 ---
 
-## Stack Tecnologica
+## Como Rodar
 
-| Camada | Tecnologia |
-|--------|-----------|
-| **Framework** | [Nuxt 3](https://nuxt.com/) + Vue 3 |
-| **State** | [Pinia](https://pinia.vuejs.org/) |
-| **Styling** | [TailwindCSS](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/) |
-| **PWA** | [@vite-pwa/nuxt](https://vite-pwa.netlify.app/) + Workbox |
-| **i18n** | [@nuxtjs/i18n](https://i18n.nuxtjs.org/) (pt-BR, en) |
-| **API** | [Hono](https://hono.dev/) (Cloudflare Workers) |
-| **Database** | [Cloudflare D1](https://developers.cloudflare.com/d1/) |
-| **Monorepo** | [Turborepo](https://turbo.build/) |
-| **Language** | [TypeScript](https://typescriptlang.org/) |
-| **Testing** | [Vitest](https://vitest.dev/) + happy-dom |
-| **Package Manager** | Bun |
-
----
-
-## Setup Local
-
-### Requisitos
-
-- [Bun](https://bun.sh/) >= 1.2
-- [Node.js](https://nodejs.org/) >= 18
+### Pre-requisitos
+- Node.js 20+
+- npm 10+
 
 ### Instalacao
 
 ```bash
-# Clonar o repositorio
+# Clonar repositorio
 git clone https://github.com/Azincourt-tech/pomodoro-nuxt.git
 cd pomodoro-nuxt
 
-# Instalar dependencias (monorepo)
-bun install
+# Instalar dependencias
+npm install
 
-# Iniciar Web (Nuxt dev server)
-cd apps/web && bun run dev
+# Rodar em desenvolvimento
+npm run dev
 
-# Em outro terminal, iniciar API (Cloudflare Workers)
-cd apps/api && bun run dev
+# Build para producao
+npm run build
+
+# Preview do build
+npm run preview
 ```
 
-Web: `http://localhost:3000` | API: `http://localhost:8787`
+### Variaveis de Ambiente
 
-### Build
+Copie `.env.example` para `.env` e configure:
 
 ```bash
-# Build tudo via Turborepo
-bun run build
+# API URL (Cloudflare Workers)
+NUXT_PUBLIC_API_BASE=http://localhost:8787
 
-# Ou individualmente
-cd apps/web && bun run build
-cd apps/api && bun run build
+# GitHub OAuth
+GITHUB_CLIENT_ID=seu-client-id
+GITHUB_CLIENT_SECRET=seu-client-secret
 ```
 
 ---
 
-## Testes
+## Scripts
 
 ```bash
-# Todos os testes (Turborepo)
-bun run test
-
-# Apenas Web (64 testes)
-cd apps/web && bun run test
-
-# Apenas API (4 testes)
-cd apps/api && bun run test
+npm run dev          # Rodar frontend em dev
+npm run build        # Build para producao
+npm run preview      # Preview do build
+npm run lint         # ESLint
+npm run lint:fix     # ESLint com auto-fix
+npm run format       # Prettier
+npm run test         # Vitest run
+npm run test:watch   # Vitest watch mode
 ```
 
-**68 testes passando** (9 arquivos: 8 web + 1 api)
+---
+
+## Estrutura de Components
+
+### Atoms
+- `Icon.vue` - Wrapper para icones Lucide
+- `CountdownDigits.vue` - Digitos do timer
+- `TimerPresets.vue` - Presets de tempo
+- `ExperienceBar.vue` - Barra de XP e level
+- `ToastContainer.vue` - Notificacoes toast
+- `ThemeSelector.vue` - Seletor de temas
+- `LanguageSelector.vue` - Seletor de idioma
+
+### Molecules
+- `Countdown.vue` - Timer circular com progresso
+- `Challenge.vue` - Card de desafio
+- `Profile.vue` - Perfil do usuario
+- `ShareCard.vue` - Card de compartilhamento com canvas
+- `ShortcutsHelp.vue` - Modal de atalhos
+- `EditProfileModal.vue` - Modal de edicao de perfil
 
 ---
 
 ## Deploy
 
-### Web — Vercel
+### Frontend (Vercel)
+1. Push para branch `develop` ou `master`
+2. Vercel detecta automaticamente
+3. Build e deploy automatico
 
-Deploy automatico via Git:
-
-| Branch | Ambiente | URL |
-|--------|----------|-----|
-| `develop` | Preview | Vercel preview URL |
-| `master` | Producao | [pomodoro-nuxt-ten.vercel.app](https://pomodoro-nuxt-ten.vercel.app) |
-
-Tambem suporta Cloudflare Pages via `wrangler pages deploy .output/public`.
-
-### API — Cloudflare Workers
-
+### API (Cloudflare Workers)
 ```bash
 cd apps/api
-
-# Configurar D1 database
-wrangler d1 migrations apply pomodoro-db --remote
-
-# Deploy
-bun run deploy
+npm run deploy
 ```
 
 ---
 
-## Atalhos de Teclado
+## Branches
 
-| Tecla | Acao |
-|-------|------|
-| `Espaco` | Iniciar / Pausar timer |
-| `R` | Resetar timer |
-| `N` | Proximo desafio |
-| `F` | Modo Foco (fullscreen) |
-| `?` | Mostrar ajuda de atalhos |
+- `master` - Producao (estavel)
+- `develop` - Desenvolvimento (integracao)
+- `feature/*` - Features em desenvolvimento
 
-*Atalhos desabilitados quando um input esta focado.*
+---
+
+## Contribuindo
+
+1. Fork o projeto
+2. Crie sua feature branch (`git checkout -b feature/minha-feature`)
+3. Commit suas mudancas (`git commit -m 'feat: adicionar nova feature'`)
+4. Push para a branch (`git push origin feature/minha-feature`)
+5. Abra um Pull Request para `develop`
 
 ---
 
 ## Autores
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Azincourt-tech">
-        <img src="https://github.com/Azincourt-tech.png" width="80px" alt="Willian"/>
-        <br />
-        <sub><b>Willian</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Morgana-Claw">
-        <img src="https://github.com/Morgana-Claw.png" width="80px" alt="Morgana"/>
-        <br />
-        <sub><b>Morgana</b></sub>
-      </a>
-    </td>
-  </tr>
-</table>
+- **Willian** - [@Azincourt-tech](https://github.com/Azincourt-tech)
+- **Morgana** - [@Morgana-Claw](https://github.com/Morgana-Claw)
 
 ---
 
 ## Licenca
 
-MIT
+MIT - Veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+---
+
+<p align="center">Feito com ❤️ usando Nuxt 3 + TailwindCSS + DaisyUI</p>
