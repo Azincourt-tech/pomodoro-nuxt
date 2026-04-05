@@ -25,7 +25,6 @@
             @click="challenges.setIsLevelUpModalOpen(false)"
           >
             <Icon name="lucide:x" class="w-4 h-4" />
-            </svg>
           </button>
 
           <div class="py-8 relative z-10">
@@ -36,7 +35,6 @@
                 <div class="absolute inset-0 flex items-center justify-center">
                   <div class="animate-spin-slow">
                     <Icon name="lucide:trophy" class="w-32 h-32 text-warning/20" />
-                    </svg>
                   </div>
                 </div>
                 
@@ -62,7 +60,6 @@
               <!-- XP Info -->
               <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mt-4">
                 <Icon name="lucide:star" class="w-5 h-5 text-primary" />
-                </svg>
                 <span class="font-bold text-primary">Level {{ challenges.level }}</span>
                 <span class="text-base-content/50">•</span>
                 <span class="text-sm text-base-content/60">{{ challenges.xp.current }} XP</span>
@@ -83,7 +80,6 @@
                 viewBox="0 0 24 24"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
             </button>
           </div>
         </div>

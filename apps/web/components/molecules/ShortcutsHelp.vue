@@ -25,7 +25,6 @@
           @click="close"
         >
           <Icon name="lucide:x" class="w-4 h-4" />
-          </svg>
         </button>
 
         <!-- Header -->
@@ -33,7 +32,6 @@
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-3">
             <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
           </div>
           <h3 class="text-2xl font-black font-rajdhani bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {{ $t('shortcuts.title', 'Atalhos de Teclado') }}
@@ -67,7 +65,6 @@
         <div class="mt-6 p-4 bg-info/10 rounded-xl border border-info/20 relative z-10">
           <p class="text-xs text-base-content/60 flex items-center gap-2">
             <Icon name="lucide:info" class="w-4 h-4 text-info shrink-0" />
-            </svg>
             <span>{{ $t('shortcuts.note', 'Atalhos desabilitados quando um input está focado') }}</span>
           </p>
         </div>
@@ -79,7 +76,6 @@
           >
             <span>{{ $t('shortcuts.close', 'Fechar') }}</span>
             <Icon name="lucide:x" class="w-4 h-4" />
-            </svg>
           </button>
         </div>
       </div>

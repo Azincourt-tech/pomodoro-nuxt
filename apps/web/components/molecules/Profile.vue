@@ -21,7 +21,6 @@
             @click="profile.setEditing(true)"
           >
             <Icon name="lucide:edit" class="w-3 h-3" />
-            </svg>
           </button>
         </div>
       </div>
@@ -40,7 +39,6 @@
         <!-- Level badge -->
         <div class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 bg-warning/10 rounded-full">
           <Icon name="lucide:star" class="w-4 h-4 text-warning" />
-          </svg>
           <span class="text-sm font-bold text-warning">{{ $t('nav.level', { level: challenges.level }) }}</span>
         </div>
 
@@ -73,7 +71,6 @@
             @click="profile.setEditing(false)"
           >
             <Icon name="lucide:x" class="w-4 h-4" />
-            </svg>
           </button>
         </div>
 
@@ -82,7 +79,6 @@
           <label class="label">
             <span class="label-text font-medium text-sm flex items-center gap-2">
               <Icon name="lucide:user" class="w-4 h-4" />
-              </svg>
               {{ $t('profile.name') }}
             </span>
           </label>
@@ -100,7 +96,6 @@
             <span class="label-text font-medium text-sm flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
               {{ $t('profile.photoUrl') }}
             </span>
           </label>
@@ -137,7 +132,6 @@
           @click="save"
         >
           <Icon name="lucide:check" class="w-4 h-4" />
-          </svg>
           {{ $t('profile.save') }}
         </button>
       </div>
@@ -153,7 +147,6 @@
           <div class="flex items-center gap-3">
             <div class="p-1.5 bg-base-300/50 rounded-md">
               <Icon name="lucide:bell" class="w-4 h-4 text-base-content/70" />
-              </svg>
             </div>
             <div>
               <span class="text-sm font-medium">{{ $t('profile.browserNotifications', 'Notificações do navegador') }}</span>
@@ -176,7 +169,6 @@
           <div class="flex items-center gap-3">
             <div class="p-1.5 bg-base-300/50 rounded-md">
               <Icon name="lucide:smartphone" class="w-4 h-4 text-base-content/70" />
-              </svg>
             </div>
             <div>
               <span class="text-sm font-medium">{{ $t('profile.pushNotifications', 'Notificações push') }}</span>

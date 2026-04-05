@@ -7,7 +7,6 @@
           <div class="p-2 bg-success/10 rounded-lg">
             <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
           </div>
           <div>
             <h3 class="font-bold text-base">{{ $t('challenges.recentTitle', 'Desafios Recentes') }}</h3>
@@ -18,7 +17,6 @@
           <span>{{ $t('history.viewAll', 'Ver tudo') }}</span>
           <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
         </NuxtLink>
       </div>
 
@@ -27,7 +25,6 @@
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-base-200/50 mb-3">
           <svg class="w-8 h-8 text-base-content/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
         </div>
         <p class="text-sm text-base-content/50">{{ $t('challenges.noRecent', 'Nenhum desafio ainda') }}</p>
         <p class="text-xs text-base-content/40 mt-1">{{ $t('challenges.startCycle', 'Inicie um ciclo para começar') }}</p>

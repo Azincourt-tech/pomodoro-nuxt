@@ -9,7 +9,6 @@
       <header class="bg-primary p-4 flex justify-between items-center text-primary-content">
         <h3 class="font-bold text-lg flex items-center gap-2">
           <Icon name="lucide:zap" class="w-6 h-6" />
-          </svg>
           {{ $t('challenges.modalTitle', 'Novo Desafio!') }}
         </h3>
         <form method="dialog">
