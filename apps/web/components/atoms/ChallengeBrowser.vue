@@ -50,7 +50,9 @@
                   <Icon name="lucide:list" class="w-3 h-3" />
                   {{ group.items.length }} desafios
                 </span>
-                <span class="badge badge-xs badge-warning shadow-md font-bold">{{ group.items[0].amount }}xp</span>
+                <span v-if="group.items.length > 0" class="text-xs text-base-content/50">
+                  • {{ getAvgXP(group.items) }}xp médio
+                </span>
               </div>
             </div>
           </div>
@@ -139,6 +141,12 @@ function typeIcon(type: string) {
     walk: 'lucide:trending-up',
   }
   return icons[type] || icons.body
+}
+
+function getAvgXP(items: Challenge[]): number {
+  if (items.length === 0) return 0
+  const total = items.reduce((sum, item) => sum + item.amount, 0)
+  return Math.round(total / items.length)
 }
 </script>
 
