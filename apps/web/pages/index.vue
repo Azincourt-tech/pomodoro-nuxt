@@ -273,33 +273,9 @@ function startNextCycle() {
   countdown.setBreakMode(false, false)
   countdown.setHasCompleted(false)
   
-  const index = getRandomNumber(0, challenges.challengesLength)
-  challenges.setCurrentChallengeIndex(index)
-
-  const challenge = challenges.currentChallenge
-  const xpGained = challenge?.amount ?? 0
-
-  // Complete challenge for XP
-  if (challenge) {
-    challenges.completeChallenge(xpGained)
-  }
-
-  // Save session to history
-  const session: SessionRecord = {
-    id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-    startedAt: sessionStartTime.value ?? Date.now(),
-    duration: countdown.customMinutes,
-    challengeCompleted: challenge?.description ?? null,
-    xpGained,
-  }
-  history.addSession(session)
-
-  // Update streak
-  profile.updateStreak()
-
-  // Save progress
-  profile.saveProgressToStorage(challenges.level, challenges.xp, challenges.completedChallenges)
-
+  // NAO mostrar modal de desafio - ele já foi mostrado quando o ciclo anterior terminou
+  // NAO dar XP novamente - XP já foi dado ao completar o desafio anterior
+  
   playStart()
   countdown.setIsActive(true)
   
