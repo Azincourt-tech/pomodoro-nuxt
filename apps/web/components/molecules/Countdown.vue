@@ -33,7 +33,7 @@
           class="stroke-base-300/30 dark:stroke-base-300/15 backdrop-blur-sm"
         />
         
-        <!-- Progress circle with theme gradient -->
+        <!-- Progress circle with theme gradient + brightness boost -->
         <defs>
           <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" :stop-color="'hsl(var(--p))'" stop-opacity="1" />
@@ -42,6 +42,13 @@
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          <filter id="brighten" x="0%" y="0%" width="100%" height="100%">
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="1.3" intercept="0.1" />
+              <feFuncG type="linear" slope="1.3" intercept="0.1" />
+              <feFuncB type="linear" slope="1.3" intercept="0.1" />
+            </feComponentTransfer>
           </filter>
         </defs>
         <circle
@@ -55,7 +62,7 @@
           :stroke-dashoffset="dashOffset"
           stroke="url(#timerGradient)"
           class="transition-all duration-1000 ease-linear"
-          filter="url(#glow)"
+          filter="url(#brighten) url(#glow)"
           :class="countdown.isActive ? 'drop-shadow-[0_0_10px_hsl(var(--p)/0.8)]' : ''"
         />
       </svg>
