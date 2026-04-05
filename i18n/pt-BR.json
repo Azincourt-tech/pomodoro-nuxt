@@ -34,6 +34,21 @@
 		"signupError": "Erro ao criar conta",
 		"connectionError": "Erro de conexão. Tente novamente."
 	},
+	"language": {
+		"info": "Idioma salvo automaticamente",
+		"changed": "Idioma alterado para: {name}"
+	},
+	"shortcuts": {
+		"title": "Atalhos de Teclado",
+		"subtitle": "Acesse rapidamente as principais funções",
+		"togglePlay": "Iniciar/Pausar",
+		"reset": "Resetar Timer",
+		"nextChallenge": "Próximo Desafio",
+		"focusMode": "Modo Foco",
+		"showHelp": "Mostrar Ajuda",
+		"close": "Fechar",
+		"note": "Atalhos desabilitados quando um input está focado"
+	},
 	"app": {
 		"title": "Pomodoro Move.it",
 		"description": "Pomodoro timer com desafios de saude e bem-estar"
