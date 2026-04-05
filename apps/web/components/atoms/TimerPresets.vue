@@ -115,8 +115,7 @@
         :disabled="!countdown.isActive && countdown.time === countdown.customMinutes * 60 && !countdown.isBreak"
         @click="resetTimer"
       >
-        <Icon name="lucide:rotate-ccw" class="w-4 h-4" />>
-        </svg>
+        <Icon name="lucide:rotate-ccw" class="w-4 h-4" />
         {{ $t('timer.resetTimer') }}
       </button>
     </div>

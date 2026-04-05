@@ -20,7 +20,7 @@
             :title="$t('profile.edit')"
             @click="profile.setEditing(true)"
           >
-            <Icon name="lucide:edit" class="w-3 h-3" />>
+            <Icon name="lucide:edit" class="w-3 h-3" />
             </svg>
           </button>
         </div>
@@ -39,7 +39,7 @@
         
         <!-- Level badge -->
         <div class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 bg-warning/10 rounded-full">
-          <Icon name="lucide:star" class="w-4 h-4 text-warning" />>
+          <Icon name="lucide:star" class="w-4 h-4 text-warning" />
           </svg>
           <span class="text-sm font-bold text-warning">{{ $t('nav.level', { level: challenges.level }) }}</span>
         </div>
@@ -72,7 +72,7 @@
             class="btn btn-ghost btn-circle btn-sm"
             @click="profile.setEditing(false)"
           >
-            <Icon name="lucide:x" class="w-4 h-4" />>
+            <Icon name="lucide:x" class="w-4 h-4" />
             </svg>
           </button>
         </div>
@@ -81,7 +81,7 @@
         <div class="form-control">
           <label class="label">
             <span class="label-text font-medium text-sm flex items-center gap-2">
-              <Icon name="lucide:user" class="w-4 h-4" />>
+              <Icon name="lucide:user" class="w-4 h-4" />
               </svg>
               {{ $t('profile.name') }}
             </span>
@@ -136,7 +136,7 @@
           class="btn btn-primary w-full"
           @click="save"
         >
-          <Icon name="lucide:check" class="w-4 h-4" />>
+          <Icon name="lucide:check" class="w-4 h-4" />
           </svg>
           {{ $t('profile.save') }}
         </button>
@@ -152,7 +152,7 @@
         <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg hover:bg-base-200 transition-colors">
           <div class="flex items-center gap-3">
             <div class="p-1.5 bg-base-300/50 rounded-md">
-              <Icon name="lucide:bell" class="w-4 h-4 text-base-content/70" />>
+              <Icon name="lucide:bell" class="w-4 h-4 text-base-content/70" />
               </svg>
             </div>
             <div>
@@ -175,7 +175,7 @@
         >
           <div class="flex items-center gap-3">
             <div class="p-1.5 bg-base-300/50 rounded-md">
-              <Icon name="lucide:smartphone" class="w-4 h-4 text-base-content/70" />>
+              <Icon name="lucide:smartphone" class="w-4 h-4 text-base-content/70" />
               </svg>
             </div>
             <div>

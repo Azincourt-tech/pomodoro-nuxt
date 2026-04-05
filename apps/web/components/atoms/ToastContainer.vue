@@ -16,7 +16,7 @@
           'alert-error': toast.type === 'error',
         }"
       >
-        <Icon name="lucide:info" class="stroke-current shrink-0 w-6 h-6" />>
+        <Icon name="lucide:info" class="stroke-current shrink-0 w-6 h-6" />
         </svg>
         <svg
           v-else-if="toast.type === 'warning'"

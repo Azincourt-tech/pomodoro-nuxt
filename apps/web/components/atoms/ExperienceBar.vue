@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between mb-2">
       <div class="flex items-center gap-2">
         <div class="badge badge-primary badge-md font-bold shadow-md">
-          <Icon name="lucide:star" class="w-3 h-3 mr-1" />>
+          <Icon name="lucide:star" class="w-3 h-3 mr-1" />
           </svg>
           {{ $t('nav.level', { level: challenges.level }) }}
         </div>

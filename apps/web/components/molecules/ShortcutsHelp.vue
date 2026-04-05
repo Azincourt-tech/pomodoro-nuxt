@@ -24,7 +24,7 @@
           class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10"
           @click="close"
         >
-          <Icon name="lucide:x" class="w-4 h-4" />>
+          <Icon name="lucide:x" class="w-4 h-4" />
           </svg>
         </button>
 
@@ -66,7 +66,7 @@
         <!-- Footer Note -->
         <div class="mt-6 p-4 bg-info/10 rounded-xl border border-info/20 relative z-10">
           <p class="text-xs text-base-content/60 flex items-center gap-2">
-            <Icon name="lucide:info" class="w-4 h-4 text-info shrink-0" />>
+            <Icon name="lucide:info" class="w-4 h-4 text-info shrink-0" />
             </svg>
             <span>{{ $t('shortcuts.note', 'Atalhos desabilitados quando um input está focado') }}</span>
           </p>
@@ -78,7 +78,7 @@
             @click="close"
           >
             <span>{{ $t('shortcuts.close', 'Fechar') }}</span>
-            <Icon name="lucide:x" class="w-4 h-4" />>
+            <Icon name="lucide:x" class="w-4 h-4" />
             </svg>
           </button>
         </div>
