@@ -70,3 +70,4 @@ export default app
 // dominio personalizado
 // teste final deploy
 // redeploy trigger
+// trigger
