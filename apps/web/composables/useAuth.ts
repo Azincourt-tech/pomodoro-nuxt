@@ -152,7 +152,7 @@ function useBetterAuthEmail() {
           id: user.id,
           email: user.email,
           name: user.name,
-          avatar: user.image || null,
+          avatarUrl: user.image || null,
         }
         authSession.value = res.data.session as any
       } else {

@@ -36,6 +36,11 @@ export function createAuth(env: AuthEnv) {
     }),
     secret: env.BETTER_AUTH_SECRET || 'pomodoro-dev-secret-change-in-production',
     baseURL: env.BETTER_AUTH_URL || 'http://localhost:8787',
+    trustedOrigins: [
+      env.BETTER_AUTH_URL || 'http://localhost:8787',
+      'https://pomodoro-nuxt-ten.vercel.app',
+      'http://localhost:3000',
+    ].filter(Boolean),
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false,
