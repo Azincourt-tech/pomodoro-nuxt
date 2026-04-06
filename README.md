@@ -118,13 +118,13 @@ pomodoro-nuxt/
 
 ---
 
-## Configuracao e Deploy
+## Configuracao do Projeto
 
 ### Pre-requisitos
 - Node.js 20+
 - npm 10+
-- Cloudflare Workers CLI (para API)
-- Conta Vercel (para Frontend)
+- Wrangler CLI (para API Cloudflare): `npm install -g wrangler`
+- Vercel CLI (opcional): `npm install -g vercel`
 
 ### 1. Instalacao
 
@@ -137,231 +137,189 @@ cd pomodoro-nuxt
 npm install
 ```
 
-### 2. Variaveis de Ambiente
+---
 
-Copie `.env.example` para `.env` na raiz:
+## Ambiente de Desenvolvimento (Localhost)
+
+> **IMPORTANTE**: Este ambiente roda 100% localmente. Nenhum dado de producao e acessado.
+
+### 2.1 Configuracao do Frontend Local
+
+Crie o arquivo `.env` na raiz do projeto:
 
 ```bash
 cp .env.example .env
 ```
 
-#### Frontend (apps/web/.env)
-```bash
-# API URL
-NUXT_PUBLIC_API_BASE=http://localhost:8787  # Desenvolvimento
-# NUXT_PUBLIC_API_BASE=https://api.exemplo.com  # Producao
+Edite `.env` com as configuracoes locais:
 
-# GitHub OAuth (opcional)
-GITHUB_CLIENT_ID=seu-client-id
-GITHUB_CLIENT_SECRET=seu-client-secret
+```bash
+# Frontend (Nuxt)
+NUXT_PUBLIC_API_BASE=http://localhost:8787
 ```
 
-#### API (apps/api/.env)
-```bash
-# GitHub OAuth
-GITHUB_CLIENT_ID=seu-client-id
-GITHUB_CLIENT_SECRET=seu-client-secret
-GITHUB_REDIRECT_URI=http://localhost:8787/api/auth/github-callback
+### 2.2 Configuracao da API Local (Cloudflare Workers)
 
-# JWT Secret
-JWT_SECRET=sua-chave-secreta-aleatoria
+#### Passo 1: Configurar wrangler.toml
 
-# D1 Database ID
-D1_DATABASE_ID=id-do-seu-database-d1
-```
-
-### 3. Desenvolvimento Local
-
-#### Configuracao do Cloudflare Workers (Local)
-
-Antes de rodar a API localmente, configure o ambiente Cloudflare:
-
-##### Passo 1: Instalar Wrangler CLI
-```bash
-npm install -g wrangler
-```
-
-##### Passo 2: Autenticar no Cloudflare
-```bash
-wrangler login
-```
-
-##### Passo 3: Configurar wrangler.toml
 ```bash
 # Copiar template
 cp apps/api/wrangler.toml.example apps/api/wrangler.toml
-
-# Editar wrangler.toml e adicionar seus IDs:
-# - database_id (D1)
-# - kv_namespace_id (KV)
 ```
 
-##### Passo 4: Criar Banco de Dados D1 (Local)
-```bash
-# Criar database local
-wrangler d1 create pomodoro-db
+Edite `apps/api/wrangler.toml` com seus IDs do Cloudflare (obtidos via `wrangler d1 create pomodoro-db`):
 
-# Anote o database_id gerado e cole no wrangler.toml
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "pomodoro-db"
+database_id = "SEU_DATABASE_ID_AQUI"
 
-# Aplicar migrations (se existirem)
-wrangler d1 execute pomodoro-db --local --file=./migrations/001_init.sql
+[[kv_namespaces]]
+binding = "KV"
+id = "SEU_KV_ID_AQUI"
 ```
 
-##### Passo 5: Configurar Secrets Locais
+#### Passo 2: Configurar Secrets Locais
+
+Crie `apps/api/.dev.vars` (arquivo de secrets para desenvolvimento local):
+
 ```bash
-# Criar arquivo .dev.vars para desenvolvimento local
-cat > apps/api/.dev.vars << EOF
-GITHUB_CLIENT_ID=seu_client_id
-GITHUB_CLIENT_SECRET=seu_client_secret
-BETTER_AUTH_SECRET=sua_chave_secreta_min_32_caracteres
+cat > apps/api/.dev.vars << 'EOF'
+GITHUB_CLIENT_ID=seu_client_id_aqui
+GITHUB_CLIENT_SECRET=seu_client_secret_aqui
+BETTER_AUTH_SECRET=chave_secreta_minimo_32_caracteres_aqui
 EOF
-
-# Proteger arquivo
-echo ".dev.vars" >> .gitignore
 ```
 
-> **Nota:** `.dev.vars` e automaticamente carregado pelo Wrangler em modo desenvolvimento e deve estar no `.gitignore`.
+Proteja o arquivo:
 
-##### Passo 6: Rodar API Localmente
 ```bash
-cd apps/api
-wrangler dev
-
-# A API estara disponivel em: http://localhost:8787
+chmod 600 apps/api/.dev.vars
 ```
 
-#### Opcao A: Rodar Frontend e API juntos (Recomendado)
+> **Seguranca**: `.dev.vars` ja esta no `.gitignore` para evitar que va para o repositorio.
 
-**Terminal 1 - API Cloudflare:**
+### 2.3 Rodar o Projeto Localmente
+
+**Terminal 1 - API Cloudflare (localhost:8787):**
 ```bash
 cd apps/api
 wrangler dev
 ```
 
-**Terminal 2 - Frontend Nuxt:**
+**Terminal 2 - Frontend Nuxt (localhost:3000):**
 ```bash
 cd apps/web
 npm run dev
 ```
 
-Acesse: `http://localhost:3000`
+Acesse: **http://localhost:3000**
 
-#### Opcao B: Usando Scripts do Monorepo
-
-```bash
-# Terminal 1 - API
-npm run dev:api
-
-# Terminal 2 - Frontend
-npm run dev:web
-```
-
-#### Opcao C: Rodar apenas Frontend (sem API)
-
-Se quiser testar apenas o frontend sem backend:
-
-```bash
-npm run dev:web
-```
-
-> **Nota:** Alguns recursos como login e sync na nuvem nao funcionarao sem a API.
-
-#### Estrutura Completa de Scripts
+### 2.4 Scripts de Desenvolvimento
 
 ```bash
 # Desenvolvimento
-npm run dev              # Turbo: roda ambos (web + api)
-npm run dev:api          # Apenas API (Cloudflare Workers)
-npm run dev:web          # Apenas Frontend (Nuxt)
+npm run dev           # Turborepo: tenta rodar ambos
+npm run dev:api       # Apenas API (wrangler dev)
+npm run dev:web       # Apenas Frontend (nuxt dev)
 
-# Build
-npm run build            # Build ambos para producao
-npm run build:web        # Build apenas frontend
-npm run build:api        # Build apenas API
-
-# Preview/Deploy
-npm run preview          # Preview do build frontend
-wrangler deploy          # Deploy API para Cloudflare
-vercel --prod            # Deploy frontend para Vercel
-
-# Qualidade de Codigo
-npm run lint             # ESLint em todo o monorepo
-npm run lint:fix         # ESLint com auto-fix
-npm run format           # Prettier
-npm run test             # Vitest (web tests)
-npm run test:watch       # Vitest watch mode
-```
+# Qualidade de codigo
 npm run lint          # ESLint
 npm run lint:fix      # ESLint com auto-fix
 npm run format        # Prettier
-npm run test          # Vitest run
+npm run test          # Vitest (testes unitarios)
 npm run test:watch    # Vitest watch mode
+
+# Verificar se esta rodando
+curl http://localhost:8787/health  # Testar API
+curl http://localhost:3000         # Testar Frontend
 ```
 
 ---
 
 ## Deploy para Producao
 
-### Frontend (Vercel)
+> **IMPORTANTE**: Este ambiente usa servicos reais da nuvem (Cloudflare + Vercel). Dados reais sao armazenados.
 
-#### Opcao 1: Deploy Automatico (Recomendado)
-1. Conecte seu repositorio GitHub ao Vercel
+### 3.1 Frontend (Vercel)
+
+#### Opcao 1: Deploy Automatico via GitHub (Recomendado)
+
+1. Acesse [vercel.com](https://vercel.com) e conecte seu repositorio GitHub
 2. Configure as variaveis de ambiente no painel do Vercel:
-   - `NUXT_PUBLIC_API_BASE=https://sua-api.exemplo.com`
+   - `NUXT_PUBLIC_API_BASE=https://sua-api.exemplo.com` (URL da API em producao)
    - `GITHUB_CLIENT_ID` (se usar OAuth)
-   - `GITHUB_CLIENT_SECRET`
-3. Push para `master` ou `develop` dispara deploy automatico
+   - `GITHUB_CLIENT_SECRET` (se usar OAuth)
+3. Push para `master` dispara deploy automatico
 
-#### Opcao 2: Deploy via CLI
+#### Opcao 2: Deploy via Vercel CLI
+
 ```bash
 # Instalar Vercel CLI
-npm i -g vercel
+npm install -g vercel
 
 # Login
 vercel login
 
 # Deploy
-vercel --prod
-```
-
-#### Opcao 3: Deploy Manual
-```bash
 cd apps/web
-npm run build
 vercel --prod
 ```
 
-### API (Cloudflare Workers)
+### 3.2 API (Cloudflare Workers)
 
-#### Configuracao Inicial
-```bash
-# Instalar Wrangler CLI
-npm i -g wrangler
+#### Passo 1: Configurar Secrets na Producao
 
-# Login no Cloudflare
-wrangler login
-
-# Criar D1 Database
-wrangler d1 create pomodoro-db
-
-# Anote o database_id gerado
-```
-
-#### Deploy da API
 ```bash
 cd apps/api
 
-# Configurar wrangler.toml com seu database_id
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "pomodoro-db"
-# database_id = "seu-database-id-aqui"
+# Adicionar secrets criptografados no Cloudflare
+wrangler secret put BETTER_AUTH_SECRET
+wrangler secret put GITHUB_CLIENT_ID
+wrangler secret put GITHUB_CLIENT_SECRET
+```
 
-# Deploy
+#### Passo 2: Deploy da API
+
+```bash
+# Deploy para producao
 npm run deploy
-# ou
+
+# Ou diretamente
 wrangler deploy
 ```
+
+#### Verificar Deploy
+
+```bash
+# Testar endpoint de health
+curl https://sua-api.exemplo.com/health
+
+# Verificar se OAuth GitHub esta habilitado
+curl https://sua-api.exemplo.com/api/auth/github-enabled
+
+# Ver logs em tempo real
+wrangler tail
+```
+
+### 3.3 Variaveis de Ambiente de Producao
+
+#### Frontend (Vercel)
+Configure no painel do Vercel:
+- `NUXT_PUBLIC_API_BASE`: URL da API em producao (ex: `https://api.exemplo.com`)
+
+#### API (Cloudflare)
+Configure via `wrangler secret put`:
+- `BETTER_AUTH_SECRET`: Chave secreta de autenticacao (min 32 caracteres)
+- `GITHUB_CLIENT_ID`: Client ID do GitHub OAuth
+- `GITHUB_CLIENT_SECRET`: Client Secret do GitHub OAuth
+
+O `wrangler.toml` deve conter os IDs reais dos recursos Cloudflare:
+- `database_id` do D1
+- `id` do KV namespace
+
+---
 
 #### Variaveis de Ambiente no Cloudflare
 ```bash
