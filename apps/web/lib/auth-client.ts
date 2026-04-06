@@ -1,5 +1,4 @@
 import { createAuthClient, type BetterAuthClient } from 'better-auth/client'
-import { useRuntimeConfig } from '#imports'
 
 const apiBase = 'https://pomodoro-api.azlab.dev.br'
 
@@ -11,17 +10,9 @@ export async function getAuthClient(): Promise<BetterAuthClient> {
   if (_initPromise) return _initPromise
   
   _initPromise = (async () => {
-    // Get github client ID from runtime config (set via NUXT_PUBLIC_GITHUB_CLIENT_ID env var)
-    const config = useRuntimeConfig()
-    const githubClientId = config.public.githubClientId || ''
-    
+    // No socialProviders config here - backend handles OAuth entirely
     _client = createAuthClient({
       baseURL: apiBase,
-      ...(githubClientId ? {
-        socialProviders: {
-          github: { clientId: githubClientId },
-        },
-      } : {}),
     })
     return _client
   })()
