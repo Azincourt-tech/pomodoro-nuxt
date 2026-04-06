@@ -131,7 +131,7 @@ export function createAuth(env: AuthEnv) {
         sessionToken: {
           options: {
             httpOnly: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             secure: true,
             path: '/',
           },
