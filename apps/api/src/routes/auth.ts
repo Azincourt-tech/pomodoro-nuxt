@@ -15,7 +15,8 @@ export const authRoutes = new Hono<{ Bindings: Env }>()
 
 // Check if GitHub OAuth is enabled
 authRoutes.get('/github-enabled', async (c) => {
+  const clientId = c.env.GH_OAUTH_CLIENT_ID || c.env.GITHUB_CLIENT_ID
   const clientSecret = c.env.GITHUB_CLIENT_SECRET || c.env.GH_OAUTH_CLIENT_SECRET
-  const enabled = !!(c.env.GITHUB_CLIENT_ID && clientSecret)
+  const enabled = !!(clientId && clientSecret)
   return c.json({ enabled })
 })
