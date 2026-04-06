@@ -25,7 +25,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: cd apps/api && npm install
+        run: npm install
 
       - name: Typecheck API
         run: npx tsc --noEmit
