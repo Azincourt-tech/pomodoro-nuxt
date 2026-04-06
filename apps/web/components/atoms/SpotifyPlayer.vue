@@ -86,7 +86,7 @@
           height="100%"
           style="min-height: 250px"
           frameBorder="0"
-          allowfullscreen
+          :allowfullscreen="true"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"
           class="rounded-2xl relative z-10"

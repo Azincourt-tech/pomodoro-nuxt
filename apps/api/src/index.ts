@@ -12,7 +12,7 @@ const app = new Hono<{ Bindings: Env }>()
 
 // CORS middleware
 app.use('*', cors({
-  origin: ['http://localhost:3000', 'https://pomodoro-move.it'],
+  origin: ['http://localhost:3000', 'https://pomodoro-nuxt-ten.vercel.app', 'https://pomodoro-move.it'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   credentials: true,
