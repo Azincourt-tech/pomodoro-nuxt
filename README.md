@@ -172,7 +172,82 @@ D1_DATABASE_ID=id-do-seu-database-d1
 
 ### 3. Desenvolvimento Local
 
-#### Opcao A: Rodar Frontend e API juntos
+#### Configuracao do Cloudflare Workers (Local)
+
+Antes de rodar a API localmente, configure o ambiente Cloudflare:
+
+##### Passo 1: Instalar Wrangler CLI
+```bash
+npm install -g wrangler
+```
+
+##### Passo 2: Autenticar no Cloudflare
+```bash
+wrangler login
+```
+
+##### Passo 3: Configurar wrangler.toml
+```bash
+# Copiar template
+cp apps/api/wrangler.toml.example apps/api/wrangler.toml
+
+# Editar wrangler.toml e adicionar seus IDs:
+# - database_id (D1)
+# - kv_namespace_id (KV)
+```
+
+##### Passo 4: Criar Banco de Dados D1 (Local)
+```bash
+# Criar database local
+wrangler d1 create pomodoro-db
+
+# Anote o database_id gerado e cole no wrangler.toml
+
+# Aplicar migrations (se existirem)
+wrangler d1 execute pomodoro-db --local --file=./migrations/001_init.sql
+```
+
+##### Passo 5: Configurar Secrets Locais
+```bash
+# Criar arquivo .dev.vars para desenvolvimento local
+cat > apps/api/.dev.vars << EOF
+GITHUB_CLIENT_ID=seu_client_id
+GITHUB_CLIENT_SECRET=seu_client_secret
+BETTER_AUTH_SECRET=sua_chave_secreta_min_32_caracteres
+EOF
+
+# Proteger arquivo
+echo ".dev.vars" >> .gitignore
+```
+
+> **Nota:** `.dev.vars` e automaticamente carregado pelo Wrangler em modo desenvolvimento e deve estar no `.gitignore`.
+
+##### Passo 6: Rodar API Localmente
+```bash
+cd apps/api
+wrangler dev
+
+# A API estara disponivel em: http://localhost:8787
+```
+
+#### Opcao A: Rodar Frontend e API juntos (Recomendado)
+
+**Terminal 1 - API Cloudflare:**
+```bash
+cd apps/api
+wrangler dev
+```
+
+**Terminal 2 - Frontend Nuxt:**
+```bash
+cd apps/web
+npm run dev
+```
+
+Acesse: `http://localhost:3000`
+
+#### Opcao B: Usando Scripts do Monorepo
+
 ```bash
 # Terminal 1 - API
 npm run dev:api
@@ -181,22 +256,41 @@ npm run dev:api
 npm run dev:web
 ```
 
-#### Opcao B: Rodar apenas Frontend (API mock)
+#### Opcao C: Rodar apenas Frontend (sem API)
+
+Se quiser testar apenas o frontend sem backend:
+
 ```bash
 npm run dev:web
 ```
 
-Acesse: `http://localhost:3000`
+> **Nota:** Alguns recursos como login e sync na nuvem nao funcionarao sem a API.
 
-#### Estrutura de Scripts
+#### Estrutura Completa de Scripts
+
 ```bash
-npm run dev           # Rodar frontend (web) em dev
-npm run dev:api       # Rodar API (Cloudflare Workers) local
-npm run dev:web       # Rodar apenas frontend
-npm run build         # Build para producao (ambos)
-npm run build:web     # Build apenas frontend
-npm run build:api     # Build apenas API
-npm run preview       # Preview do build frontend
+# Desenvolvimento
+npm run dev              # Turbo: roda ambos (web + api)
+npm run dev:api          # Apenas API (Cloudflare Workers)
+npm run dev:web          # Apenas Frontend (Nuxt)
+
+# Build
+npm run build            # Build ambos para producao
+npm run build:web        # Build apenas frontend
+npm run build:api        # Build apenas API
+
+# Preview/Deploy
+npm run preview          # Preview do build frontend
+wrangler deploy          # Deploy API para Cloudflare
+vercel --prod            # Deploy frontend para Vercel
+
+# Qualidade de Codigo
+npm run lint             # ESLint em todo o monorepo
+npm run lint:fix         # ESLint com auto-fix
+npm run format           # Prettier
+npm run test             # Vitest (web tests)
+npm run test:watch       # Vitest watch mode
+```
 npm run lint          # ESLint
 npm run lint:fix      # ESLint com auto-fix
 npm run format        # Prettier
@@ -329,6 +423,102 @@ npm run build
 
 wrangler deploy --dry-run  # Testar sem deploy
 wrangler tail              # Ver logs em tempo real
+```
+
+#### Erros Comuns - Desenvolvimento Local (Cloudflare Workers)
+
+##### Wrangler nao inicia
+```bash
+# Verificar versao do Wrangler
+wrangler --version  # Deve ser 3.x ou superior
+
+# Reinstalar se necessario
+npm install -g wrangler@latest
+
+# Limpar cache
+rm -rf .wrangler/
+wrangler dev
+```
+
+##### Erro de autenticacao
+```bash
+# Re-autenticar
+wrangler logout
+wrangler login
+
+# Verificar conta
+wrangler whoami
+```
+
+##### Erro de D1 database
+```bash
+# Verificar se database existe
+wrangler d1 list
+
+# Se database_id esta incorreto no wrangler.toml:
+# 1. Criar novo database
+wrangler d1 create pomodoro-db
+
+# 2. Copiar o database_id gerado
+# 3. Colar no wrangler.toml
+
+# Aplicar schema localmente
+wrangler d1 execute pomodoro-db --local
+```
+
+##### Erro de KV namespace
+```bash
+# Listar namespaces
+wrangler kv:namespace list
+
+# Se precisar criar novo:
+wrangler kv:namespace create "MY_KV"
+
+# Copiar o ID e atualizar wrangler.toml
+```
+
+##### Erro: "Module not found" na API
+```bash
+# Verificar se dependencias estao instaladas
+cd apps/api
+npm install
+
+# Rebuild se necessario
+npm run build
+```
+
+##### Erro de .dev.vars
+```bash
+# Verificar se arquivo existe
+ls -la apps/api/.dev.vars
+
+# Verificar permissões
+chmod 600 apps/api/.dev.vars
+
+# Verificar se esta no .gitignore
+grep "\.dev\.vars" .gitignore  # Deve retornar resultado
+```
+
+##### Frontend nao conecta com API local
+```bash
+# 1. Verificar se API esta rodando
+curl http://localhost:8787/health
+
+# 2. Verificar NUXT_PUBLIC_API_BASE no .env
+grep "NUXT_PUBLIC_API_BASE" .env
+# Deve ser: NUXT_PUBLIC_API_BASE=http://localhost:8787
+
+# 3. Reiniciar Nuxt dev server
+# Ctrl+C e npm run dev:web
+```
+
+##### Erro de CORS
+```bash
+# Verificar se a API esta configurada para aceitar localhost
+# Em apps/api/src/index.ts, verificar headers CORS:
+# Access-Control-Allow-Origin: *
+
+# Em desenvolvimento, permita todas as origens
 ```
 
 ---
