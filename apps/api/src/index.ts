@@ -43,25 +43,38 @@ app.route('/api/auth', authRoutes)
 
 // Better Auth handler - catches all other auth routes
 app.all('/api/auth/*', async (c) => {
-  // Initialize DB tables if not exists (idempotent)
-  try {
-    const statements = runMigrations.split(';').filter(s => s.trim())
-    for (const stmt of statements) {
-      await c.env.DB.prepare(stmt.trim()).run()
+  // Initialize DB tables if not exists (idempotent) - only on first call
+  if (!c.env.__DB_INITIALIZED) {
+    try {
+      const statements = runMigrations.split(';').filter(s => s.trim())
+      for (const stmt of statements) {
+        const trimmed = stmt.trim()
+        if (trimmed) {
+          await c.env.DB.prepare(trimmed).run()
+        }
+      }
+      // Mark as initialized (won't persist across requests but prevents redundant calls in same worker)
+      c.env.__DB_INITIALIZED = true
+    } catch (e) {
+      console.error('DB migration error:', e)
+      return c.json({ error: 'DB initialization failed', details: String(e) }, 500)
     }
-  } catch (e) {
-    console.error('DB migration error:', e)
   }
 
-  const auth = getAuth({
-    DB: c.env.DB,
-    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
-    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
-    GITHUB_CLIENT_ID: c.env.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET || c.env.GH_OAUTH_CLIENT_SECRET,
-  })
+  try {
+    const auth = getAuth({
+      DB: c.env.DB,
+      BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+      BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+      GITHUB_CLIENT_ID: c.env.GITHUB_CLIENT_ID,
+      GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET || c.env.GH_OAUTH_CLIENT_SECRET,
+    })
 
-  return auth.handler(c.req.raw)
+    return auth.handler(c.req.raw)
+  } catch (e) {
+    console.error('Better Auth handler error:', e)
+    return c.json({ error: 'Auth handler failed', details: String(e) }, 500)
+  }
 })
 
 // Pomodoro routes
