@@ -33,17 +33,10 @@ jobs:
 
       - name: Setup wrangler.jsonc
         run: |
-          # Copiar wrangler.jsonc base
           cp wrangler.jsonc wrangler.deploy.jsonc
-          
-          # Substituir placeholders por secrets do GitHub
-          if [ -n "${{ secrets.D1_DATABASE_ID }}" ]; then
-            sed -i "s/D1_DATABASE_ID/${{ secrets.D1_DATABASE_ID }}/g" wrangler.deploy.jsonc
-          fi
-          
-          if [ -n "${{ secrets.KV_NAMESPACE_ID }}" ]; then
-            sed -i "s/KV_NAMESPACE_ID/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.deploy.jsonc
-          fi
+          sed -i "s/{{D1_DATABASE_ID}}/${{ secrets.D1_DATABASE_ID }}/g" wrangler.deploy.jsonc
+          sed -i "s/{{KV_NAMESPACE_ID}}/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.deploy.jsonc
+          sed -i "s|{{BETTER_AUTH_URL}}|${{ secrets.BETTER_AUTH_URL }}|g" wrangler.deploy.jsonc
 
       - name: Deploy to Cloudflare Workers
         run: npx wrangler deploy --config wrangler.deploy.jsonc
