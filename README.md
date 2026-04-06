@@ -9,15 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://pomodoro-nuxt-ten.vercel.app">🚀 Live Demo</a>
-  ·
-  <a href="#features">✨ Features</a>
-  ·
-  <a href="docs/QUICK_SETUP.md">⚡ Quick Start</a>
-  ·
-  <a href="docs/SETUP_SECRETS.md">🔐 Secrets Setup</a>
-  ·
-  <a href="docs/API_DEPLOY_TROUBLESHOOTING.md">🛠️ API Deploy Guide</a>
+  <a href="https://pomodoro-nuxt-ten.vercel.app">🚀 Live Demo</a> ·
+  <a href="#features">✨ Features</a> ·
+  <a href="#quick-start">⚡ Quick Start</a>
 </p>
 
 <p align="center">
@@ -69,45 +63,52 @@ Pomodoro Move.it combina a técnica Pomodoro com desafios de saúde e bem-estar.
 - **Frontend**: Nuxt 3.15+ (Vue 3.5) + TailwindCSS + DaisyUI
 - **Icons**: Lucide Icons via @iconify/vue
 - **State**: Pinia 2.3
-- **Backend**: Hono 4.0 (Cloudflare Workers)
-- **Database**: D1 (SQLite) + KV
+- **Backend**: Hono 4.0 (Cloudflare Workers emulado local)
+- **Database**: D1 (SQLite emulado) + KV (emulado)
 - **Auth**: GitHub OAuth 2.0 + Email/Password
-- **Deploy**: Vercel (frontend) + Cloudflare (API)
+- **Deploy**: Vercel (frontend) + Cloudflare (API, opcional)
 - **Monorepo**: Turborepo
 
 ---
 
 ## Quick Start
 
+### Desenvolvimento Local
+
 ```bash
-# Clone e instale
+# Clone
 git clone https://github.com/Azincourt-tech/pomodoro-nuxt.git
 cd pomodoro-nuxt
+
+# Setup automatizado
+./setup-localhost.sh
+
+# Ou manual
 npm install
 
-# Frontend (localhost)
+# Terminal 1: API (wrangler dev - emulado)
+cd apps/api
 npm run dev
 
-# API (Cloudflare Workers)
-cd apps/api
+# Terminal 2: Frontend
+cd apps/web
 npm run dev
 ```
 
-📖 **Guia completo**: [docs/QUICK_SETUP.md](docs/QUICK_SETUP.md)
+📖 **Guia completo**: [docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md)
 
 ---
 
-## Estrutura do Projeto
+## Estrutura
 
 ```
 pomodoro-nuxt/
 ├── apps/
 │   ├── web/          # Nuxt 3 Frontend
-│   └── api/          # Hono API (Cloudflare Workers)
-├── docs/             # Documentação
-│   ├── QUICK_SETUP.md
-│   ├── SETUP_SECRETS.md
-│   └── API_DEPLOY_TROUBLESHOOTING.md
+│   └── api/          # Hono API (Workers emulado)
+├── docs/
+│   ├── LOCAL_SETUP.md       # Setup local (wrangler dev)
+│   └── SETUP_SECRETS.md     # Boas práticas de segurança
 └── README.md
 ```
 
@@ -115,27 +116,39 @@ pomodoro-nuxt/
 
 ## Documentação
 
-- 🚀 [Quick Setup Guide](docs/QUICK_SETUP.md) - Setup local e produção
-- 🔐 [Secrets Configuration](docs/SETUP_SECRETS.md) - Configurar secrets GitHub/Cloudflare
-- 🛠️ [API Deploy Guide](docs/API_DEPLOY_TROUBLESHOOTING.md) - Troubleshooting deploy API
+- 🚀 [**LOCAL_SETUP.md**](docs/LOCAL_SETUP.md) - Setup local completo
+- 🔐 [**SETUP_SECRETS.md**](docs/SETUP_SECRETS.md) - Segurança
+
+> ⚠️ **Importante**: Este repositório é público. **Nunca exponha credenciais** (tokens, IDs, secrets).
+
+---
+
+## Scripts
+
+```bash
+npm run dev           # Turborepo (API + Web)
+npm run dev:web       # Apenas frontend
+npm run dev:api       # Apenas API
+npm run lint          # ESLint
+npm run format        # Prettier
+npm run test          # Vitest
+```
 
 ---
 
 ## Contribuindo
 
-1. Crie uma branch a partir de `develop`
-2. Faça suas mudanças
-3. Abra um PR para `develop`
-4. Após aprovação, merge para `master` triggera o deploy
+1. Crie branch de `develop`
+2. Faça mudanças
+3. Abra PR para `develop`
+4. Após aprovação, merge para `master`
 
 ---
 
 ## Licença
 
-MIT - Veja [LICENSE](LICENSE) para detalhes.
+MIT - Veja [LICENSE](LICENSE).
 
 ---
 
-<p align="center">
-  Feito com ❤️ por <a href="https://github.com/Azincourt-tech">Azincourt-tech</a>
-</p>
+<p align="center">Feito com ❤️ por <a href="https://github.com/Azincourt-tech">Azincourt-tech</a></p>
