@@ -30,22 +30,18 @@ jobs:
       - name: Typecheck API
         run: npx tsc --noEmit
 
-      - name: Setup wrangler.jsonc
+      - name: Setup wrangler.toml
         run: |
-          cp wrangler.jsonc wrangler.deploy.jsonc
-          echo "Antes da substituicao:"
-          cat wrangler.deploy.jsonc
-          sed -i "s/__D1_DATABASE_ID__/${{ secrets.D1_DATABASE_ID }}/g" wrangler.deploy.jsonc
-          sed -i "s/__KV_NAMESPACE_ID__/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.deploy.jsonc
-          sed -i "s|__BETTER_AUTH_URL__|${{ secrets.BETTER_AUTH_URL }}|g" wrangler.deploy.jsonc
-          sed -i "s/__BETTER_AUTH_SECRET__/${{ secrets.BETTER_AUTH_SECRET }}/g" wrangler.deploy.jsonc
-          sed -i "s/__GH_OAUTH_CLIENT_ID__/${{ secrets.GH_OAUTH_CLIENT_ID }}/g" wrangler.deploy.jsonc
-          sed -i "s/__GH_OAUTH_CLIENT_SECRET__/${{ secrets.GH_OAUTH_CLIENT_SECRET }}/g" wrangler.deploy.jsonc
-          echo "Depois da substituicao:"
-          cat wrangler.deploy.jsonc
+          cp wrangler.toml wrangler.deploy.toml
+          sed -i "s/__D1_DATABASE_ID__/${{ secrets.D1_DATABASE_ID }}/g" wrangler.deploy.toml
+          sed -i "s/__KV_NAMESPACE_ID__/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.deploy.toml
+          sed -i "s|__BETTER_AUTH_URL__|${{ secrets.BETTER_AUTH_URL }}|g" wrangler.deploy.toml
+          sed -i "s/__BETTER_AUTH_SECRET__/${{ secrets.BETTER_AUTH_SECRET }}/g" wrangler.deploy.toml
+          sed -i "s/__GH_OAUTH_CLIENT_ID__/${{ secrets.GH_OAUTH_CLIENT_ID }}/g" wrangler.deploy.toml
+          sed -i "s/__GH_OAUTH_CLIENT_SECRET__/${{ secrets.GH_OAUTH_CLIENT_SECRET }}/g" wrangler.deploy.toml
 
       - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy --config wrangler.deploy.jsonc
+        run: npx wrangler deploy --config wrangler.deploy.toml
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
