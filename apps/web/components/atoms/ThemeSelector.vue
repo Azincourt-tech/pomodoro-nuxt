@@ -90,7 +90,6 @@
 import { useThemeStore, AVAILABLE_THEMES } from '~/stores/theme'
 import { useToast } from '~/composables/useToast'
 
-const { t } = useI18n()
 const theme = useThemeStore()
 const { success } = useToast()
 const themes = AVAILABLE_THEMES
@@ -113,13 +112,12 @@ function previewColor(t: string) {
 
 function handleThemeChange(t: string) {
   theme.setTheme(t as any)
-  success(t('theme.themeChanged', 'Tema alterado para: {theme}', { theme: t }))
+  success(`Tema alterado para: ${t}`)
 }
 
-function handleAutoDarkModeToggle(event: Event) {
-  const target = event.target as HTMLInputElement
+function handleAutoDarkModeToggle() {
   theme.toggleAutoDarkMode()
-  const status = target.checked ? t('theme.autoDarkEnabled', 'ativado') : t('theme.autoDarkDisabled', 'desativado')
-  success(t('theme.autoDarkToggled', 'Modo automatico {status}', { status }))
+  const status = theme.autoDarkMode ? 'ativado' : 'desativado'
+  success(`Modo automatico ${status}`)
 }
 </script>
