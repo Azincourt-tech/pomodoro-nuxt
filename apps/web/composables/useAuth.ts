@@ -60,13 +60,25 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
-      // Use Better Auth client which handles the full OAuth flow
       const client = await getAuthClient()
       
       await client.signIn.social({
         provider: 'github',
         callbackURL: window.location.origin,
       })
+      
+      // After OAuth redirect back, ensure pomodoro profile exists
+      // This runs when the user returns from GitHub
+      setTimeout(async () => {
+        try {
+          await fetch('https://pomodoro-api.azlab.dev.br/api/auth/ensure-profile', {
+            method: 'POST',
+            credentials: 'include',
+          })
+        } catch {
+          // Ignore errors - profile creation is best-effort
+        }
+      }, 2000)
     } catch (err) {
       console.error('GitHub OAuth error:', err)
       throw new Error('GitHub OAuth failed')

@@ -13,6 +13,9 @@ export async function getAuthClient(): Promise<BetterAuthClient> {
     // No socialProviders config here - backend handles OAuth entirely
     _client = createAuthClient({
       baseURL: apiBase,
+      fetchOptions: {
+        credentials: 'include', // Include cookies for cross-origin requests
+      },
     })
     return _client
   })()
