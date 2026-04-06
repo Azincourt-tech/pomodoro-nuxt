@@ -1,17 +1,10 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { drizzle } from 'drizzle-orm/d1'
+import * as schema from '../db/drizzle-schema'
 
-// Custom isoDate type for D1/SQLite compatibility
-const isoDate = {
-  name: 'isoDate',
-  field: 'TEXT',
-  mapFromDatabaseValue: (val: any) => (val !== null && val !== undefined ? String(val) : val),
-  mapToDatabaseValue: (val: any) => (val !== null && val !== undefined ? String(val) : val),
-}
-
-// Better Auth schema definitions for D1
-const user = {
+// Better Auth schema definitions (for adapter config)
+const baUser = {
   tableName: 'user',
   fields: {
     id: { type: 'string', columnName: 'id' },
@@ -24,7 +17,7 @@ const user = {
   },
 }
 
-const session = {
+const baSession = {
   tableName: 'session',
   fields: {
     id: { type: 'string', columnName: 'id' },
@@ -38,7 +31,7 @@ const session = {
   },
 }
 
-const account = {
+const baAccount = {
   tableName: 'account',
   fields: {
     id: { type: 'string', columnName: 'id' },
@@ -57,7 +50,7 @@ const account = {
   },
 }
 
-const verification = {
+const baVerification = {
   tableName: 'verification',
   fields: {
     id: { type: 'string', columnName: 'id' },
@@ -78,7 +71,7 @@ export function getAuth(env: {
   BETTER_AUTH_SECRET?: string
   BETTER_AUTH_URL?: string
 }) {
-  const db = drizzle(env.DB)
+  const db = drizzle(env.DB, { schema })
 
   // Support both naming conventions
   const clientId = env.GH_OAUTH_CLIENT_ID || env.GITHUB_CLIENT_ID
@@ -106,10 +99,10 @@ export function getAuth(env: {
     database: drizzleAdapter(db, {
       provider: 'sqlite',
       schema: {
-        user,
-        session,
-        account,
-        verification,
+        user: baUser,
+        session: baSession,
+        account: baAccount,
+        verification: baVerification,
       },
     }),
     secret: env.BETTER_AUTH_SECRET || 'pomodoro-dev-secret-change-in-production',
@@ -161,14 +154,13 @@ export function getAuth(env: {
     },
   })
 
-  // Override the handler to add pomodoro profile creation
+  // Override the handler to add pomodoro profile creation after social login
   const originalHandler = auth.handler
   auth.handler = async (request: Request) => {
     const response = await originalHandler(request)
 
-    // After successful sign-in via social provider, create pomodoro profile
+    // After successful GitHub callback, create pomodoro profile
     if (request.url.includes('/callback/github') && request.method === 'GET') {
-      // Extract session from response cookies to get user info
       const setCookie = response.headers.get('set-cookie')
       if (setCookie) {
         const tokenMatch = setCookie.match(/better-auth\.session_token=([^;]+)/)
@@ -179,11 +171,19 @@ export function getAuth(env: {
               headers: new Headers({ cookie: `better-auth.session_token=${sessionToken}` }),
             })
             if (session?.user?.id) {
-              // Check if pomodoro profile exists and create if not
-              await env.DB.prepare(
-                'INSERT OR IGNORE INTO pomodoro_profiles (user_id, display_name, avatar_url, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges) VALUES (?, ?, ?, 1, 0, 0, 64, 0, 0, 0)'
-              ).bind(session.user.id, session.user.name || null, session.user.image || null).run()
-              console.log('[BetterAuth Backend] Ensured pomodoro profile for user:', session.user.id)
+              // Use Drizzle with typed schema
+              const existing = await db.query.pomodoroProfiles.findFirst({
+                where: (profiles, { eq }) => eq(profiles.userId, session.user.id),
+              })
+              if (!existing) {
+                await db.insert(schema.pomodoroProfiles).values({
+                  userId: session.user.id,
+                  displayName: session.user.name || null,
+                  avatarUrl: session.user.image || null,
+                  updatedAt: new Date().toISOString(),
+                })
+                console.log('[BetterAuth Backend] Created pomodoro profile for user:', session.user.id)
+              }
             }
           } catch (e) {
             console.error('[BetterAuth Backend] Failed to create pomodoro profile:', e)
