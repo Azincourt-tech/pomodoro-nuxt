@@ -226,17 +226,20 @@ authRoutes.get('/github-enabled', async (c) => {
   return c.json({ enabled })
 })
 
-// Get GitHub OAuth URL
+// Get GitHub OAuth URL - redirect to Better Auth social sign-in
 authRoutes.get('/github-login', async (c) => {
   const enabled = !!(c.env.GITHUB_CLIENT_ID && c.env.GITHUB_CLIENT_SECRET)
   if (!enabled) {
     return c.json({ error: 'GitHub OAuth não configurado' }, 400)
   }
 
-  const callbackURL = c.req.query('callbackURL') || `${c.env.BETTER_AUTH_URL}/api/auth/callback/github`
+  const callbackURL = c.req.query('callbackURL') || `${c.env.BETTER_AUTH_URL}`
   const baseURL = c.env.BETTER_AUTH_URL || `${new URL(c.req.url).origin}`
 
+  // Redirect to GitHub OAuth authorization endpoint
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${c.env.GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(`${baseURL}/api/auth/callback/github`)}&scope=user:email`
+
   return c.json({
-    url: `${baseURL}/api/auth/sign-in/social?provider=github&callbackURL=${encodeURIComponent(callbackURL)}`,
+    url: githubAuthUrl,
   })
 })
