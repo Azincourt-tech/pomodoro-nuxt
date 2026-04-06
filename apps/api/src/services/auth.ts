@@ -1,7 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { drizzle } from 'drizzle-orm/d1'
-import * as schema from '../db/drizzle-schema'
+import { pomodoroProfiles } from '../db/drizzle-schema'
 
 // Better Auth schema definitions (for adapter config)
 const baUser = {
@@ -71,7 +71,7 @@ export function getAuth(env: {
   BETTER_AUTH_SECRET?: string
   BETTER_AUTH_URL?: string
 }) {
-  const db = drizzle(env.DB, { schema })
+  const db = drizzle(env.DB, { schema: { pomodoroProfiles } })
 
   // Support both naming conventions
   const clientId = env.GH_OAUTH_CLIENT_ID || env.GITHUB_CLIENT_ID
@@ -171,12 +171,12 @@ export function getAuth(env: {
               headers: new Headers({ cookie: `better-auth.session_token=${sessionToken}` }),
             })
             if (session?.user?.id) {
-              // Use Drizzle with typed schema
+              // Check if pomodoro profile exists using Drizzle
               const existing = await db.query.pomodoroProfiles.findFirst({
                 where: (profiles, { eq }) => eq(profiles.userId, session.user.id),
               })
               if (!existing) {
-                await db.insert(schema.pomodoroProfiles).values({
+                await db.insert(pomodoroProfiles).values({
                   userId: session.user.id,
                   displayName: session.user.name || null,
                   avatarUrl: session.user.image || null,
