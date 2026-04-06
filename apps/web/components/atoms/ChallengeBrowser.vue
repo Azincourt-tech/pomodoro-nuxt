@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-base-200 shadow-2xl border border-warning/20 hover:shadow-[0_25px_60px_rgba(234,179,8,0.2)] hover:border-warning/40 transition-all duration-500 hover:-translate-y-1 group relative overflow-hidden">
+  <div class="card bg-base-100/80 backdrop-blur-md shadow-2xl border border-warning/20 hover:shadow-[0_25px_60px_rgba(234,179,8,0.2)] hover:border-warning/40 transition-all duration-500 hover:-translate-y-1 group relative overflow-hidden">
     <!-- Background decoration -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden">
       <div class="absolute -top-20 -right-20 w-40 h-40 bg-warning/10 rounded-full blur-3xl group-hover:bg-warning/15 transition-all duration-700" />
