@@ -60,32 +60,13 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
-      // Direct POST to backend auth endpoint to get OAuth redirect URL
-      const apiBase = 'https://pomodoro-api.azlab.dev.br'
-      const response = await fetch(`${apiBase}/api/auth/sign-in/social`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider: 'github',
-          callbackURL: window.location.origin,
-        }),
-        credentials: 'include',
-        redirect: 'manual', // Capture the redirect URL
-      })
+      // Use Better Auth client which handles the full OAuth flow
+      const client = await getAuthClient()
       
-      // Better Auth returns 302 with Location header
-      const redirectUrl = response.headers.get('Location')
-      if (redirectUrl) {
-        window.location.href = redirectUrl
-      } else {
-        // Fallback: try JSON response
-        const data = await response.json().catch(() => ({}))
-        if (data.url) {
-          window.location.href = data.url
-        } else {
-          throw new Error('No redirect URL received from auth endpoint')
-        }
-      }
+      await client.signIn.social({
+        provider: 'github',
+        callbackURL: window.location.origin,
+      })
     } catch (err) {
       console.error('GitHub OAuth error:', err)
       throw new Error('GitHub OAuth failed')
