@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import { getAuthClient } from '~/lib/auth-client'
+import { initClient, authClient } from '~/lib/auth-client'
 
 export interface AuthUser {
   id: string
@@ -60,21 +60,10 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
-      // Get client ID from sessionStorage (set by auth-config plugin)
-      const githubClientId = typeof window !== 'undefined' 
-        ? sessionStorage.getItem('github_client_id') || '' 
-        : ''
+      // Ensure client is initialized
+      await initClient()
       
-      const client = getAuthClient()
-      
-      // If we have a client ID, rebuild client with it
-      if (githubClientId && typeof window !== 'undefined') {
-        // Force redirect to backend auth endpoint instead of client-side OAuth
-        window.location.href = `https://pomodoro-api.azlab.dev.br/api/auth/sign-in/social?provider=github&callbackURL=${encodeURIComponent(window.location.origin)}`
-        return
-      }
-      
-      await client.signIn.social({
+      await authClient.signIn.social({
         provider: 'github',
         callbackURL: window.location.origin,
       })
@@ -88,11 +77,10 @@ function useBetterAuthSocial() {
 }
 
 function useBetterAuthEmail() {
-  const client = getAuthClient()
-  
   async function login(email: string, password: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const res = await client.signIn.email({
+      await initClient()
+      const res = await authClient.signIn.email({
         email,
         password,
       })
@@ -118,7 +106,8 @@ function useBetterAuthEmail() {
 
   async function signUp(email: string, password: string, name: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const res = await client.signUp.email({
+      await initClient()
+      const res = await authClient.signUp.email({
         email,
         password,
         name,
@@ -147,9 +136,9 @@ function useBetterAuthEmail() {
   }
 
   async function logout(): Promise<void> {
-    const client = getAuthClient()
+    await initClient()
     try {
-      await client.signOut()
+      await authClient.signOut()
     } catch {
       // Idempotent
     }
@@ -159,11 +148,11 @@ function useBetterAuthEmail() {
   }
 
   async function fetchSession(): Promise<void> {
-    const client = getAuthClient()
+    await initClient()
     if (authInitialized.value) return
 
     try {
-      const res = await client.getSession()
+      const res = await authClient.getSession()
       if (res.data?.user) {
         const user = res.data.user as any
         authUser.value = {

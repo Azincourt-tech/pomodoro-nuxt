@@ -1,28 +1,64 @@
-import { createAuthClient } from 'better-auth/client'
+import { createAuthClient, type BetterAuthClient } from 'better-auth/client'
 
-const apiBase = import.meta.env.VITE_API_BASE || 'https://pomodoro-api.azlab.dev.br'
+const apiBase = 'https://pomodoro-api.azlab.dev.br'
 
-// GitHub OAuth Client ID - set via NUXT_PUBLIC_GITHUB_CLIENT_ID env var
-// In Nuxt, public runtime config vars are available via process.env at build time
-const githubClientId = process.env.NUXT_PUBLIC_GITHUB_CLIENT_ID || ''
+let _client: BetterAuthClient | null = null
+let _clientId: string | null = null
+let _initPromise: Promise<void> | null = null
 
-let _client: ReturnType<typeof createAuthClient> | null = null
-
-export function getAuthClient() {
-  if (_client) return _client
+async function fetchGithubClientId(): Promise<string> {
+  if (_clientId !== null) return _clientId
   
-  _client = createAuthClient({
-    baseURL: apiBase,
-    ...(githubClientId ? {
-      socialProviders: {
-        github: {
-          clientId: githubClientId,
-        },
-      },
-    } : {}),
-  })
+  try {
+    const res = await fetch(`${apiBase}/api/config/oauth`)
+    const data = await res.json()
+    _clientId = data.githubClientId || ''
+  } catch {
+    _clientId = ''
+  }
   
-  return _client
+  return _clientId
 }
 
-export const authClient = getAuthClient()
+async function initClient(): Promise<BetterAuthClient> {
+  if (_client) return _client
+  if (_initPromise) {
+    await _initPromise
+    return _client!
+  }
+  
+  _initPromise = (async () => {
+    const githubClientId = await fetchGithubClientId()
+    
+    _client = createAuthClient({
+      baseURL: apiBase,
+      ...(githubClientId ? {
+        socialProviders: {
+          github: {
+            clientId: githubClientId,
+          },
+        },
+      } : {}),
+    })
+  })()
+  
+  await _initPromise
+  return _client!
+}
+
+// Initialize immediately in browser
+if (typeof window !== 'undefined') {
+  initClient().catch(console.error)
+}
+
+export { initClient, fetchGithubClientId }
+
+// Export a proxy that waits for init
+export const authClient = new Proxy({} as BetterAuthClient, {
+  get(_target, prop) {
+    if (!_client) {
+      throw new Error('Auth client not initialized. Call initClient() first.')
+    }
+    return (_client as any)[prop]
+  },
+})

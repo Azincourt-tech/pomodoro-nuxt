@@ -7,6 +7,7 @@ import profile from './routes/profile'
 import sessions from './routes/sessions'
 import stats from './routes/stats'
 import { authRoutes } from './routes/auth'
+import oauthConfig from './routes/oauth-config'
 
 const app = new Hono<{ Bindings: Env }>()
 
@@ -39,6 +40,9 @@ app.get('/api/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISO
 
 // Custom auth routes (only github-enabled check)
 app.route('/api/auth', authRoutes)
+
+// OAuth config endpoint
+app.route('/api', oauthConfig)
 
 // Better Auth handler - catches all other auth routes
 app.all('/api/auth/*', async (c) => {
