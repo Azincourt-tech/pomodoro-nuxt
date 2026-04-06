@@ -333,6 +333,79 @@ wrangler tail              # Ver logs em tempo real
 
 ---
 
+## Seguranca
+
+### Arquivos Ignorados
+
+Os seguintes arquivos sao ignorados pelo Git por conterem informacoes sensiveis:
+
+- `.env` - Variaveis de ambiente com chaves secretas
+- `wrangler.toml` - IDs do Cloudflare D1 e KV namespaces
+- `.dev.vars` - Variaveis locais do Cloudflare Workers
+- `.wrangler/` - Cache e estado local do Wrangler
+- `node_modules/` - Dependencias instaladas
+
+### Segredos que NAO devem estar no repositorio
+
+#### Frontend
+- `VITE_VAPID_PUBLIC_KEY` - Chave publica de push notifications
+- OAuth credentials (se configuradas localmente)
+
+#### API (Cloudflare Workers)
+- `BETTER_AUTH_SECRET` - Chave secreta de autenticacao (min. 32 chars)
+- `GITHUB_CLIENT_SECRET` - Secret do OAuth GitHub
+- `D1_DATABASE_ID` - ID do banco de dados Cloudflare D1
+- `KV_NAMESPACE_ID` - ID do namespace KV
+- JWT secrets
+- API keys de servicos externos
+
+### Configuracao Segura de Secrets
+
+#### Cloudflare Workers (Recomendado)
+```bash
+# Adicionar secrets via Wrangler (criptografados)
+wrangler secret put BETTER_AUTH_SECRET
+wrangler secret put GITHUB_CLIENT_ID
+wrangler secret put GITHUB_CLIENT_SECRET
+
+# Verificar secrets configurados
+wrangler secret list
+```
+
+#### Frontend (Vercel)
+```bash
+# Configurar via painel do Vercel
+# Settings > Environment Variables
+# NUXT_PUBLIC_API_BASE
+# GITHUB_CLIENT_ID (se necessario)
+```
+
+### Melhores Praticas
+
+1. **NUNCA commite arquivos `.env`** - Use `.env.example` como template
+2. **Use secrets do Cloudflare** - Nao hardcode secrets no codigo
+3. **Gire chaves regularmente** - Especialmente secrets de autenticacao
+4. **Revogue chaves expostas** - Se algum secret vazar, rotate imediatamente
+5. **Use variaveis de ambiente** - Nao escreva secrets no codigo fonte
+6. **wrangler.toml.example** - Use o template e configure localmente
+
+### Se um Secret Vazar
+
+1. Revogue a chave/secret imediatamente no provedor
+2. Gire todas as chaves relacionadas
+3. Adicione o arquivo ao `.gitignore` se ainda nao estiver
+4. Use `git rm --cached` para remover do historico Git
+5. Considere usar ferramentas como `git-secrets` ou `trufflehog`
+
+```bash
+# Remover arquivo sensivel do historico Git (se commitado acidentalmente)
+git rm --cached apps/api/wrangler.toml
+git commit -m "security: remover arquivo sensivel"
+git push
+```
+
+---
+
 ## Branches
 
 - `master` - Producao (estavel)
