@@ -34,9 +34,13 @@ jobs:
       - name: Setup wrangler.jsonc
         run: |
           cp wrangler.jsonc wrangler.deploy.jsonc
+          echo "Antes da substituicao:"
+          cat wrangler.deploy.jsonc
           sed -i "s/__D1_DATABASE_ID__/${{ secrets.D1_DATABASE_ID }}/g" wrangler.deploy.jsonc
           sed -i "s/__KV_NAMESPACE_ID__/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.deploy.jsonc
           sed -i "s|__BETTER_AUTH_URL__|${{ secrets.BETTER_AUTH_URL }}|g" wrangler.deploy.jsonc
+          echo "Depois da substituicao:"
+          cat wrangler.deploy.jsonc
 
       - name: Deploy to Cloudflare Workers
         run: npx wrangler deploy --config wrangler.deploy.jsonc
