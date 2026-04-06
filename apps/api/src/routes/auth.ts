@@ -13,8 +13,13 @@ authRoutes.get('/github-enabled', (c) => {
 
 // Pass all other auth requests to Better Auth handler
 authRoutes.on(['POST', 'GET', 'DELETE'], '/*', async (c) => {
-  const auth = getAuth(c.env) as Auth
-  return auth.handler(c.req.raw)
+  try {
+    const auth = getAuth(c.env) as Auth
+    return await auth.handler(c.req.raw)
+  } catch (err) {
+    console.error('[Auth Route] Error:', err)
+    return c.json({ error: 'Internal server error', details: String(err) }, 500)
+  }
 })
 
 export { authRoutes }
