@@ -81,11 +81,6 @@ const verification = sqliteTable('verification', {
 export function createAuth(env: AuthEnv) {
   const db = drizzle(env.DB, { casing: 'snake_case' })
 
-  // Debug: log environment variables (remove in production)
-  console.log('[Auth] GH_OAUTH_CLIENT_ID:', env.GH_OAUTH_CLIENT_ID ? 'SET' : 'NOT SET')
-  console.log('[Auth] GITHUB_CLIENT_ID:', env.GITHUB_CLIENT_ID ? 'SET' : 'NOT SET')
-  console.log('[Auth] GH_OAUTH_CLIENT_SECRET:', env.GH_OAUTH_CLIENT_SECRET ? 'SET' : 'NOT SET')
-
   // Configure social providers
   const socialProvidersConfig: any = {}
 
@@ -93,8 +88,6 @@ export function createAuth(env: AuthEnv) {
   // Support both GITHUB_CLIENT_ID and GH_OAUTH_CLIENT_ID (Cloudflare var naming)
   const clientId = env.GH_OAUTH_CLIENT_ID || env.GITHUB_CLIENT_ID
   const clientSecret = env.GITHUB_CLIENT_SECRET || env.GH_OAUTH_CLIENT_SECRET
-  console.log('[Auth] Final clientId:', clientId ? 'SET' : 'NOT SET')
-  console.log('[Auth] Final clientSecret:', clientSecret ? 'SET' : 'NOT SET')
   if (clientId && clientSecret) {
     socialProvidersConfig.github = github({
       clientId: clientId,
