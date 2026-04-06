@@ -41,8 +41,8 @@ app.get('/api/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISO
 app.route('/api/auth', authRoutes)
 
 // Better Auth handler for OAuth flows (GitHub OAuth signin/callback)
-// Mounts at /api/better-auth/* to avoid conflicts with custom routes
-app.all('/api/better-auth/*', async (c) => {
+// Mounts at /api/auth/* to match better-auth default basePath
+app.all('/api/auth/*', async (c) => {
   const auth = getAuth({
     DB: c.env.DB,
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,

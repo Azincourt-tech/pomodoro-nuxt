@@ -233,10 +233,10 @@ authRoutes.get('/github-login', async (c) => {
     return c.json({ error: 'GitHub OAuth não configurado' }, 400)
   }
 
-  const callbackURL = c.req.query('callbackURL') || `${c.env.BETTER_AUTH_URL}/api/better-auth/callback/github`
+  const callbackURL = c.req.query('callbackURL') || `${c.env.BETTER_AUTH_URL}/api/auth/callback/github`
   const baseURL = c.env.BETTER_AUTH_URL || `${new URL(c.req.url).origin}`
 
   return c.json({
-    url: `${baseURL}/api/better-auth/sign-in/social?provider=github&callbackURL=${encodeURIComponent(callbackURL)}`,
+    url: `${baseURL}/api/auth/sign-in/social?provider=github&callbackURL=${encodeURIComponent(callbackURL)}`,
   })
 })
