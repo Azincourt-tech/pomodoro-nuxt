@@ -47,7 +47,7 @@ app.all('/api/auth/*', async (c) => {
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
     GITHUB_CLIENT_ID: c.env.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET,
+    GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET || c.env.GH_OAUTH_CLIENT_SECRET,
   })
 
   return auth.handler(c.req.raw)
