@@ -629,6 +629,77 @@ git push
 
 ---
 
+## Solucao para Problemas de Deploy da API Cloudflare
+
+### Problema: Deploy falhando com "Missing entry-point"
+
+**Causa:** O Vercel esta tentando executar `npx wrangler build` como parte do build do frontend, mas:
+- `wrangler build` foi **deprecated** (desde wrangler 3.x)
+- A API Cloudflare **nao deve ser buildada pelo Vercel** - ela precisa de deploy manual
+- Cada branch esta fazendo deploy por configuracao do Vercel
+
+### Solucao:
+
+#### 1. Corrigir o comando de build (se necessario)
+
+Se voce ainda quiser que o Vercel tente algo relacionado ao wrangler, use:
+
+```bash
+# Em vercel.json (opcional, nao recomendado)
+"buildCommand": "cd apps/web && npm run build && echo \"API Cloudflare precisa de deploy manual\""
+```
+
+**Recomendacao**: Remover qualquer referencia ao wrangler do vercel.json - o frontend nao precisa buildar a API.
+
+#### 2. Deploy Manual da API Cloudflare (Obrigatorio)
+
+A API Cloudflare Workers **NAO** pode ser deployada automaticamente por build scripts porque:
+- Precisa de autenticacao com o Cloudflare (wrangler login)
+- Precisa de secrets configurados (wrangler secret put)
+- Precisa de wrangler.toml com IDs reais (nao commitados por seguranca)
+
+**Como deployar corretamente:**
+
+```bash
+# Terminal - API Cloudflare
+cd apps/api
+
+# 1. Autenticar (uma vez)
+wrangler login
+
+# 2. Configurar secrets (uma vez por ambiente)
+wrangler secret put BETTER_AUTH_SECRET
+wrangler secret put GITHUB_CLIENT_ID
+wrangler secret put GITHUB_CLIENT_SECRET
+
+# 3. Copiar template e configurar IDs locais
+cp wrangler.toml.example wrangler.toml
+# Editar wrangler.toml com seus database_id e kv_namespace_id
+
+# 4. Deploy para producao
+wrangler deploy
+
+# 5. Ver deploy
+wrangler tail  # Logs em tempo real
+```
+
+#### 3. Configurar o Vercel para Deploy Apenas do Frontend
+
+Para evitar que branches nao-mestre facem deploy:
+
+**No painel do Vercel:**
+1. Acesse seu projeto -> Settings -> Git
+2. Em "Production Branches": deixe apenas `master` (ou `main`)
+3. Em "Preview Branches": deixe vazio ou especifique apenas branches que voce quer preview
+4. Em "Ignore Build Steps": pode deixar como esta
+
+**Resultado:**
+- Apenas pushes para `master` triggeram deploy do frontend
+- Nenhum deploy automatico da API Cloudflare (porque nao ha comando de build para ela)
+- Deploy da API Cloudflare sempre sera **manual** via `wrangler deploy`
+
+---
+
 ## Autores
 
 - **Willian** - [@Azincourt-tech](https://github.com/Azincourt-tech)
