@@ -123,21 +123,19 @@ export function createAuth(env: AuthEnv) {
       minPasswordLength: 6,
     },
     socialProviders: Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined,
-    session: {
-      expiresIn: 60 * 60 * 24 * 30, // 30 days
-      updateAge: 60 * 60 * 24, // 1 day
-      cookieCache: {
-        enabled: false,
-      },
-    },
-    account: {
-      accountLinking: {
-        enabled: true, // Allow linking accounts from same email
-      },
-    },
     advanced: {
       crossSubDomainCookies: {
         enabled: false,
+      },
+      cookies: {
+        sessionToken: {
+          options: {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: true,
+            path: '/',
+          },
+        },
       },
       database: {
         generateId: () => {
