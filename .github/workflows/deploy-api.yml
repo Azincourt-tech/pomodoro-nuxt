@@ -31,24 +31,22 @@ jobs:
       - name: Typecheck API
         run: npx tsc --noEmit
 
-      - name: Setup wrangler.toml
+      - name: Setup wrangler.jsonc
         run: |
-          # Criar wrangler.toml a partir do exemplo se não existir
-          if [ ! -f wrangler.toml ]; then
-            cp wrangler.toml.example wrangler.toml
-          fi
+          # Copiar wrangler.jsonc base
+          cp wrangler.jsonc wrangler.deploy.jsonc
           
           # Substituir placeholders por secrets do GitHub
           if [ -n "${{ secrets.D1_DATABASE_ID }}" ]; then
-            sed -i "s/SEU_DATABASE_ID_AQUI/${{ secrets.D1_DATABASE_ID }}/g" wrangler.toml
+            sed -i "s/D1_DATABASE_ID/${{ secrets.D1_DATABASE_ID }}/g" wrangler.deploy.jsonc
           fi
           
           if [ -n "${{ secrets.KV_NAMESPACE_ID }}" ]; then
-            sed -i "s/SEU_KV_ID_AQUI/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.toml
+            sed -i "s/KV_NAMESPACE_ID/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.deploy.jsonc
           fi
 
       - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy
+        run: npx wrangler deploy --config wrangler.deploy.jsonc
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
