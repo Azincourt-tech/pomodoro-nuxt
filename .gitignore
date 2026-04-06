@@ -51,6 +51,7 @@ Thumbs.db
 .wrangler
 .dev.vars
 .dev.vars.example
+apps/api/wrangler.toml
 
 # Lock files (keep only one)
 # package-lock.json  # Uncomment if using bun/pnpm only
