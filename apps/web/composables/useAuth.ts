@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import { initClient, authClient } from '~/lib/auth-client'
+import { getAuthClient } from '~/lib/auth-client'
 
 export interface AuthUser {
   id: string
@@ -60,10 +60,9 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
-      // Ensure client is initialized
-      await initClient()
+      const client = await getAuthClient()
       
-      await authClient.signIn.social({
+      await client.signIn.social({
         provider: 'github',
         callbackURL: window.location.origin,
       })
@@ -79,8 +78,8 @@ function useBetterAuthSocial() {
 function useBetterAuthEmail() {
   async function login(email: string, password: string): Promise<{ success: boolean; error?: string }> {
     try {
-      await initClient()
-      const res = await authClient.signIn.email({
+      const client = await getAuthClient()
+      const res = await client.signIn.email({
         email,
         password,
       })
@@ -106,8 +105,8 @@ function useBetterAuthEmail() {
 
   async function signUp(email: string, password: string, name: string): Promise<{ success: boolean; error?: string }> {
     try {
-      await initClient()
-      const res = await authClient.signUp.email({
+      const client = await getAuthClient()
+      const res = await client.signUp.email({
         email,
         password,
         name,
@@ -136,9 +135,9 @@ function useBetterAuthEmail() {
   }
 
   async function logout(): Promise<void> {
-    await initClient()
+    const client = await getAuthClient()
     try {
-      await authClient.signOut()
+      await client.signOut()
     } catch {
       // Idempotent
     }
@@ -148,11 +147,11 @@ function useBetterAuthEmail() {
   }
 
   async function fetchSession(): Promise<void> {
-    await initClient()
+    const client = await getAuthClient()
     if (authInitialized.value) return
 
     try {
-      const res = await authClient.getSession()
+      const res = await client.getSession()
       if (res.data?.user) {
         const user = res.data.user as any
         authUser.value = {
