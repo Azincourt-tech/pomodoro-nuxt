@@ -1,109 +1,108 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { drizzle } from 'drizzle-orm/d1'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { customType } from 'drizzle-orm/sqlite-core'
 
-// Custom date type that converts Date to ISO string for D1
-const isoDate = customType<{ data: Date | string; driverData: string }>({
-  dataType() {
-    return 'text'
-  },
-  toDriver(value: Date | string): string {
-    if (value instanceof Date) {
-      return value.toISOString()
-    }
-    return String(value)
-  },
-  fromDriver(value: string): Date | string {
-    return value
-  },
-})
-
-interface AuthEnv {
-  DB: D1Database
-  BETTER_AUTH_SECRET: string
-  BETTER_AUTH_URL: string
-  GITHUB_CLIENT_ID?: string
-  GH_OAUTH_CLIENT_ID?: string
-  GITHUB_CLIENT_SECRET?: string
-  GH_OAUTH_CLIENT_SECRET?: string
+// Custom isoDate type for D1/SQLite compatibility
+const isoDate = {
+  name: 'isoDate',
+  field: 'TEXT',
+  mapFromDatabaseValue: (val: any) => (val !== null && val !== undefined ? String(val) : val),
+  mapToDatabaseValue: (val: any) => (val !== null && val !== undefined ? String(val) : val),
 }
 
-// Define Better Auth schema for Drizzle adapter
-const user = sqliteTable('user', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
-  image: text('image'),
-  createdAt: isoDate('created_at').notNull(),
-  updatedAt: isoDate('updated_at').notNull(),
-})
+// Better Auth schema definitions for D1
+const user = {
+  tableName: 'user',
+  fields: {
+    id: { type: 'string', columnName: 'id' },
+    name: { type: 'string', columnName: 'name' },
+    email: { type: 'string', columnName: 'email' },
+    emailVerified: { type: 'boolean', columnName: 'email_verified' },
+    image: { type: 'string', columnName: 'image' },
+    createdAt: { type: 'date', columnName: 'created_at' },
+    updatedAt: { type: 'date', columnName: 'updated_at' },
+  },
+}
 
-const session = sqliteTable('session', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
-  expiresAt: isoDate('expires_at').notNull(),
-  token: text('token').notNull().unique(),
-  createdAt: isoDate('created_at').notNull(),
-  updatedAt: isoDate('updated_at').notNull(),
-  ipAddress: text('ip_address'),
-  userAgent: text('user_agent'),
-})
+const session = {
+  tableName: 'session',
+  fields: {
+    id: { type: 'string', columnName: 'id' },
+    userId: { type: 'string', columnName: 'user_id' },
+    token: { type: 'string', columnName: 'token' },
+    expiresAt: { type: 'date', columnName: 'expires_at' },
+    ipAddress: { type: 'string', columnName: 'ip_address' },
+    userAgent: { type: 'string', columnName: 'user_agent' },
+    createdAt: { type: 'date', columnName: 'created_at' },
+    updatedAt: { type: 'date', columnName: 'updated_at' },
+  },
+}
 
-const account = sqliteTable('account', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
-  accountId: text('account_id').notNull(),
-  providerId: text('provider_id').notNull(),
-  accessToken: text('access_token'),
-  refreshToken: text('refresh_token'),
-  accessTokenExpiresAt: isoDate('access_token_expires_at'),
-  refreshTokenExpiresAt: isoDate('refresh_token_expires_at'),
-  scope: text('scope'),
-  idToken: text('id_token'),
-  password: text('password'),
-  createdAt: isoDate('created_at').notNull(),
-  updatedAt: isoDate('updated_at').notNull(),
-})
+const account = {
+  tableName: 'account',
+  fields: {
+    id: { type: 'string', columnName: 'id' },
+    userId: { type: 'string', columnName: 'user_id' },
+    accountId: { type: 'string', columnName: 'account_id' },
+    providerId: { type: 'string', columnName: 'provider_id' },
+    accessToken: { type: 'string', columnName: 'access_token' },
+    refreshToken: { type: 'string', columnName: 'refresh_token' },
+    accessTokenExpiresAt: { type: 'date', columnName: 'access_token_expires_at' },
+    refreshTokenExpiresAt: { type: 'date', columnName: 'refresh_token_expires_at' },
+    scope: { type: 'string', columnName: 'scope' },
+    idToken: { type: 'string', columnName: 'id_token' },
+    password: { type: 'string', columnName: 'password' },
+    createdAt: { type: 'date', columnName: 'created_at' },
+    updatedAt: { type: 'date', columnName: 'updated_at' },
+  },
+}
 
-const verification = sqliteTable('verification', {
-  id: text('id').primaryKey(),
-  identifier: text('identifier').notNull(),
-  value: text('value').notNull(),
-  expiresAt: isoDate('expires_at').notNull(),
-  createdAt: isoDate('created_at').notNull(),
-  updatedAt: isoDate('updated_at').notNull(),
-})
+const verification = {
+  tableName: 'verification',
+  fields: {
+    id: { type: 'string', columnName: 'id' },
+    identifier: { type: 'string', columnName: 'identifier' },
+    value: { type: 'string', columnName: 'value' },
+    expiresAt: { type: 'date', columnName: 'expires_at' },
+    createdAt: { type: 'date', columnName: 'created_at' },
+    updatedAt: { type: 'date', columnName: 'updated_at' },
+  },
+}
 
-export function createAuth(env: AuthEnv) {
-  const db = drizzle(env.DB, { casing: 'snake_case' })
+export function getAuth(env: {
+  DB: D1Database
+  GH_OAUTH_CLIENT_ID?: string
+  GH_OAUTH_CLIENT_SECRET?: string
+  GITHUB_CLIENT_ID?: string
+  GITHUB_CLIENT_SECRET?: string
+  BETTER_AUTH_SECRET?: string
+  BETTER_AUTH_URL?: string
+}) {
+  const db = drizzle(env.DB)
 
-  // Configure social providers
-  const socialProvidersConfig: any = {}
-
-  // Add GitHub OAuth if credentials are configured
-  // Support both GITHUB_CLIENT_ID and GH_OAUTH_CLIENT_ID (Cloudflare var naming)
+  // Support both naming conventions
   const clientId = env.GH_OAUTH_CLIENT_ID || env.GITHUB_CLIENT_ID
-  const clientSecret = env.GITHUB_CLIENT_SECRET || env.GH_OAUTH_CLIENT_SECRET
+  const clientSecret = env.GH_OAUTH_CLIENT_SECRET || env.GITHUB_CLIENT_SECRET
+
+  // Set up social providers
+  const socialProvidersConfig: Record<string, any> = {}
+
   console.log('[BetterAuth Backend] clientId:', clientId ? `SET (${clientId.substring(0, 8)}...)` : 'NOT SET')
   console.log('[BetterAuth Backend] clientSecret:', clientSecret ? 'SET' : 'NOT SET')
   if (clientId && clientSecret) {
     console.log('[BetterAuth Backend] Configuring GitHub OAuth provider')
-    // Try passing credentials directly without github() helper
+    // Pass credentials directly without oauth helper
     socialProvidersConfig.github = {
-      clientId: clientId,
-      clientSecret: clientSecret,
+      clientId,
+      clientSecret,
     }
     console.log('[BetterAuth Backend] socialProvidersConfig keys:', Object.keys(socialProvidersConfig))
-    console.log('[BetterAuth Backend] socialProvidersConfig.github:', socialProvidersConfig.github)
   }
   console.log('[BetterAuth Backend] Final socialProviders:', Object.keys(socialProvidersConfig).length > 0 ? 'SET' : 'EMPTY')
 
   const socialProvidersFinal = Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined
   console.log('[BetterAuth Backend] Passing to betterAuth socialProviders:', socialProvidersFinal ? Object.keys(socialProvidersFinal) : 'undefined')
-  
+
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: 'sqlite',
@@ -127,7 +126,33 @@ export function createAuth(env: AuthEnv) {
       minPasswordLength: 6,
     },
     socialProviders: socialProvidersFinal,
+    // User hooks to create pomodoro profile
+    user: {
+      additionalFields: {
+        // We don't add custom fields to user table, just hooks
+      },
+      createUser: {
+        async after(user, ctx) {
+          console.log('[BetterAuth Backend] New user created:', user.id, user.name, user.email)
+          // Create pomodoro profile for new user
+          try {
+            await db.run(
+              'INSERT INTO pomodoro_profiles (user_id, display_name, avatar_url, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges) VALUES (?, ?, ?, 1, 0, 0, 64, 0, 0, 0)',
+              [user.id, user.name || null, user.image || null]
+            )
+            console.log('[BetterAuth Backend] Pomodoro profile created for user:', user.id)
+          } catch (e) {
+            console.error('[BetterAuth Backend] Failed to create pomodoro profile:', e)
+          }
+        },
+      },
+    },
     advanced: {
+      database: {
+        customTypes: {
+          date: isoDate,
+        },
+      },
       crossSubDomainCookies: {
         enabled: false,
       },
@@ -160,16 +185,8 @@ export function createAuth(env: AuthEnv) {
           },
         },
       },
-      database: {
-        generateId: () => {
-          return crypto.randomUUID()
-        },
-      },
     },
   })
 }
 
-export function getAuth(env: AuthEnv) {
-  return createAuth(env)
-}
-// trigger deploy
+export type Auth = ReturnType<typeof getAuth>

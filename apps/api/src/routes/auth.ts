@@ -1,23 +1,31 @@
 import { Hono } from 'hono'
 import { getAuth } from '../services/auth'
+import type { Auth } from '../services/auth'
+import type { Env } from '../types/env'
 
-interface Env {
-  DB: D1Database
-  KV: KVNamespace
-  BETTER_AUTH_SECRET: string
-  BETTER_AUTH_URL: string
-  GITHUB_CLIENT_ID?: string
-  GH_OAUTH_CLIENT_ID?: string
-  GITHUB_CLIENT_SECRET?: string
-  GH_OAUTH_CLIENT_SECRET?: string
-}
+const authRoutes = new Hono<{ Bindings: Env }>()
 
-export const authRoutes = new Hono<{ Bindings: Env }>()
-
-// Check if GitHub OAuth is enabled
-authRoutes.get('/github-enabled', async (c) => {
-  const clientId = c.env.GH_OAUTH_CLIENT_ID || c.env.GITHUB_CLIENT_ID
-  const clientSecret = c.env.GITHUB_CLIENT_SECRET || c.env.GH_OAUTH_CLIENT_SECRET
-  const enabled = !!(clientId && clientSecret)
-  return c.json({ enabled })
+// Override sign-in social to create pomodoro profile after successful social login
+authRoutes.post('/sign-in/social', async (c) => {
+  const auth = getAuth(c.env) as Auth
+  return auth.handler(c.req.raw)
 })
+
+// Override callback to handle profile creation
+authRoutes.get('/callback/:provider', async (c) => {
+  const auth = getAuth(c.env) as Auth
+  const response = await auth.handler(c.req.raw)
+  
+  // After successful callback, the user is authenticated
+  // We need to ensure their pomodoro profile exists
+  // For now, just return the auth response - profile will be created on first access
+  return response
+})
+
+// Handle all other auth endpoints
+authRoutes.on(['POST', 'GET'], '/*', async (c) => {
+  const auth = getAuth(c.env) as Auth
+  return auth.handler(c.req.raw)
+})
+
+export { authRoutes }
