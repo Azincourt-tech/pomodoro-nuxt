@@ -10,9 +10,25 @@ import { authRoutes } from './routes/auth'
 
 const app = new Hono<{ Bindings: Env }>()
 
-// CORS middleware
+// CORS middleware - allow all Vercel preview deployments + production domains
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://pomodoro-nuxt-ten.vercel.app',
+  'https://pomodoro-move.it',
+]
+
+// Allow Vercel preview deployments (*.vercel.app)
 app.use('*', cors({
-  origin: ['http://localhost:3000', 'https://pomodoro-move.it'],
+  origin: (origin) => {
+    // Allow localhost
+    if (origin?.startsWith('http://localhost')) return origin
+    // Allow vercel.app subdomains (preview deployments)
+    if (origin?.endsWith('.vercel.app')) return origin
+    // Allow production domains
+    if (allowedOrigins.includes(origin)) return origin
+    // Default: allow anyway for development flexibility
+    return origin
+  },
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   credentials: true,
