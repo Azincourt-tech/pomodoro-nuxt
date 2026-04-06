@@ -66,6 +66,8 @@ bun.lockb
 *.temp
 .cache
 update-icons.sh
+get-account-id.sh
+setup-cloudflare.sh
 
 # Bun
 bun.lockb
