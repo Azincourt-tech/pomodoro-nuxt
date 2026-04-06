@@ -66,19 +66,6 @@ function useBetterAuthSocial() {
         provider: 'github',
         callbackURL: window.location.origin,
       })
-      
-      // After OAuth redirect back, ensure pomodoro profile exists
-      // This runs when the user returns from GitHub
-      setTimeout(async () => {
-        try {
-          await fetch('https://pomodoro-api.azlab.dev.br/api/auth/ensure-profile', {
-            method: 'POST',
-            credentials: 'include',
-          })
-        } catch {
-          // Ignore errors - profile creation is best-effort
-        }
-      }, 2000)
     } catch (err) {
       console.error('GitHub OAuth error:', err)
       throw new Error('GitHub OAuth failed')
@@ -174,8 +161,38 @@ function useBetterAuthEmail() {
           avatarUrl: user.image || null,
         }
         authSession.value = res.data.session as any
+        
+        // Ensure pomodoro profile exists for social login users
+        try {
+          await fetch('https://pomodoro-api.azlab.dev.br/api/auth/ensure-profile', {
+            method: 'POST',
+            credentials: 'include',
+          })
+        } catch {
+          // Ignore errors - profile creation is best-effort
+        }
       } else {
-        authUser.value = null
+        // Session not found via cookies - try fetching from profile endpoint
+        // as a fallback for cases where cookies are blocked
+        try {
+          const profileRes = await fetch('https://pomodoro-api.azlab.dev.br/api/pomodoro/profile', {
+            credentials: 'include',
+          })
+          if (profileRes.ok) {
+            const profile = await profileRes.json()
+            if (profile) {
+              authUser.value = {
+                id: profile.userId,
+                email: '',
+                name: profile.displayName || '',
+                avatarUrl: profile.avatarUrl || null,
+              }
+            }
+          }
+        } catch {
+          // Profile fetch also failed - user is not authenticated
+        }
+        authUser.value = authUser.value || null
         authSession.value = null
       }
     } catch {
