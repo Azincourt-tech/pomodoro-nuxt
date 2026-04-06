@@ -3,7 +3,6 @@ import type { Env } from './types/env'
 import { cors } from 'hono/cors'
 import { getCookie } from 'hono/cookie'
 import { getAuth } from './services/auth'
-import { runMigrations } from './db/schema'
 import profile from './routes/profile'
 import sessions from './routes/sessions'
 import stats from './routes/stats'
@@ -43,24 +42,6 @@ app.route('/api/auth', authRoutes)
 
 // Better Auth handler - catches all other auth routes
 app.all('/api/auth/*', async (c) => {
-  // Initialize DB tables if not exists (idempotent) - only on first call
-  if (!c.env.__DB_INITIALIZED) {
-    try {
-      const statements = runMigrations.split(';').filter(s => s.trim())
-      for (const stmt of statements) {
-        const trimmed = stmt.trim()
-        if (trimmed) {
-          await c.env.DB.prepare(trimmed).run()
-        }
-      }
-      // Mark as initialized (won't persist across requests but prevents redundant calls in same worker)
-      c.env.__DB_INITIALIZED = true
-    } catch (e) {
-      console.error('DB migration error:', e)
-      return c.json({ error: 'DB initialization failed', details: String(e) }, 500)
-    }
-  }
-
   try {
     const auth = getAuth({
       DB: c.env.DB,
