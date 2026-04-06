@@ -171,7 +171,6 @@ export function getAuth(env: {
       // Extract session from response cookies to get user info
       const setCookie = response.headers.get('set-cookie')
       if (setCookie) {
-        // Try to parse session token
         const tokenMatch = setCookie.match(/better-auth\.session_token=([^;]+)/)
         if (tokenMatch) {
           const sessionToken = tokenMatch[1]
@@ -179,19 +178,12 @@ export function getAuth(env: {
             const session = await auth.api.getSession({
               headers: new Headers({ cookie: `better-auth.session_token=${sessionToken}` }),
             })
-            if (session && session.user) {
-              // Check if pomodoro profile exists
-              const existing = await db.query.pomodoro_profiles?.findFirst({
-                where: (profiles: any, { eq }: any) => eq(profiles.user_id, session.user.id),
-              })
-              if (!existing) {
-                // Create pomodoro profile
-                await db.execute(
-                  'INSERT INTO pomodoro_profiles (user_id, display_name, avatar_url, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges) VALUES (?, ?, ?, 1, 0, 0, 64, 0, 0, 0)',
-                  [session.user.id, session.user.name || null, session.user.image || null]
-                )
-                console.log('[BetterAuth Backend] Created pomodoro profile for user:', session.user.id)
-              }
+            if (session?.user?.id) {
+              // Check if pomodoro profile exists and create if not
+              await env.DB.prepare(
+                'INSERT OR IGNORE INTO pomodoro_profiles (user_id, display_name, avatar_url, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges) VALUES (?, ?, ?, 1, 0, 0, 64, 0, 0, 0)'
+              ).bind(session.user.id, session.user.name || null, session.user.image || null).run()
+              console.log('[BetterAuth Backend] Ensured pomodoro profile for user:', session.user.id)
             }
           } catch (e) {
             console.error('[BetterAuth Backend] Failed to create pomodoro profile:', e)
