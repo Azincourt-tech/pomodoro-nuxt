@@ -60,8 +60,7 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
-      const config = useRuntimeConfig()
-      const client = getAuthClient(config.public.githubClientId)
+      const client = getAuthClient()
       
       await client.signIn.social({
         provider: 'github',
