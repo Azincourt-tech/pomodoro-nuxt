@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card bg-gradient-to-br from-base-100/95 via-base-100/90 to-base-200/80 backdrop-blur-xl shadow-2xl border border-success/20 hover:shadow-[0_25px_60px_rgba(30,215,96,0.25)] hover:border-success/40 transition-all duration-500 hover:-translate-y-1 h-full group relative overflow-hidden"
+    class="card bg-base-200 shadow-2xl border border-success/20 hover:shadow-[0_25px_60px_rgba(30,215,96,0.25)] hover:border-success/40 transition-all duration-500 hover:-translate-y-1 h-full group relative overflow-hidden"
     v-bind="$attrs"
   >
     <!-- Background decoration -->

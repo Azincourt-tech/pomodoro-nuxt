@@ -1,5 +1,5 @@
 <template>
-  <div class="stat bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/5 rounded-2xl shadow-xl border border-primary/25 p-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+  <div class="stat bg-base-200 rounded-2xl shadow-xl border border-primary/25 p-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
     <div class="stat-figure">
       <div class="p-3.5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl shadow-md group-hover:scale-110 transition-transform duration-300">
         <Icon name="lucide:trophy" class="w-6 h-6 text-primary" />
