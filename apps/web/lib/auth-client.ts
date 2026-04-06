@@ -21,11 +21,19 @@ async function fetchGithubClientId(): Promise<string> {
 }
 
 export async function getAuthClient(): Promise<BetterAuthClient> {
-  if (_client) return _client
-  if (_initPromise) return _initPromise
+  if (_client) {
+    console.log('[AuthClient] Returning cached client')
+    return _client
+  }
+  if (_initPromise) {
+    console.log('[AuthClient] Waiting for existing init promise')
+    return _initPromise
+  }
   
+  console.log('[AuthClient] Initializing new client...')
   _initPromise = (async () => {
     const githubClientId = await fetchGithubClientId()
+    console.log('[AuthClient] Fetched GitHub client ID:', githubClientId ? 'SET (' + githubClientId.substring(0, 8) + '...)' : 'NOT SET')
     
     _client = createAuthClient({
       baseURL: apiBase,
@@ -38,6 +46,7 @@ export async function getAuthClient(): Promise<BetterAuthClient> {
       } : {}),
     })
     
+    console.log('[AuthClient] Client created with socialProviders:', githubClientId ? 'YES' : 'NO')
     return _client
   })()
   
