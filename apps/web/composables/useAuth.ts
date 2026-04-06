@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import { authClient } from '~/lib/auth-client'
+import { getAuthClient } from '~/lib/auth-client'
 
 export interface AuthUser {
   id: string
@@ -60,7 +60,10 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
-      await authClient.signIn.social({
+      const config = useRuntimeConfig()
+      const client = getAuthClient(config.public.githubClientId)
+      
+      await client.signIn.social({
         provider: 'github',
         callbackURL: window.location.origin,
       })
@@ -74,9 +77,11 @@ function useBetterAuthSocial() {
 }
 
 function useBetterAuthEmail() {
+  const client = getAuthClient()
+  
   async function login(email: string, password: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const res = await authClient.signIn.email({
+      const res = await client.signIn.email({
         email,
         password,
       })
@@ -102,7 +107,7 @@ function useBetterAuthEmail() {
 
   async function signUp(email: string, password: string, name: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const res = await authClient.signUp.email({
+      const res = await client.signUp.email({
         email,
         password,
         name,
@@ -131,8 +136,9 @@ function useBetterAuthEmail() {
   }
 
   async function logout(): Promise<void> {
+    const client = getAuthClient()
     try {
-      await authClient.signOut()
+      await client.signOut()
     } catch {
       // Idempotent
     }
@@ -142,10 +148,11 @@ function useBetterAuthEmail() {
   }
 
   async function fetchSession(): Promise<void> {
+    const client = getAuthClient()
     if (authInitialized.value) return
 
     try {
-      const res = await authClient.getSession()
+      const res = await client.getSession()
       if (res.data?.user) {
         const user = res.data.user as any
         authUser.value = {
