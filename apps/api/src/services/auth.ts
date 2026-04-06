@@ -133,6 +133,25 @@ export function createAuth(env: AuthEnv) {
       },
       cookies: {
         sessionToken: {
+          name: 'better-auth.session_token',
+          attributes: {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            path: '/',
+          },
+        },
+        state: {
+          name: 'better-auth.state',
+          attributes: {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            path: '/',
+          },
+        },
+        nonce: {
+          name: 'better-auth.nonce',
           attributes: {
             httpOnly: true,
             sameSite: 'none',
