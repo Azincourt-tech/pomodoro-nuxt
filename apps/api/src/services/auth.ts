@@ -88,7 +88,10 @@ export function createAuth(env: AuthEnv) {
   // Support both GITHUB_CLIENT_ID and GH_OAUTH_CLIENT_ID (Cloudflare var naming)
   const clientId = env.GH_OAUTH_CLIENT_ID || env.GITHUB_CLIENT_ID
   const clientSecret = env.GITHUB_CLIENT_SECRET || env.GH_OAUTH_CLIENT_SECRET
+  console.log('[BetterAuth Backend] clientId:', clientId ? `SET (${clientId.substring(0, 8)}...)` : 'NOT SET')
+  console.log('[BetterAuth Backend] clientSecret:', clientSecret ? 'SET' : 'NOT SET')
   if (clientId && clientSecret) {
+    console.log('[BetterAuth Backend] Configuring GitHub OAuth provider')
     socialProvidersConfig.github = github({
       clientId: clientId,
       clientSecret: clientSecret,
