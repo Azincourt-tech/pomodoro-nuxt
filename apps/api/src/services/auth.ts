@@ -14,21 +14,20 @@ interface AuthEnv {
 export function createAuth(env: AuthEnv) {
   const db = drizzle(env.DB, { casing: 'snake_case' })
 
-  const socialProviders = []
+  // Configure social providers
+  const socialProvidersConfig: any = {}
 
   // Add GitHub OAuth if credentials are configured
   if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) {
-    socialProviders.push(
-      github({
-        clientId: env.GITHUB_CLIENT_ID,
-        clientSecret: env.GITHUB_CLIENT_SECRET,
-        mapProfileToUser: (profile) => ({
-          name: profile.name || profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-        }),
-      })
-    )
+    socialProvidersConfig.github = github({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      mapProfileToUser: (profile) => ({
+        name: profile.name || profile.login,
+        email: profile.email,
+        image: profile.avatar_url,
+      }),
+    })
   }
 
   return betterAuth({
@@ -42,7 +41,7 @@ export function createAuth(env: AuthEnv) {
       requireEmailVerification: false,
       minPasswordLength: 6,
     },
-    socialProviders: socialProviders.length > 0 ? socialProviders : undefined,
+    socialProviders: Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined,
     session: {
       expiresIn: 60 * 60 * 24 * 30, // 30 days
       updateAge: 60 * 60 * 24, // 1 day

@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { Env } from '../types/env'
+import type { Env } from './types/env'
 import { cors } from 'hono/cors'
 import { getCookie } from 'hono/cookie'
 import { getAuth } from './services/auth'
