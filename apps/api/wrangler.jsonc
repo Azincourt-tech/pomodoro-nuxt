@@ -20,8 +20,6 @@
     }
   ],
   "vars": {
-    "BETTER_AUTH_URL": "__BETTER_AUTH_URL__",
-    "GITHUB_CLIENT_ID": "__GITHUB_CLIENT_ID__",
-    "GH_OAUTH_CLIENT_SECRET": "__GH_OAUTH_CLIENT_SECRET__"
+    "BETTER_AUTH_URL": "__BETTER_AUTH_URL__"
   }
 }
