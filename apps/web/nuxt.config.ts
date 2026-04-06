@@ -97,3 +97,4 @@ export default defineNuxtConfig({
     },
   },
 })
+// full rebuild trigger

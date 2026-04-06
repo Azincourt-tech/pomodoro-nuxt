@@ -71,3 +71,4 @@ export default app
 // teste final deploy
 // redeploy trigger
 // trigger
+// full rebuild trigger
