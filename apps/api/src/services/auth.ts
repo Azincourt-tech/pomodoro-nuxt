@@ -91,7 +91,6 @@ export function getAuth(env: {
   console.log('[BetterAuth Backend] clientSecret:', clientSecret ? 'SET' : 'NOT SET')
   if (clientId && clientSecret) {
     console.log('[BetterAuth Backend] Configuring GitHub OAuth provider')
-    // Pass credentials directly without oauth helper
     socialProvidersConfig.github = {
       clientId,
       clientSecret,
@@ -103,7 +102,7 @@ export function getAuth(env: {
   const socialProvidersFinal = Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined
   console.log('[BetterAuth Backend] Passing to betterAuth socialProviders:', socialProvidersFinal ? Object.keys(socialProvidersFinal) : 'undefined')
 
-  return betterAuth({
+  const auth = betterAuth({
     database: drizzleAdapter(db, {
       provider: 'sqlite',
       schema: {
@@ -126,33 +125,7 @@ export function getAuth(env: {
       minPasswordLength: 6,
     },
     socialProviders: socialProvidersFinal,
-    // User hooks to create pomodoro profile
-    user: {
-      additionalFields: {
-        // We don't add custom fields to user table, just hooks
-      },
-      createUser: {
-        async after(user, ctx) {
-          console.log('[BetterAuth Backend] New user created:', user.id, user.name, user.email)
-          // Create pomodoro profile for new user
-          try {
-            await db.run(
-              'INSERT INTO pomodoro_profiles (user_id, display_name, avatar_url, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges) VALUES (?, ?, ?, 1, 0, 0, 64, 0, 0, 0)',
-              [user.id, user.name || null, user.image || null]
-            )
-            console.log('[BetterAuth Backend] Pomodoro profile created for user:', user.id)
-          } catch (e) {
-            console.error('[BetterAuth Backend] Failed to create pomodoro profile:', e)
-          }
-        },
-      },
-    },
     advanced: {
-      database: {
-        customTypes: {
-          date: isoDate,
-        },
-      },
       crossSubDomainCookies: {
         enabled: false,
       },
@@ -187,6 +160,50 @@ export function getAuth(env: {
       },
     },
   })
+
+  // Override the handler to add pomodoro profile creation
+  const originalHandler = auth.handler
+  auth.handler = async (request: Request) => {
+    const response = await originalHandler(request)
+
+    // After successful sign-in via social provider, create pomodoro profile
+    if (request.url.includes('/callback/github') && request.method === 'GET') {
+      // Extract session from response cookies to get user info
+      const setCookie = response.headers.get('set-cookie')
+      if (setCookie) {
+        // Try to parse session token
+        const tokenMatch = setCookie.match(/better-auth\.session_token=([^;]+)/)
+        if (tokenMatch) {
+          const sessionToken = tokenMatch[1]
+          try {
+            const session = await auth.api.getSession({
+              headers: new Headers({ cookie: `better-auth.session_token=${sessionToken}` }),
+            })
+            if (session && session.user) {
+              // Check if pomodoro profile exists
+              const existing = await db.query.pomodoro_profiles?.findFirst({
+                where: (profiles: any, { eq }: any) => eq(profiles.user_id, session.user.id),
+              })
+              if (!existing) {
+                // Create pomodoro profile
+                await db.execute(
+                  'INSERT INTO pomodoro_profiles (user_id, display_name, avatar_url, level, xp_current, xp_start, xp_end, streak_current, streak_best, completed_challenges) VALUES (?, ?, ?, 1, 0, 0, 64, 0, 0, 0)',
+                  [session.user.id, session.user.name || null, session.user.image || null]
+                )
+                console.log('[BetterAuth Backend] Created pomodoro profile for user:', session.user.id)
+              }
+            }
+          } catch (e) {
+            console.error('[BetterAuth Backend] Failed to create pomodoro profile:', e)
+          }
+        }
+      }
+    }
+
+    return response
+  }
+
+  return auth
 }
 
 export type Auth = ReturnType<typeof getAuth>
