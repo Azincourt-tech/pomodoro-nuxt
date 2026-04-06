@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 lg:py-10" :class="{ 'focus-mode-active': isFocusMode }">
+  <div class="min-h-screen bg-base-200 py-6 lg:py-10" :class="{ 'focus-mode-active': isFocusMode }">
     <!-- Focus Mode Exit Button -->
     <div
       v-if="isFocusMode"
