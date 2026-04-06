@@ -71,3 +71,4 @@ setup-cloudflare.sh
 
 # Bun
 bun.lockb
+setup-cloudflare.sh

@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { Env } from '../types/env'
+import type { Env } from './types/env'
 import { cors } from 'hono/cors'
 import { getCookie } from 'hono/cookie'
 import { getAuth } from './services/auth'
@@ -44,3 +44,6 @@ app.route('/api/pomodoro/sessions', sessions)
 app.route('/api/pomodoro/stats', stats)
 
 export default app
+// deploy test
+// dominio personalizado
+// teste final deploy
