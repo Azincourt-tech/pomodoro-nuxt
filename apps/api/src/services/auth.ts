@@ -1,6 +1,5 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { github } from 'better-auth/social-providers'
 import { drizzle } from 'drizzle-orm/d1'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { customType } from 'drizzle-orm/sqlite-core'
@@ -92,16 +91,13 @@ export function createAuth(env: AuthEnv) {
   console.log('[BetterAuth Backend] clientSecret:', clientSecret ? 'SET' : 'NOT SET')
   if (clientId && clientSecret) {
     console.log('[BetterAuth Backend] Configuring GitHub OAuth provider')
-    socialProvidersConfig.github = github({
+    // Try passing credentials directly without github() helper
+    socialProvidersConfig.github = {
       clientId: clientId,
       clientSecret: clientSecret,
-      mapProfileToUser: (profile) => ({
-        name: profile.name || profile.login,
-        email: profile.email,
-        image: profile.avatar_url,
-      }),
-    })
+    }
     console.log('[BetterAuth Backend] socialProvidersConfig keys:', Object.keys(socialProvidersConfig))
+    console.log('[BetterAuth Backend] socialProvidersConfig.github:', socialProvidersConfig.github)
   }
   console.log('[BetterAuth Backend] Final socialProviders:', Object.keys(socialProvidersConfig).length > 0 ? 'SET' : 'EMPTY')
 
