@@ -10,16 +10,16 @@
     {
       "binding": "DB",
       "database_name": "pomodoro-db",
-      "database_id": "{{D1_DATABASE_ID}}"
+      "database_id": "__D1_DATABASE_ID__"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "{{KV_NAMESPACE_ID}}"
+      "id": "__KV_NAMESPACE_ID__"
     }
   ],
   "vars": {
-    "BETTER_AUTH_URL": "{{BETTER_AUTH_URL}}"
+    "BETTER_AUTH_URL": "__BETTER_AUTH_URL__"
   }
 }
