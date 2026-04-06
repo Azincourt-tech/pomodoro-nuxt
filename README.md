@@ -700,6 +700,65 @@ Para evitar que branches nao-mestre facem deploy:
 
 ---
 
+## Configuracao Secrets para GitHub Actions (API Cloudflare)
+
+### 1. Configurar Secrets no Repositorio GitHub
+
+Acesse: `Settings > Secrets and variables > Actions > New repository secret`
+
+Adicione os seguintes secrets:
+
+```bash
+# Cloudflare
+CLOUDFLARE_API_TOKEN=seu_token_aqui
+CLOUDFLARE_ACCOUNT_ID=seu_account_id_aqui
+D1_DATABASE_ID=id-do-seu-database-d1
+KV_NAMESPACE_ID=id-do-seu-namespace-kv
+
+# API Secrets (serao configurados via wrangler secret put, ou adicione aqui)
+BETTER_AUTH_SECRET=sua_chave_secreta_min_32_chars
+GITHUB_CLIENT_ID=seu_github_client_id
+GITHUB_CLIENT_SECRET=seu_github_client_secret
+```
+
+### 2. Obter Cloudflare API Token
+
+1. Acesse: [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)
+2. Clique em "Create Token"
+3. Use o template "Edit Cloudflare Workers"
+4. Ou crie um token customizado com permissoes:
+   - Account: Workers Scripts: Edit
+   - Account: Workers KV Storage: Edit
+   - Account: D1: Edit
+5. Copie o token gerado e cole no secret `CLOUDFLARE_API_TOKEN` do GitHub
+
+### 3. Obter Cloudflare Account ID
+
+1. Acesse: [dash.cloudflare.com](https://dash.cloudflare.com)
+2. Vá para Workers & Pages
+3. No canto inferior direito, voce vera "Account ID"
+4. Copie e cole no secret `CLOUDFLARE_ACCOUNT_ID` do GitHub
+
+### 4. Obter D1 Database ID e KV Namespace ID
+
+```bash
+# Listar databases
+wrangler d1 list
+
+# Copie o database_id do "pomodoro-db"
+
+# Listar namespaces KV
+wrangler kv:namespace list
+
+# Copie o ID do namespace correspondente
+```
+
+Cole esses IDs nos secrets do GitHub:
+- `D1_DATABASE_ID`
+- `KV_NAMESPACE_ID`
+
+---
+
 ## Autores
 
 - **Willian** - [@Azincourt-tech](https://github.com/Azincourt-tech)

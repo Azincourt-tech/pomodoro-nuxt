@@ -1,0 +1,65 @@
+name: Deploy API Cloudflare
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'apps/api/**'
+      - '.github/workflows/deploy-api.yml'
+
+env:
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup wrangler.toml
+        run: |
+          cp wrangler.toml.example wrangler.toml
+          
+          # Substituir placeholders por secrets do GitHub
+          if [ -n "${{ secrets.D1_DATABASE_ID }}" ]; then
+            sed -i "s/SEU_DATABASE_ID_AQUI/${{ secrets.D1_DATABASE_ID }}/g" wrangler.toml
+          fi
+          
+          if [ -n "${{ secrets.KV_NAMESPACE_ID }}" ]; then
+            sed -i "s/SEU_KV_ID_AQUI/${{ secrets.KV_NAMESPACE_ID }}/g" wrangler.toml
+          fi
+
+      - name: Verify wrangler.toml
+        run: |
+          echo "=== wrangler.toml ==="
+          cat wrangler.toml
+          echo "==================="
+
+      - name: Deploy to Cloudflare
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Post-deployment verification
+        run: |
+          echo "✅ Deploy concluido com sucesso!"
+          echo "API: https://pomodoro-api.azincourt-tech.workers.dev"

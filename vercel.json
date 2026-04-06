@@ -1,12 +1,5 @@
 {
-  "builds": [
-    {
-      "src": "apps/web/**",
-      "use": "@vercel/node",
-      "config": { "distDir": "apps/web/.output" }
-    }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/apps/web/$1" }
-  ]
+  "buildCommand": "cd apps/web && npm run build",
+  "outputDirectory": "apps/web/.output",
+  "installCommand": "cd apps/web && npm install"
 }
