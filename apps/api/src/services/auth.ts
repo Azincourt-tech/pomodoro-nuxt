@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { github } from 'better-auth/social-providers'
 import { drizzle } from 'drizzle-orm/d1'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 
 interface AuthEnv {
   DB: D1Database
@@ -11,6 +12,53 @@ interface AuthEnv {
   GITHUB_CLIENT_SECRET?: string
   GH_OAUTH_CLIENT_SECRET?: string
 }
+
+// Define Better Auth schema for Drizzle adapter
+const user = sqliteTable('user', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
+  image: text('image'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+})
+
+const session = sqliteTable('session', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  expiresAt: text('expires_at').notNull(),
+  token: text('token').notNull().unique(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+})
+
+const account = sqliteTable('account', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  accountId: text('account_id').notNull(),
+  providerId: text('provider_id').notNull(),
+  accessToken: text('access_token'),
+  refreshToken: text('refresh_token'),
+  accessTokenExpiresAt: text('access_token_expires_at'),
+  refreshTokenExpiresAt: text('refresh_token_expires_at'),
+  scope: text('scope'),
+  idToken: text('id_token'),
+  password: text('password'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+})
+
+const verification = sqliteTable('verification', {
+  id: text('id').primaryKey(),
+  identifier: text('identifier').notNull(),
+  value: text('value').notNull(),
+  expiresAt: text('expires_at').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+})
 
 export function createAuth(env: AuthEnv) {
   const db = drizzle(env.DB, { casing: 'snake_case' })
@@ -36,6 +84,12 @@ export function createAuth(env: AuthEnv) {
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: 'sqlite',
+      schema: {
+        user,
+        session,
+        account,
+        verification,
+      },
     }),
     secret: env.BETTER_AUTH_SECRET || 'pomodoro-dev-secret-change-in-production',
     baseURL: env.BETTER_AUTH_URL || 'http://localhost:8787',
