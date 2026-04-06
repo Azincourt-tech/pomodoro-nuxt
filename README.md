@@ -118,13 +118,15 @@ pomodoro-nuxt/
 
 ---
 
-## Como Rodar
+## Configuracao e Deploy
 
 ### Pre-requisitos
 - Node.js 20+
 - npm 10+
+- Cloudflare Workers CLI (para API)
+- Conta Vercel (para Frontend)
 
-### Instalacao
+### 1. Instalacao
 
 ```bash
 # Clonar repositorio
@@ -133,79 +135,200 @@ cd pomodoro-nuxt
 
 # Instalar dependencias
 npm install
-
-# Rodar em desenvolvimento
-npm run dev
-
-# Build para producao
-npm run build
-
-# Preview do build
-npm run preview
 ```
 
-### Variaveis de Ambiente
+### 2. Variaveis de Ambiente
 
-Copie `.env.example` para `.env` e configure:
+Copie `.env.example` para `.env` na raiz:
 
 ```bash
-# API URL (Cloudflare Workers)
-NUXT_PUBLIC_API_BASE=http://localhost:8787
+cp .env.example .env
+```
 
-# GitHub OAuth
+#### Frontend (apps/web/.env)
+```bash
+# API URL
+NUXT_PUBLIC_API_BASE=http://localhost:8787  # Desenvolvimento
+# NUXT_PUBLIC_API_BASE=https://api.exemplo.com  # Producao
+
+# GitHub OAuth (opcional)
 GITHUB_CLIENT_ID=seu-client-id
 GITHUB_CLIENT_SECRET=seu-client-secret
 ```
 
----
-
-## Scripts
-
+#### API (apps/api/.env)
 ```bash
-npm run dev          # Rodar frontend em dev
-npm run build        # Build para producao
-npm run preview      # Preview do build
-npm run lint         # ESLint
-npm run lint:fix     # ESLint com auto-fix
-npm run format       # Prettier
-npm run test         # Vitest run
-npm run test:watch   # Vitest watch mode
+# GitHub OAuth
+GITHUB_CLIENT_ID=seu-client-id
+GITHUB_CLIENT_SECRET=seu-client-secret
+GITHUB_REDIRECT_URI=http://localhost:8787/api/auth/github-callback
+
+# JWT Secret
+JWT_SECRET=sua-chave-secreta-aleatoria
+
+# D1 Database ID
+D1_DATABASE_ID=id-do-seu-database-d1
+```
+
+### 3. Desenvolvimento Local
+
+#### Opcao A: Rodar Frontend e API juntos
+```bash
+# Terminal 1 - API
+npm run dev:api
+
+# Terminal 2 - Frontend
+npm run dev:web
+```
+
+#### Opcao B: Rodar apenas Frontend (API mock)
+```bash
+npm run dev:web
+```
+
+Acesse: `http://localhost:3000`
+
+#### Estrutura de Scripts
+```bash
+npm run dev           # Rodar frontend (web) em dev
+npm run dev:api       # Rodar API (Cloudflare Workers) local
+npm run dev:web       # Rodar apenas frontend
+npm run build         # Build para producao (ambos)
+npm run build:web     # Build apenas frontend
+npm run build:api     # Build apenas API
+npm run preview       # Preview do build frontend
+npm run lint          # ESLint
+npm run lint:fix      # ESLint com auto-fix
+npm run format        # Prettier
+npm run test          # Vitest run
+npm run test:watch    # Vitest watch mode
 ```
 
 ---
 
-## Estrutura de Components
-
-### Atoms
-- `Icon.vue` - Wrapper para icones Lucide
-- `CountdownDigits.vue` - Digitos do timer
-- `TimerPresets.vue` - Presets de tempo
-- `ExperienceBar.vue` - Barra de XP e level
-- `ToastContainer.vue` - Notificacoes toast
-- `ThemeSelector.vue` - Seletor de temas
-- `LanguageSelector.vue` - Seletor de idioma
-
-### Molecules
-- `Countdown.vue` - Timer circular com progresso
-- `Challenge.vue` - Card de desafio
-- `Profile.vue` - Perfil do usuario
-- `ShareCard.vue` - Card de compartilhamento com canvas
-- `ShortcutsHelp.vue` - Modal de atalhos
-- `EditProfileModal.vue` - Modal de edicao de perfil
-
----
-
-## Deploy
+## Deploy para Producao
 
 ### Frontend (Vercel)
-1. Push para branch `develop` ou `master`
-2. Vercel detecta automaticamente
-3. Build e deploy automatico
+
+#### Opcao 1: Deploy Automatico (Recomendado)
+1. Conecte seu repositorio GitHub ao Vercel
+2. Configure as variaveis de ambiente no painel do Vercel:
+   - `NUXT_PUBLIC_API_BASE=https://sua-api.exemplo.com`
+   - `GITHUB_CLIENT_ID` (se usar OAuth)
+   - `GITHUB_CLIENT_SECRET`
+3. Push para `master` ou `develop` dispara deploy automatico
+
+#### Opcao 2: Deploy via CLI
+```bash
+# Instalar Vercel CLI
+npm i -g vercel
+
+# Login
+vercel login
+
+# Deploy
+vercel --prod
+```
+
+#### Opcao 3: Deploy Manual
+```bash
+cd apps/web
+npm run build
+vercel --prod
+```
 
 ### API (Cloudflare Workers)
+
+#### Configuracao Inicial
+```bash
+# Instalar Wrangler CLI
+npm i -g wrangler
+
+# Login no Cloudflare
+wrangler login
+
+# Criar D1 Database
+wrangler d1 create pomodoro-db
+
+# Anote o database_id gerado
+```
+
+#### Deploy da API
 ```bash
 cd apps/api
+
+# Configurar wrangler.toml com seu database_id
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "pomodoro-db"
+# database_id = "seu-database-id-aqui"
+
+# Deploy
 npm run deploy
+# ou
+wrangler deploy
+```
+
+#### Variaveis de Ambiente no Cloudflare
+```bash
+# Adicionar secrets
+wrangler secret put GITHUB_CLIENT_ID
+wrangler secret put GITHUB_CLIENT_SECRET
+wrangler secret put JWT_SECRET
+
+# Configurar D1 bindings no wrangler.toml
+```
+
+### 4. Verificacao Pos-Deploy
+
+#### Frontend
+```bash
+# Testar URL de producao
+curl https://sua-app.vercel.app
+
+# Verificar PWA
+# Acesse o site e verifique se o service worker esta ativo
+# Chrome DevTools > Application > Service Workers
+```
+
+#### API
+```bash
+# Testar endpoint health
+curl https://sua-api.exemplo.com/health
+
+# Testar OAuth GitHub
+curl https://sua-api.exemplo.com/api/auth/github-enabled
+```
+
+### 5. Troubleshooting
+
+#### Erro: API não conecta no frontend
+- Verifique se `NUXT_PUBLIC_API_BASE` esta correto
+- Development: `http://localhost:8787`
+- Producao: `https://sua-api.exemplo.com`
+
+#### Erro: GitHub OAuth falha
+- Verifique se `GITHUB_CLIENT_ID` e `GITHUB_CLIENT_SECRET` estao corretos
+- Confirme o redirect URI no GitHub Developer Settings:
+  - Development: `http://localhost:8787/api/auth/github-callback`
+  - Producao: `https://sua-api.exemplo.com/api/auth/github-callback`
+
+#### Erro de Build
+```bash
+# Limpar cache e reinstalar
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+#### Erro de Deploy Cloudflare
+```bash
+# Verificar wrangler.toml
+# Confirmar database_id correto
+# Verificar bindings configurados
+
+wrangler deploy --dry-run  # Testar sem deploy
+wrangler tail              # Ver logs em tempo real
 ```
 
 ---
