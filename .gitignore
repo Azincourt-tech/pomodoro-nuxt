@@ -54,8 +54,12 @@ Thumbs.db
 apps/api/wrangler.toml
 
 # Lock files (keep only one)
-# package-lock.json  # Uncomment if using bun/pnpm only
-# yarn.lock          # Uncomment if using bun/pnpm only
+package-lock.json
+pnpm-lock.yaml
+bun.lock
+bun.lockb
+.yarn
+.yarnrc.yml
 
 # Temporary files
 *.tmp
