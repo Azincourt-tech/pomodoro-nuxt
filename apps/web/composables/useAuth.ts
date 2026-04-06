@@ -60,7 +60,19 @@ export function useAuth() {
 function useBetterAuthSocial() {
   async function signInWithGitHub(): Promise<void> {
     try {
+      // Get client ID from sessionStorage (set by auth-config plugin)
+      const githubClientId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('github_client_id') || '' 
+        : ''
+      
       const client = getAuthClient()
+      
+      // If we have a client ID, rebuild client with it
+      if (githubClientId && typeof window !== 'undefined') {
+        // Force redirect to backend auth endpoint instead of client-side OAuth
+        window.location.href = `https://pomodoro-api.azlab.dev.br/api/auth/sign-in/social?provider=github&callbackURL=${encodeURIComponent(window.location.origin)}`
+        return
+      }
       
       await client.signIn.social({
         provider: 'github',
