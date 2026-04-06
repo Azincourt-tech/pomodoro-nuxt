@@ -326,20 +326,34 @@ vercel --prod
 
 ### 3.2 API (Cloudflare Workers)
 
-#### Passo 1: Configurar Secrets na Producao
+> **NOTA**: O deploy da API Cloudflare agora e **automatico** via GitHub Actions!
+> Quando voce faz push para `master` com mudancas em `apps/api/`, o workflow `.github/workflows/deploy-api.yml` e executado automaticamente.
+
+#### Deploy Automatico (Recomendado)
+
+O deploy e triggersdo automaticamente quando:
+- Push para branch `master`
+- Ha mudancas em `apps/api/**` ou `.github/workflows/deploy-api.yml`
+
+**Nenhuma acao manual necessaria!** O workflow faz:
+1. Checkout do codigo
+2. Install dependencies (npm ci)
+3. Typecheck API (tsc --noEmit)
+4. Configura wrangler.toml com IDs dos secrets
+5. Deploy para Cloudflare Workers
+
+#### Deploy Manual (Opcional)
+
+Se precisar fazer deploy manual:
 
 ```bash
 cd apps/api
 
-# Adicionar secrets criptografados no Cloudflare
+# Configurar secrets da API (uma vez por ambiente)
 wrangler secret put BETTER_AUTH_SECRET
 wrangler secret put GITHUB_CLIENT_ID
 wrangler secret put GITHUB_CLIENT_SECRET
-```
 
-#### Passo 2: Deploy da API
-
-```bash
 # Deploy para producao
 npm run deploy
 
