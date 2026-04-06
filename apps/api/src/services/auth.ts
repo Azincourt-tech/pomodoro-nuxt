@@ -80,7 +80,7 @@ export function getAuth(env: {
   // Set up social providers
   const socialProvidersConfig: Record<string, any> = {}
 
-  console.log('[BetterAuth Backend] clientId:', clientId ? `SET (${clientId.substring(0, 8)}...)` : 'NOT SET')
+  console.log('[BetterAuth Backend] clientId:', clientId ? `SET` : 'NOT SET')
   console.log('[BetterAuth Backend] clientSecret:', clientSecret ? 'SET' : 'NOT SET')
   if (clientId && clientSecret) {
     console.log('[BetterAuth Backend] Configuring GitHub OAuth provider')
@@ -88,14 +88,12 @@ export function getAuth(env: {
       clientId,
       clientSecret,
     }
-    console.log('[BetterAuth Backend] socialProvidersConfig keys:', Object.keys(socialProvidersConfig))
   }
-  console.log('[BetterAuth Backend] Final socialProviders:', Object.keys(socialProvidersConfig).length > 0 ? 'SET' : 'EMPTY')
 
   const socialProvidersFinal = Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined
-  console.log('[BetterAuth Backend] Passing to betterAuth socialProviders:', socialProvidersFinal ? Object.keys(socialProvidersFinal) : 'undefined')
+  console.log('[BetterAuth Backend] socialProviders:', socialProvidersFinal ? 'SET' : 'EMPTY')
 
-  const auth = betterAuth({
+  return betterAuth({
     database: drizzleAdapter(db, {
       provider: 'sqlite',
       schema: {
@@ -153,49 +151,6 @@ export function getAuth(env: {
       },
     },
   })
-
-  // Override the handler to add pomodoro profile creation after social login
-  const originalHandler = auth.handler
-  auth.handler = async (request: Request) => {
-    const response = await originalHandler(request)
-
-    // After successful GitHub callback, create pomodoro profile
-    if (request.url.includes('/callback/github') && request.method === 'GET') {
-      const setCookie = response.headers.get('set-cookie')
-      if (setCookie) {
-        const tokenMatch = setCookie.match(/better-auth\.session_token=([^;]+)/)
-        if (tokenMatch) {
-          const sessionToken = tokenMatch[1]
-          try {
-            const session = await auth.api.getSession({
-              headers: new Headers({ cookie: `better-auth.session_token=${sessionToken}` }),
-            })
-            if (session?.user?.id) {
-              // Check if pomodoro profile exists using Drizzle
-              const existing = await db.query.pomodoroProfiles.findFirst({
-                where: (profiles, { eq }) => eq(profiles.userId, session.user.id),
-              })
-              if (!existing) {
-                await db.insert(pomodoroProfiles).values({
-                  userId: session.user.id,
-                  displayName: session.user.name || null,
-                  avatarUrl: session.user.image || null,
-                  updatedAt: new Date().toISOString(),
-                })
-                console.log('[BetterAuth Backend] Created pomodoro profile for user:', session.user.id)
-              }
-            }
-          } catch (e) {
-            console.error('[BetterAuth Backend] Failed to create pomodoro profile:', e)
-          }
-        }
-      }
-    }
-
-    return response
-  }
-
-  return auth
 }
 
 export type Auth = ReturnType<typeof getAuth>
