@@ -37,14 +37,11 @@ app.use('*', cors({
 // Health check
 app.get('/api/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISOString() }))
 
-// Better Auth handler - catches all auth routes except custom ones
-app.all('/api/auth/*', async (c) => {
-  // Skip custom routes handled by authRoutes
-  const path = new URL(c.req.url).pathname
-  if (path === '/api/auth/github-enabled') {
-    return c.next()
-  }
+// Custom auth routes (only github-enabled check)
+app.route('/api/auth', authRoutes)
 
+// Better Auth handler - catches all other auth routes
+app.all('/api/auth/*', async (c) => {
   const auth = getAuth({
     DB: c.env.DB,
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
@@ -55,9 +52,6 @@ app.all('/api/auth/*', async (c) => {
 
   return auth.handler(c.req.raw)
 })
-
-// Custom auth routes (only github-enabled check)
-app.route('/api/auth', authRoutes)
 
 // Pomodoro routes
 app.route('/api/pomodoro/profile', profile)
