@@ -3,6 +3,7 @@ import type { Env } from './types/env'
 import { cors } from 'hono/cors'
 import { getCookie } from 'hono/cookie'
 import { getAuth } from './services/auth'
+import { runMigrations } from './db/schema'
 import profile from './routes/profile'
 import sessions from './routes/sessions'
 import stats from './routes/stats'
@@ -42,6 +43,16 @@ app.route('/api/auth', authRoutes)
 
 // Better Auth handler - catches all other auth routes
 app.all('/api/auth/*', async (c) => {
+  // Initialize DB tables if not exists (idempotent)
+  try {
+    const statements = runMigrations.split(';').filter(s => s.trim())
+    for (const stmt of statements) {
+      await c.env.DB.prepare(stmt.trim()).run()
+    }
+  } catch (e) {
+    console.error('DB migration error:', e)
+  }
+
   const auth = getAuth({
     DB: c.env.DB,
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
