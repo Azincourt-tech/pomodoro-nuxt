@@ -160,24 +160,81 @@ NUXT_PUBLIC_API_BASE=http://localhost:8787
 
 ### 2.2 Configuracao da API Local (Cloudflare Workers)
 
-#### Passo 1: Configurar wrangler.toml
+#### Passo 1: Autenticar no Cloudflare
+
+```bash
+# Fazer login (necessario mesmo para desenvolvimento local)
+wrangler login
+```
+
+> **Nota**: O login e necessario porque o Wrangler precisa autenticar para criar recursos locais.
+
+#### Passo 2: Criar Banco de Dados D1
+
+```bash
+# Criar database D1
+wrangler d1 create pomodoro-db
+```
+
+Você vera algo como:
+
+```bash
+✅ Successfully created DB 'pomodoro-db' with ID 84f5543d-e0b0-45cd-96e1-0d55f8c620bf
+```
+
+**Copie o `database_id` gerado** (ex: `84f5543d-e0b0-45cd-96e1-0d55f8c620bf`).
+
+#### Passo 3: Criar Namespace KV
+
+```bash
+# Criar namespace KV
+wrangler kv:namespace create "pomodoro-kv"
+```
+
+Você vera algo como:
+
+```bash
+✅ Successfully created namespace 'pomodoro-kv' with ID a1b2c3d4e5f6789012345678901234ab
+```
+
+**Copie o `id` gerado** (ex: `a1b2c3d4e5f6789012345678901234ab`).
+
+#### Passo 4: Configurar wrangler.toml
 
 ```bash
 # Copiar template
 cp apps/api/wrangler.toml.example apps/api/wrangler.toml
 ```
 
-Edite `apps/api/wrangler.toml` com seus IDs do Cloudflare (obtidos via `wrangler d1 create pomodoro-db`):
+Edite `apps/api/wrangler.toml` e substitua os placeholders pelos IDs reais:
 
 ```toml
+name = "pomodoro-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "pomodoro-db"
-database_id = "SEU_DATABASE_ID_AQUI"
+database_id = "84f5543d-e0b0-45cd-96e1-0d55f8c620bf"  # ← Cole o ID do D1
 
 [[kv_namespaces]]
 binding = "KV"
-id = "SEU_KV_ID_AQUI"
+id = "a1b2c3d4e5f6789012345678901234ab"  # ← Cole o ID do KV
+```
+
+> **IMPORTANTE**: Estes IDs sao unicos para o SEU ambiente. Use os IDs que voce obteve nos passos 2 e 3.
+
+#### Passo 5: Aplicar Schema do Banco (Opcional)
+
+Se o projeto tiver migrations SQL:
+
+```bash
+# Aplicar schema localmente
+wrangler d1 execute pomodoro-db --local --file=./migrations/001_init.sql
+
+# Ou se houver um comando npm:
+npm run db:migrate:local
 ```
 
 #### Passo 2: Configurar Secrets Locais
