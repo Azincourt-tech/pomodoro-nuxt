@@ -6,23 +6,23 @@
     <!-- Level and XP Info - Enhanced -->
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2.5">
-        <!-- Level Badge with gradient -->
+        <!-- Level Badge -->
         <div class="relative group">
-          <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl blur-md group-hover:blur-lg transition-all duration-300" />
-          <div class="badge badge-primary badge-lg font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 relative bg-gradient-to-br from-primary to-primary/80 border-0 text-white">
-            <Icon name="lucide:trophy" class="w-4 h-4 mr-1.5 drop-shadow-md" />
+          <div class="absolute inset-0 bg-primary/20 rounded-xl blur-md group-hover:blur-lg transition-all duration-300" />
+          <div class="badge badge-primary badge-lg font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 relative">
+            <Icon name="lucide:trophy" class="w-4 h-4 mr-1.5" />
             {{ challenges.level }}
           </div>
         </div>
         
-        <!-- Streak Badge with fire animation -->
+        <!-- Streak Badge -->
         <div
           v-if="profile.streakCurrent > 0"
           class="relative group cursor-help"
           :title="$t('streak.best', { days: profile.streakBest })"
         >
-          <div class="absolute inset-0 bg-gradient-to-br from-error/30 to-error/10 rounded-xl blur-md animate-pulse" />
-          <div class="badge badge-error badge-lg font-black gap-1.5 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 relative bg-gradient-to-br from-error to-error/80 border-0 text-white">
+          <div class="absolute inset-0 bg-error/20 rounded-xl blur-md animate-pulse" />
+          <div class="badge badge-error badge-lg font-black gap-1.5 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 relative">
             <Icon name="lucide:flame" class="w-4 h-4 animate-bounce" />
             {{ profile.streakCurrent }}d
           </div>
@@ -36,7 +36,7 @@
           <p class="text-xs font-bold text-base-content/70">{{ $t('experience.xp') }}</p>
         </div>
         <div class="flex items-center justify-end gap-2">
-          <p class="text-lg font-black text-transparent bg-gradient-to-r from-success to-success/70 bg-clip-text">
+          <p class="text-lg font-black text-success">
             {{ challenges.xp.current }}
           </p>
           <span class="text-xs text-base-content/40 font-medium">/</span>
@@ -52,22 +52,16 @@
       
       <!-- Bar container -->
       <div class="h-6 bg-gradient-to-r from-base-200/60 via-base-200/80 to-base-300/60 rounded-full overflow-hidden shadow-inner border border-base-300/30 backdrop-blur-sm">
-        <!-- Progress fill with multiple gradients -->
+        <!-- Progress fill with theme colors -->
         <div
-          class="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
+          class="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden bg-primary"
           :style="{ width: `${Math.max(challenges.currentXpPercentage, 2)}%` }"
         >
-          <!-- Main gradient -->
-          <div class="absolute inset-0 bg-gradient-to-r from-info via-success to-success/90" />
-          
           <!-- Shimmer effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
           
           <!-- Top highlight -->
-          <div class="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/30 to-transparent" />
-          
-          <!-- Bottom shadow -->
-          <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/10 to-transparent" />
+          <div class="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent" />
         </div>
       </div>
       
