@@ -129,7 +129,7 @@ export function createAuth(env: AuthEnv) {
       },
       cookies: {
         sessionToken: {
-          options: {
+          attributes: {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
