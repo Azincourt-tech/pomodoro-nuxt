@@ -9,6 +9,7 @@ interface AuthEnv {
   BETTER_AUTH_URL: string
   GITHUB_CLIENT_ID?: string
   GITHUB_CLIENT_SECRET?: string
+  GH_OAUTH_CLIENT_SECRET?: string
 }
 
 export function createAuth(env: AuthEnv) {
@@ -18,10 +19,12 @@ export function createAuth(env: AuthEnv) {
   const socialProvidersConfig: any = {}
 
   // Add GitHub OAuth if credentials are configured
-  if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) {
+  // Support both GITHUB_CLIENT_SECRET (standard) and GH_OAUTH_CLIENT_SECRET (avoid Cloudflare var conflict)
+  const clientSecret = env.GITHUB_CLIENT_SECRET || env.GH_OAUTH_CLIENT_SECRET
+  if (env.GITHUB_CLIENT_ID && clientSecret) {
     socialProvidersConfig.github = github({
       clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
+      clientSecret: clientSecret,
       mapProfileToUser: (profile) => ({
         name: profile.name || profile.login,
         email: profile.email,
