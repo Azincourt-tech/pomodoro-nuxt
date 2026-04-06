@@ -37,12 +37,9 @@ app.use('*', cors({
 // Health check
 app.get('/api/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISOString() }))
 
-// Custom auth routes (sign-in, sign-up, sign-out, session, github-enabled, github-login)
-app.route('/api/auth', authRoutes)
-
 // Better Auth handler for OAuth flows (GitHub OAuth signin/callback)
-// Mounts at /api/auth/* to match better-auth default basePath
-app.all('/api/auth/*', async (c) => {
+// Must be registered BEFORE custom auth routes to catch /api/auth/sign-in/social etc.
+app.all('/api/auth/sign-in/*', async (c) => {
   const auth = getAuth({
     DB: c.env.DB,
     BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
@@ -53,6 +50,21 @@ app.all('/api/auth/*', async (c) => {
 
   return auth.handler(c.req.raw)
 })
+
+app.all('/api/auth/callback/*', async (c) => {
+  const auth = getAuth({
+    DB: c.env.DB,
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+    GITHUB_CLIENT_ID: c.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET,
+  })
+
+  return auth.handler(c.req.raw)
+})
+
+// Custom auth routes (sign-in, sign-up, sign-out, session, github-enabled, github-login)
+app.route('/api/auth', authRoutes)
 
 // Pomodoro routes
 app.route('/api/pomodoro/profile', profile)
