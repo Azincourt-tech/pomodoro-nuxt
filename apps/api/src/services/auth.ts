@@ -101,8 +101,13 @@ export function createAuth(env: AuthEnv) {
         image: profile.avatar_url,
       }),
     })
+    console.log('[BetterAuth Backend] socialProvidersConfig keys:', Object.keys(socialProvidersConfig))
   }
+  console.log('[BetterAuth Backend] Final socialProviders:', Object.keys(socialProvidersConfig).length > 0 ? 'SET' : 'EMPTY')
 
+  const socialProvidersFinal = Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined
+  console.log('[BetterAuth Backend] Passing to betterAuth socialProviders:', socialProvidersFinal ? Object.keys(socialProvidersFinal) : 'undefined')
+  
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: 'sqlite',
@@ -125,7 +130,7 @@ export function createAuth(env: AuthEnv) {
       requireEmailVerification: false,
       minPasswordLength: 6,
     },
-    socialProviders: Object.keys(socialProvidersConfig).length > 0 ? socialProvidersConfig : undefined,
+    socialProviders: socialProvidersFinal,
     advanced: {
       crossSubDomainCookies: {
         enabled: false,
