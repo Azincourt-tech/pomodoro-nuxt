@@ -63,6 +63,18 @@ app.all('/api/auth/callback/*', async (c) => {
   return auth.handler(c.req.raw)
 })
 
+app.all('/api/auth/error*', async (c) => {
+  const auth = getAuth({
+    DB: c.env.DB,
+    BETTER_AUTH_SECRET: c.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: c.env.BETTER_AUTH_URL,
+    GITHUB_CLIENT_ID: c.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: c.env.GITHUB_CLIENT_SECRET,
+  })
+
+  return auth.handler(c.req.raw)
+})
+
 // Custom auth routes (sign-in, sign-up, sign-out, session, github-enabled, github-login)
 app.route('/api/auth', authRoutes)
 

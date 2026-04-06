@@ -416,8 +416,16 @@ async function handleGitHubLogin() {
   isLoading.value = true
 
   try {
-    const res = await $fetch<{ url: string }>(`${apiBase}/api/auth/github-login`)
-    navigateTo(res.url, { external: true })
+    const res = await $fetch<{ enabled: boolean }>(`${apiBase}/api/auth/github-enabled`)
+    if (!res.enabled) {
+      showError(t('auth.githubUnavailable', 'GitHub OAuth não disponível'))
+      isLoading.value = false
+      return
+    }
+
+    const { signInWithGitHub } = useAuth()
+    await signInWithGitHub()
+    // Better Auth handles redirect automatically
   } catch {
     showError(t('auth.githubUnavailable', 'GitHub OAuth não disponível'))
     isLoading.value = false

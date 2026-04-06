@@ -1,4 +1,5 @@
 import type { Ref } from 'vue'
+import { authClient } from '~/lib/auth-client'
 
 export interface AuthUser {
   id: string
@@ -33,6 +34,19 @@ export function useAuthLoading() {
 export function useAuth() {
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase as string || ''
+
+  async function signInWithGitHub(): Promise<void> {
+    try {
+      await authClient.signIn.social({
+        provider: 'github',
+        callbackURL: window.location.origin,
+      })
+      // Better Auth handles the redirect automatically
+    } catch (err) {
+      console.error('GitHub OAuth error:', err)
+      throw new Error('GitHub OAuth failed')
+    }
+  }
 
   async function login(email: string, password: string): Promise<{ success: boolean; error?: string }> {
     try {
@@ -141,5 +155,6 @@ export function useAuth() {
     fetchSession,
     isAuthenticated,
     isGitHubUser,
+    signInWithGitHub,
   }
 }

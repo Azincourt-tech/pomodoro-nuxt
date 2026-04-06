@@ -360,8 +360,8 @@ async function handleLogout() {
 async function handleGitHubLogin() {
   ;(document.activeElement as HTMLElement)?.blur()
   try {
-    const res = await $fetch<{ url: string }>(`${apiBase}/api/auth/github-login`)
-    navigateTo(res.url, { external: true })
+    const { signInWithGitHub } = useAuth()
+    await signInWithGitHub()
   } catch {
     // GitHub OAuth not configured, fallback to login page
     navigateTo('/login')
