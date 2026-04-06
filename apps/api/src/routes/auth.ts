@@ -5,7 +5,13 @@ import type { Env } from '../types/env'
 
 const authRoutes = new Hono<{ Bindings: Env }>()
 
-// Pass all auth requests to Better Auth handler
+// Custom endpoint to check if GitHub OAuth is enabled
+authRoutes.get('/github-enabled', (c) => {
+  const clientId = c.env.GH_OAUTH_CLIENT_ID || c.env.GITHUB_CLIENT_ID
+  return c.json({ enabled: !!clientId })
+})
+
+// Pass all other auth requests to Better Auth handler
 authRoutes.on(['POST', 'GET', 'DELETE'], '/*', async (c) => {
   const auth = getAuth(c.env) as Auth
   return auth.handler(c.req.raw)
