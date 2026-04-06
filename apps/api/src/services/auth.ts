@@ -120,6 +120,8 @@ export function createAuth(env: AuthEnv) {
       env.BETTER_AUTH_URL || 'http://localhost:8787',
       'https://pomodoro-nuxt-ten.vercel.app',
       'http://localhost:3000',
+      // Allow Vercel preview deployments
+      /\.vercel\.app$/,
     ].filter(Boolean),
     emailAndPassword: {
       enabled: true,
